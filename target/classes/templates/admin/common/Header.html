@@ -1,0 +1,184 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<nav class="topbar d-flex align-items-center justify-content-between px-4" th:fragment="layout_header">
+    <!-- ==== LEFT ==== -->
+    <div class="left-controls d-flex align-items-center gap-3">
+        <!-- 🍔 TOGGLE MENU -->
+        <div class="icon-btn" id="toggleSidebar" title="Mở / Đóng sidebar">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- 🌐 Language -->
+        <div class="dropdown ms-3">
+            <button class="btn btn-light dropdown-toggle lang-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="fw-semibold text-secondary small">EN</span>
+            </button>
+<!--            <ul class="dropdown-menu shadow-sm border-0 rounded-3">-->
+<!--                <li><a class="dropdown-item small" href="#">EN</a></li>-->
+<!--                <li><a class="dropdown-item small" href="#">AB</a></li>-->
+<!--                <li><a class="dropdown-item small" href="#">AK</a></li>-->
+<!--                <li><a class="dropdown-item small" href="#">BE</a></li>-->
+<!--            </ul>-->
+        </div>
+    </div>
+
+    <!-- ==== RIGHT ==== -->
+    <div class="d-flex align-items-center gap-4">
+        <!-- 🔍 Search -->
+        <div class="position-relative search-box">
+            <input type="text" class="form-control rounded-pill shadow-sm ps-4 pe-5" placeholder="Search">
+            <i data-feather="search" class="position-absolute end-0 top-50 translate-middle-y me-3 text-muted"></i>
+        </div>
+
+        <!-- 👤 User -->
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
+                <img src="/img2/user-default.png" alt="User" class="rounded-circle me-2" width="36" height="36">
+                <span class="fw-semibold text-secondary small">
+                    Hello, <span class="text-dark">LTT</span>
+                </span>
+                <i data-feather="chevron-down" class="ms-1 text-muted" style="width:14px;"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2 p-0 overflow-hidden">
+                <li><a class="dropdown-item py-2 small" href="#"><i data-feather="user" class="me-2"></i> My Profile</a></li>
+                <li><a class="dropdown-item py-2 small" href="#"><i data-feather="credit-card" class="me-2"></i> My Balance</a></li>
+                <li><a class="dropdown-item py-2 small" href="#"><i data-feather="mail" class="me-2"></i> Inbox</a></li>
+                <div class="dropdown-divider my-1"></div>
+                <li><a class="dropdown-item py-2 small" href="#"><i data-feather="settings" class="me-2"></i> Account Setting</a></li>
+                <div class="dropdown-divider my-1"></div>
+                <li><a class="dropdown-item py-2 small text-danger" href="/dang-nhap"><i data-feather="power" class="me-2 text-danger"></i> Logout</a></li>
+                <div class="border-top p-3">
+                    <a href="#" class="btn btn-sm btn-primary w-100 rounded-pill">View Profile</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==== STYLE ==== -->
+    <style>
+        /* ----- Tổng thể header ----- */
+        .topbar {
+            height: 70px;
+            background: #f9fbfd;
+            border-bottom: 1px solid #eef0f3;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-left: 250px; /* Header nằm bên phải sidebar 260px */
+        }
+
+        /* ===== KHỐI TRÁI (ICON + NGÔN NGỮ) ===== */
+        .left-controls {
+            display: flex;
+            align-items: center;
+            gap: 18px; /* 👈 cách icon và nút ngôn ngữ */
+        }
+
+        /* ===== NÚT MENU CHÍNH ===== */
+        .icon-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            transition: all 0.25s ease;
+            color: #707e93;
+        }
+
+        .icon-btn:hover {
+            background: #ebf5ff;
+            color: #4f46e5;
+            transform: scale(1.07);
+        }
+
+        .icon-btn i {
+            font-size: 18px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .icon-btn:hover i {
+            color: #007bff;
+            font-size: 19px;
+            transition: transform 0.3s ease;
+        }
+
+        body.sidebar-collapsed .icon-btn i {
+            transform: rotate(90deg);
+        }
+
+        /* ===== NÚT CHỌN NGÔN NGỮ ===== */
+        .lang-btn {
+            background: #ffffff;
+            border-radius: 50px;
+            padding: 8px 29px;
+            font-size: 16px;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            transition: all 0.25s ease;
+            color: #707e93;
+        }
+
+        .lang-btn:hover {
+            background: #eef4ff;
+            color: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .dropdown-menu {
+            font-size: 13px;
+        }
+
+        /* Giãn cách icon và ngôn ngữ */
+        .topbar .d-flex.align-items-center.gap-4 {
+            gap: 20px !important;
+        }
+
+        /* ----- Ô tìm kiếm ----- */
+        .search-box input {
+            background: #ffffff;
+            border: none;
+            font-size: 14px;
+            height: 45px;
+            width: 267px;
+        }
+
+        .search-box input::placeholder {
+            color: #b0b8c4;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* ----- Avatar và text ----- */
+        .topbar img {
+            object-fit: cover;
+        }
+
+        .topbar .text-secondary {
+            color: #707e93 !important;
+        }
+    </style>
+
+    <!-- ==== SCRIPT ==== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.feather) feather.replace();
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.feather) feather.replace();
+            const toggleBtn = document.getElementById("toggleSidebar");
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    document.body.classList.toggle("sidebar-collapsed");
+                });
+            }
+        });
+    </script>
+</nav>
+</html>

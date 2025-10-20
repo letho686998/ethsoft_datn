@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/Layout}">
+
+<head>
+    <title layout:title="Trang chủ - Tổng quan"></title>
+
+    <style>
+        /* ====== TỔNG THỂ ====== */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Ngăn cuộn toàn trang */
+            background-color: #f4f6f9;
+        }
+
+        /* ====== NỘI DUNG CHÍNH ====== */
+        section[layout\:fragment="content"] {
+            position: fixed;
+            top: 70px;              /* trừ chiều cao header */
+            left: 250px;            /* trừ chiều rộng sidebar */
+            width: calc(100vw - 260px);
+            height: calc(100vh - 80px);
+            overflow-y: auto;       /* chỉ cuộn phần nội dung */
+            overflow-x: hidden;
+            padding: 20px 30px;
+            background: #f8f9fa;
+        }
+
+        /* ====== CARD & BẢNG ====== */
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            background: #fff;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table > :not(caption) > * > * {
+            vertical-align: middle;
+        }
+
+        /* ====== THANH CUỘN ====== */
+        /* Firefox */
+        section[layout\:fragment="content"] {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.2) transparent;
+        }
+
+        /* Chrome / Edge / Safari */
+        section[layout\:fragment="content"]::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        section[layout\:fragment="content"]::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.25);
+            border-radius: 10px;
+        }
+
+        section[layout\:fragment="content"]::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        section[layout\:fragment="content"]::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content">
+        <div class="container-fluid py-4">
+            <h2 class="fw-bold mb-4">Trang chủ - Tổng quan</h2>
+
+            <!-- ===== THỐNG KÊ NHANH ===== -->
+            <div class="row g-3 mb-4">
+                <!-- Doanh thu hôm nay -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">Doanh thu hôm nay</h6>
+                            <h3 class="fw-bold text-primary">₫ 12,450,000</h3>
+                            <small class="text-success">Tăng 8% so với hôm qua</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Đơn hàng mới -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">Đơn hàng mới</h6>
+                            <h3 class="fw-bold text-dark">34</h3>
+                            <small class="text-secondary">Chờ xử lý: 6</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tồn kho thấp -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">Tồn kho thấp</h6>
+                            <h3 class="fw-bold text-danger">7 sản phẩm</h3>
+                            <small class="text-secondary">Cần đặt hàng lại</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== ĐƠN HÀNG GẦN ĐÂY ===== -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white fw-bold fs-5">Đơn hàng gần đây</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Khách hàng</th>
+                                    <th>Ngày</th>
+                                    <th>Tổng</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#1007</td>
+                                    <td>Nguyễn Văn A</td>
+                                    <td>2025-09-30</td>
+                                    <td>₫ 450,000</td>
+                                    <td><span class="badge bg-info text-dark">Đang giao</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#1006</td>
+                                    <td>Trần Thị B</td>
+                                    <td>2025-09-30</td>
+                                    <td>₫ 1,200,000</td>
+                                    <td><span class="badge bg-success">Hoàn tất</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#1005</td>
+                                    <td>Phạm C</td>
+                                    <td>2025-09-29</td>
+                                    <td>₫ 320,000</td>
+                                    <td><span class="badge bg-secondary">Hủy</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+
+</html>

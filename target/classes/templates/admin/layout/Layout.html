@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="${CONTENT_TITLE} - Quản trị hệ thống">Quản trị hệ thống</title>
+    <link rel="icon" type="image/png" href="/img2/favor1.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- AdminLTE & Bootstrap -->
+    <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+    <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/dist/js/adminlte.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+
+        <!-- Header -->
+        <div th:replace="admin/common/Header :: layout_header"></div>
+
+        <!-- Sidebar -->
+        <div th:replace="admin/common/Menu :: layout_menu"></div>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="container-fluid" layout:fragment="content">
+                    <!-- Nội dung các trang con sẽ được chèn tại đây -->
+                </div>
+            </section>
+        </div>
+        <div layout:fragment="scripts"></div>
+        <!-- Footer -->
+        <!--    <div th:replace="admin/common/Footer :: layout_footer"></div>-->
+    </div>
+    <!-- 🔝 Nút lên đầu trang -->
+    <button id="btnScrollTop" title="Lên đầu trang">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</body>
+<style>
+    /* 🚫 Loại bỏ padding và margin mặc định của content-wrapper */
+    .content-wrapper {
+        margin-left: 250px !important; /* đồng bộ với sidebar rộng 250px */
+        padding: 0 !important;
+        background-color: #f4f6f9;
+        min-height: calc(100vh - 57px); /* trừ chiều cao header */
+    }
+
+    /* 🚫 Xóa padding mặc định của section content */
+    .content {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* 🚫 Xóa padding mặc định của container-fluid */
+    .content .container-fluid {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* ✅ Làm card full khung, không viền trắng dư */
+    .page-content-section {
+        padding: 0 !important;
+        margin: 0 !important;
+        height: calc(100vh - 60px); /* full chiều cao trừ header */
+    }
+
+    /* ✅ Đảm bảo header cố định và content tràn mượt */
+    .main-header {
+        z-index: 1030;
+    }
+
+    /* ✅ Nếu sidebar cố định thì nội dung không bị che */
+
+
+    #btnScrollTop {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #001f3f;
+        color: #fff;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        font-size: 16px;
+        display: none; /* ẩn mặc định */
+        transition: all 0.25s ease;
+        z-index: 99999 !important;
+    }
+    #btnScrollTop:hover {
+        background: #003366;
+        transform: scale(1.1);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    }
+
+</style>
+
+<script>
+    $(function() {
+        // Theo dõi vùng cuộn chính của layout
+        $('.page-content-section').on('scroll', function () {
+            if ($(this).scrollTop() > 200) {
+                $('#btnScrollTop').fadeIn();
+            } else {
+                $('#btnScrollTop').fadeOut();
+            }
+        });
+
+        // Khi click -> cuộn lên đầu
+        $('#btnScrollTop').on('click', function () {
+            $('.page-content-section').animate({ scrollTop: 0 }, 600);
+        });
+    });
+
+</script>
+
+</html>

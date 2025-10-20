@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/Layout}">
+
+<head>
+    <title layout:title="Quản lý màu sắc"></title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background: #f4f6f9;
+        }
+
+        .page-content-section {
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            padding: 10px 20px;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        #ms-form {
+            background: #f9fafc;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .table-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        .table thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+        }
+
+        .table tr.selected {
+            background-color: #d0ebff;
+        }
+
+        #maMauPreview {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="page-content-section container-fluid">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white py-2">
+                <h5 class="mb-0"><i class="fas fa-palette"></i> Quản lý màu sắc</h5>
+            </div>
+
+            <div class="card-body">
+                <form id="ms-form">
+                    <input type="hidden" id="ms-id">
+                    <div class="form-row align-items-center">
+                        <div class="form-group col-md-4">
+                            <input type="text" class="form-control" id="tenMauSac" placeholder="Tên màu">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <div class="d-flex align-items-center">
+                                <input type="text" class="form-control" id="maMau" placeholder="Mã màu (ví dụ #FFFFFF)">
+                                <span id="maMauPreview"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <select id="trangThai" class="form-control">
+                                <option value="1">Đang KD</option>
+                                <option value="0">Ngừng</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" id="btn-add"><i
+                                    class="fas fa-plus"></i></button>
+                            <button type="button" class="btn btn-success btn-sm" id="btn-update"><i
+                                    class="fas fa-save"></i></button>
+                            <button type="reset" class="btn btn-warning btn-sm text-white" id="btn-reset"><i
+                                    class="fas fa-undo"></i></button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="table-container">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="thead-light text-center">
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên màu</th>
+                                <th>Mã màu</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="msTable">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Đang tải...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div layout:fragment="scripts">
+        <script>
+            $(function () {
+                const $table = $('#msTable'); const $form = $('#ms-form');
+                let selectedId = null;
+
+                function updatePreview() {
+                    const val = $('#maMau').val();
+                    $('#maMauPreview').css('background', val && /^#([0-9a-f]{3}){1,2}$/i.test(val) ? val : 'transparent');
+                }
+                $('#maMau').on('input', updatePreview); updatePreview();
+
+                async function loadData() {
+                    try {
+                        const res = await axios.get('/api/mau-sac/getAll');
+                        const data = res.data || [];
+                        $table.empty();
+                        if (!data.length) { $table.html('<tr><td colspan="5" class="text-center text-muted">Không có dữ liệu</td></tr>'); return; }
+                        data.forEach((m, idx) => {
+                            $table.append(`
+                            <tr class="text-center ms-row" data-id="${m.id}">
+                                <td>${idx + 1}</td>
+                                <td>${m.tenMauSac || '-'}</td>
+                                <td>
+                                    <span class="badge badge-light border" style="min-width:70px;display:inline-block;">${m.maMau || '-'}</span>
+                                    <span style="display:inline-block;width:14px;height:14px;border:1px solid #ccc;vertical-align:middle;margin-left:6px;background:${m.maMau || 'transparent'}"></span>
+                                </td>
+                                <td>${m.trangThai === 1 ? 'Đang KD' : 'Ngừng'}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                        });
+                    } catch (e) {
+                        $table.html('<tr><td colspan="5" class="text-danger text-center">Lỗi tải dữ liệu!</td></tr>');
+                    }
+                }
+
+                // chọn hàng
+                $(document).on('click', '.ms-row', async function (e) {
+                    if ($(e.target).is('button')) return;
+                    $('.ms-row').removeClass('selected'); $(this).addClass('selected');
+                    selectedId = $(this).data('id');
+                    const res = await axios.get(`/api/mau-sac/${selectedId}`);
+                    const m = res.data;
+                    $('#tenMauSac').val(m.tenMauSac);
+                    $('#maMau').val(m.maMau); updatePreview();
+                    $('#trangThai').val(String(m.trangThai));
+                });
+
+                // thêm
+                $('#btn-add').click(async () => {
+                    const m = { tenMauSac: $('#tenMauSac').val(), maMau: $('#maMau').val(), trangThai: $('#trangThai').val() };
+                    await axios.post('/api/mau-sac/add', m);
+                    alert('✅ Thêm màu sắc thành công!'); $form.trigger('reset'); updatePreview(); loadData();
+                });
+
+                // cập nhật
+                $('#btn-update').click(async () => {
+                    if (!selectedId) return alert('Chọn màu để cập nhật!');
+                    const m = { tenMauSac: $('#tenMauSac').val(), maMau: $('#maMau').val(), trangThai: $('#trangThai').val() };
+                    await axios.put(`/api/mau-sac/update/${selectedId}`, m);
+                    alert('✅ Cập nhật thành công!'); loadData();
+                });
+
+                // xóa
+                $(document).on('click', '.btn-delete', async function () {
+                    const id = $(this).closest('tr').data('id');
+                    if (!confirm('Xóa màu này?')) return;
+                    await axios.delete(`/api/mau-sac/delete/${id}`);
+                    alert('Đã xóa!'); loadData();
+                });
+
+                // reset
+                $('#btn-reset').click(() => { selectedId = null; $('.ms-row').removeClass('selected'); updatePreview(); });
+
+                loadData();
+            });
+        </script>
+    </div>
+</body>
+
+</html>

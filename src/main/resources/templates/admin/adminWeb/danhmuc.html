@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/Layout}">
+
+<head>
+    <title layout:title="Quản lý danh mục"></title>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f6f9;
+        }
+
+        .page-content-section {
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            padding: 10px 20px;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        #category-form {
+            background: #f9fafc;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .table-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .table thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+        }
+
+        .table tr.selected {
+            background-color: #d0ebff;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="page-content-section container-fluid">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white py-2">
+                <h5 class="mb-0"><i class="fas fa-tags"></i> Quản lý danh mục</h5>
+            </div>
+
+            <div class="card-body">
+                <!-- 🌿 FORM DANH MỤC -->
+                <form id="category-form">
+                    <input type="hidden" id="category-id">
+                    <div class="form-row align-items-center">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="tenDanhMuc" placeholder="Tên danh mục">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select id="trangThai" class="form-control">
+                                <option value="1">Đang kinh doanh</option>
+                                <option value="0">Ngừng kinh doanh</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" id="btn-add" title="Thêm">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-success btn-sm" id="btn-update" title="Cập nhật">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button type="reset" class="btn btn-warning btn-sm text-white" id="btn-reset"
+                                title="Làm mới">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 📋 DANH SÁCH DANH MỤC -->
+                <div class="table-container">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="thead-light text-center">
+                            <tr>
+                                <th>Tên danh mục</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTable">
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Đang tải...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div layout:fragment="scripts">
+        <script>
+            $(function () {
+                const $table = $('#categoryTable');
+                const $form = $('#category-form');
+                let selectedId = null;
+
+                // 🧭 Load danh sách danh mục
+                async function loadCategories() {
+                    try {
+                        const res = await axios.get('/api/danh-muc/getAll');
+                        const data = res.data || [];
+                        $table.empty();
+                        if (!data.length) {
+                            $table.html('<tr><td colspan="3" class="text-center text-muted">Không có danh mục nào</td></tr>');
+                            return;
+                        }
+                        data.forEach(dm => {
+                            $table.append(`
+                            <tr class="text-center category-row" data-id="${dm.id}">
+                                <td>${dm.tenDanhMuc}</td>
+                                <td>${dm.trangThai === 1 ? 'Đang kinh doanh' : 'Ngừng kinh doanh'}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger btn-delete" data-id="${dm.id}" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>`);
+                        });
+                    } catch {
+                        $table.html('<tr><td colspan="3" class="text-danger text-center">Lỗi tải dữ liệu!</td></tr>');
+                    }
+                }
+
+                // 🖱️ Chọn hàng
+                $(document).on('click', '.category-row', async function (e) {
+                    if ($(e.target).is('button')) return;
+                    $('.category-row').removeClass('selected');
+                    $(this).addClass('selected');
+                    selectedId = $(this).data('id');
+                    const res = await axios.get(`/api/danh-muc/${selectedId}`);
+                    const dm = res.data;
+                    $('#tenDanhMuc').val(dm.tenDanhMuc);
+                    $('#trangThai').val(String(dm.trangThai));
+                });
+
+                // ➕ Thêm danh mục
+                $('#btn-add').click(async () => {
+                    const dm = {
+                        tenDanhMuc: $('#tenDanhMuc').val(),
+                        trangThai: $('#trangThai').val()
+                    };
+                    await axios.post('/api/danh-muc/add', dm);
+                    alert('✅ Thêm danh mục thành công!');
+                    $form.trigger('reset');
+                    loadCategories();
+                });
+
+                // 💾 Cập nhật danh mục
+                $('#btn-update').click(async () => {
+                    if (!selectedId) return alert('⚠️ Vui lòng chọn danh mục để cập nhật!');
+                    const dm = {
+                        tenDanhMuc: $('#tenDanhMuc').val(),
+                        trangThai: $('#trangThai').val()
+                    };
+                    await axios.put(`/api/danh-muc/update/${selectedId}`, dm);
+                    alert('✅ Cập nhật thành công!');
+                    loadCategories();
+                });
+
+                // ❌ Xóa danh mục
+                $(document).on('click', '.btn-delete', async function () {
+                    const id = $(this).data('id');
+                    if (!confirm('Bạn có chắc muốn xóa danh mục này?')) return;
+                    await axios.delete(`/api/danh-muc/delete/${id}`);
+                    alert('Đã xóa!');
+                    loadCategories();
+                });
+
+                // 🔄 Làm mới form
+                $('#btn-reset').click(() => {
+                    selectedId = null;
+                    $('.category-row').removeClass('selected');
+                });
+
+                loadCategories();
+            });
+        </script>
+    </div>
+</body>
+
+</html>

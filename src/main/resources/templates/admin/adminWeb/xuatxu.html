@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/Layout}">
+
+<head>
+    <title layout:title="Quản lý xuất xứ"></title>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f6f9;
+        }
+
+        .page-content-section {
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            padding: 10px 20px;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        #origin-form {
+            background: #f9fafc;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .table-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .table thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+        }
+
+        .table tr.selected {
+            background-color: #d0ebff;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="page-content-section container-fluid">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white py-2">
+                <h5 class="mb-0"><i class="fas fa-globe"></i> Quản lý xuất xứ</h5>
+            </div>
+
+            <div class="card-body">
+                <!-- 🌿 FORM XUẤT XỨ -->
+                <form id="origin-form">
+                    <input type="hidden" id="origin-id">
+                    <div class="form-row align-items-center">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="tenXuatXu" placeholder="Tên xuất xứ">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select id="trangThai" class="form-control">
+                                <option value="1">Đang kinh doanh</option>
+                                <option value="0">Ngừng kinh doanh</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" id="btn-add" title="Thêm">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-success btn-sm" id="btn-update" title="Cập nhật">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button type="reset" class="btn btn-warning btn-sm text-white" id="btn-reset"
+                                title="Làm mới">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 📋 DANH SÁCH XUẤT XỨ -->
+                <div class="table-container">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="thead-light text-center">
+                            <tr>
+                                <th>Tên xuất xứ</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="originTable">
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Đang tải...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div layout:fragment="scripts">
+        <script>
+            $(function () {
+                const $table = $('#originTable');
+                const $form = $('#origin-form');
+                let selectedId = null;
+
+                // 🧭 Load danh sách xuất xứ
+                async function loadOrigins() {
+                    try {
+                        const res = await axios.get('/api/xuat-xu/getAll');
+                        const data = res.data || [];
+                        $table.empty();
+                        if (!data.length) {
+                            $table.html('<tr><td colspan="3" class="text-center text-muted">Không có xuất xứ nào</td></tr>');
+                            return;
+                        }
+
+                        data.forEach(xx => {
+                            $table.append(`
+                            <tr class="text-center origin-row" data-id="${xx.id}">
+                                <td>${xx.tenXuatXu}</td>
+                                <td>${xx.trangThai === 1 ? 'Đang kinh doanh' : 'Ngừng kinh doanh'}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger btn-delete" data-id="${xx.id}" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>`);
+                        });
+                    } catch {
+                        $table.html('<tr><td colspan="3" class="text-danger text-center">Lỗi tải dữ liệu!</td></tr>');
+                    }
+                }
+
+                // 🖱️ Chọn hàng
+                $(document).on('click', '.origin-row', async function (e) {
+                    if ($(e.target).is('button')) return;
+                    $('.origin-row').removeClass('selected');
+                    $(this).addClass('selected');
+                    selectedId = $(this).data('id');
+                    const res = await axios.get(`/api/xuat-xu/${selectedId}`);
+                    const xx = res.data;
+                    $('#tenXuatXu').val(xx.tenXuatXu);
+                    $('#trangThai').val(String(xx.trangThai));
+                });
+
+                // ➕ Thêm xuất xứ
+                $('#btn-add').click(async () => {
+                    const xx = {
+                        tenXuatXu: $('#tenXuatXu').val(),
+                        trangThai: $('#trangThai').val()
+                    };
+                    await axios.post('/api/xuat-xu/add', xx);
+                    alert('✅ Thêm xuất xứ thành công!');
+                    $form.trigger('reset');
+                    loadOrigins();
+                });
+
+                // 💾 Cập nhật xuất xứ
+                $('#btn-update').click(async () => {
+                    if (!selectedId) return alert('⚠️ Vui lòng chọn xuất xứ để cập nhật!');
+                    const xx = {
+                        tenXuatXu: $('#tenXuatXu').val(),
+                        trangThai: $('#trangThai').val()
+                    };
+                    await axios.put(`/api/xuat-xu/update/${selectedId}`, xx);
+                    alert('✅ Cập nhật thành công!');
+                    loadOrigins();
+                });
+
+                // ❌ Xóa xuất xứ
+                $(document).on('click', '.btn-delete', async function () {
+                    const id = $(this).data('id');
+                    if (!confirm('Bạn có chắc muốn xóa xuất xứ này?')) return;
+                    await axios.delete(`/api/xuat-xu/delete/${id}`);
+                    alert('Đã xóa!');
+                    loadOrigins();
+                });
+
+                // 🔄 Làm mới form
+                $('#btn-reset').click(() => {
+                    selectedId = null;
+                    $('.origin-row').removeClass('selected');
+                });
+
+                loadOrigins();
+            });
+        </script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+/* ==========================================================
+ 🍎 MYSHOP ADMIN — iOS Glass Theme
+ Tác giả: Thành Lường
+========================================================== */
+
+/* ------------------------- 🌟 Biến chung ------------------------- */
+:root {
+    --primary-color: #001f3f;
+    --accent-color: #007bff;
+    --text-color: #222;
+    --radius: 14px;
+    --blur-bg: rgba(255, 255, 255, 0.55);
+    --blur-dark: rgba(0, 0, 0, 0.35);
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.15);
+    --font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ------------------------- 🌍 Body ------------------------- */
+body {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e8ecf3 100%);
+    font-family: var(--font-family);
+    color: var(--text-color);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    overflow-x: hidden;
+}
+
+/* ------------------------- 🍎 Header ------------------------- */
+.main-header {
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.65);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+}
+.main-header.scrolled {
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: var(--shadow-strong);
+}
+
+/* ------------------------- 🧭 Sidebar ------------------------- */
+.main-sidebar {
+    width: 240px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.3s ease;
+}
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 1.1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff !important;
+    background: linear-gradient(135deg, #001f3f, #004f9e);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-sidebar > .nav-item > .nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    border-radius: var(--radius);
+    margin: 4px 10px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+.nav-sidebar > .nav-item > .nav-link:hover,
+.nav-sidebar > .nav-item > .nav-link.active {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* ------------------------- 💫 Ripple (iOS nhẹ nhàng) ------------------------- */
+.nav-link {
+    position: relative;
+    overflow: hidden;
+}
+.nav-link::after {
+    content: "";
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: width 0.5s ease, height 0.5s ease, opacity 0.6s ease;
+}
+.nav-link:active::after {
+    width: 240%;
+    height: 240%;
+    opacity: 1;
+}
+
+/* ------------------------- 📦 Card ------------------------- */
+.card {
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--blur-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-strong);
+}
+
+.card-header {
+    border: none;
+    background: rgba(0, 31, 63, 0.85);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+/* ------------------------- 🧩 Button ------------------------- */
+.btn {
+    border-radius: var(--radius);
+    transition: all 0.25s ease;
+    font-weight: 500;
+    border: none;
+}
+.btn-primary {
+    background: linear-gradient(135deg, #007aff, #004f9e);
+    box-shadow: 0 4px 10px rgba(0, 122, 255, 0.25);
+}
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0066e6, #003a80);
+    box-shadow: 0 6px 14px rgba(0, 122, 255, 0.35);
+}
+.btn-outline-primary {
+    border: 1.5px solid #007bff;
+    color: #007bff;
+}
+.btn-outline-primary:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+/* ------------------------- 📋 Table ------------------------- */
+.table {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.table thead th {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #001f3f;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.08);
+}
+
+/* ------------------------- 🔍 Form ------------------------- */
+.form-control {
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+/* ------------------------- 🌙 Modal ------------------------- */
+.modal-content {
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: var(--shadow-strong);
+    animation: modalPop 0.35s ease;
+}
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ------------------------- 🧊 Footer ------------------------- */
+.main-footer {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    font-size: 0.9rem;
+    padding: 8px 0;
+    color: #555;
+}
+
+/* ------------------------- 📱 Responsive ------------------------- */
+@media (max-width: 992px) {
+    .main-sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        height: 100vh;
+        z-index: 1050;
+        border-right: none;
+    }
+    body.sidebar-open .main-sidebar {
+        transform: translateX(0);
+    }
+}

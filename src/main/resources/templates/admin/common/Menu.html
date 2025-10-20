@@ -1,0 +1,334 @@
+<!-- 🌟 Sidebar Aurora v2.1 (Modernized + Blur + Slide + Persistent) -->
+<aside class="main-sidebar aurora-theme" th:fragment="layout_menu">
+    <div class="sidebar-shell">
+
+        <!-- 🔹 LOGO -->
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+            <a href="/admin" class="brand-link text-nowrap">
+                <img src="/img2/favor1.png" class="brand-image" alt="Logo" />
+                <span class="brand-text">Shoe Shop</span>
+            </a>
+            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                <i class="fas fa-times fs-5"></i>
+            </div>
+        </div>
+
+        <!-- 🔹 SIDEBAR NAVIGATION -->
+        <nav class="sidebar-nav scroll-sidebar" id="sidebarnav">
+            <ul>
+                <li class="nav-small-cap">
+                    <i class="fas fa-circle-notch nav-small-cap-icon"></i>
+                    <span class="hide-menu">Tổng quan</span>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="/admin" class="sidebar-link">
+                        <i class="fas fa-home"></i>
+                        <span class="hide-menu">Trang chủ</span>
+                    </a>
+                </li>
+
+                <!-- QUẢN LÝ SẢN PHẨM -->
+                <li class="sidebar-item" data-tree="san-pham">
+                    <a href="javascript:void(0)" class="sidebar-link has-arrow">
+                        <i class="fas fa-box"></i>
+                        <span class="hide-menu">Quản lý sản phẩm</span>
+                    </a>
+                    <ul class="collapse first-level">
+                        <li class="sidebar-item"><a href="/admin/san-pham" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Sản phẩm</span></a></li>
+                        <li class="sidebar-item"><a href="/admin/thuong-hieu" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Thương hiệu</span></a></li>
+                        <li class="sidebar-item"><a href="/admin/mau-sac" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Màu sắc</span></a></li>
+                        <li class="sidebar-item"><a href="/admin/kich-co" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Kích cỡ</span></a></li>
+                        <li class="sidebar-item"><a href="/admin/danh-muc" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Danh mục</span></a></li>
+                        <li class="sidebar-item"><a href="/admin/chat-lieu" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Chất liệu</span></a></li>
+                        <li class="sidebar-item"><a href="/admin/de-giay" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Đế giày</span></a></li>
+                        <li class="sidebar-item"><a href="/admin/xuat-xu" class="sidebar-link"><i class="far fa-circle"></i><span class="hide-menu">Xuất xứ</span></a></li>
+                    </ul>
+                </li>
+
+                <!-- ĐƠN HÀNG -->
+                <li class="sidebar-item">
+                    <a href="/admin/don-hang" class="sidebar-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="hide-menu">Đơn hàng</span>
+                    </a>
+                </li>
+
+                <!-- NGƯỜI DÙNG -->
+                <li class="sidebar-item">
+                    <a href="/admin/nguoi-dung" class="sidebar-link">
+                        <i class="fas fa-users"></i>
+                        <span class="hide-menu">Người dùng</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- ⚙️ FOOTER -->
+        <div class="sidebar-footer">
+            <span>© 2025 MyShop <strong>Aurora</strong></span>
+        </div>
+    </div>
+
+    <!-- 💅 STYLE -->
+    <style>
+        .aurora-theme {
+            width: 250px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(18px) saturate(180%);
+            border-right: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.06);
+            font-family: "Inter", "SF Pro Display", sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .brand-logo {
+            min-height: 70px;
+            padding: 0 16px;
+            display: flex;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(12px);
+        }
+
+        .brand-image {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(13,110,253,0.3);
+            margin-right: 8px;
+        }
+
+        .brand-text {
+            font-weight: 600;
+            font-size: 18px;
+            color: #0045cc;
+        }
+
+        #sidebarnav {
+            padding: 12px 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
+        }
+
+        #sidebarnav ul { list-style: none; padding-left: 0; margin: 0; }
+        .sidebar-item { position: relative; }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            color: #2f3542;
+            border-radius: 10px;
+            margin: 2px 10px;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(0, 123, 255, 0.08);
+            color: #007bff;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            color: #4b5563;
+        }
+
+        .sidebar-link.active {
+            position: relative;
+            color: #fff;
+            z-index: 1;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .sidebar-link.active::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #14F5F1, #007bff);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link:hover i {
+            color: #007bff;
+        }
+
+        .sidebar-link.active i {
+            color: #fff;
+        }
+
+
+        /* SUBMENU */
+        .has-arrow::after {
+            content: "\f078";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: 10px;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            color: #999;
+        }
+
+        .has-arrow[aria-expanded="true"]::after {
+            transform: rotate(180deg);
+            color: #007bff;
+        }
+
+        .collapse {
+            /*display: none;*/
+            margin-left: 15px;
+            border-left: 2px solid rgba(0,123,255,0.1);
+            /*transition: all 0.3s ease;*/
+        }
+
+        .collapse.in { display: block; }
+
+        .first-level .sidebar-link {
+            padding: 8px 20px;
+            font-size: 14px;
+            background: transparent;
+        }
+
+        .nav-small-cap {
+            font-size: 1rem;
+            text-align: center;
+            text-transform: uppercase;
+            color: #6c757d;
+            padding: 10px 20px 6px;
+            font-weight: 600;
+        }
+
+        .nav-small-cap-icon { margin-right: 5px; color: #adb5bd; }
+
+        .sidebar-footer {
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            color: #666;
+            background: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* 🎞️ Submenu slide animation - Aurora smooth version */
+        .slide {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition:
+                    max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                    opacity 0.35s ease,
+                    transform 0.35s ease;
+        }
+
+        .slide.show {
+            max-height: 1000px; /* Tự động cao cho các submenu dài */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+
+    <!-- ⚙️ JS FUNCTION (Slide + Persistent menu) -->
+    <script>
+        $(function () {
+            "use strict";
+
+            const url = window.location + "";
+            const currentPath = url.replace(window.location.origin, "");
+            const isHome = currentPath === "/admin" || currentPath === "/admin/";
+
+            // Kích hoạt link hiện tại
+            const currentLink = document.querySelector(`#sidebarnav a[href='${currentPath}']`);
+            if (currentLink) {
+                currentLink.classList.add("active");
+                const submenu = currentLink.closest(".collapse");
+                if (submenu && !isHome) {
+                    submenu.classList.add("in", "show");
+                    submenu.previousElementSibling?.setAttribute("aria-expanded", "true");
+                    const parent = submenu.closest(".sidebar-item");
+                    if (parent?.dataset.tree) localStorage.setItem("menu-open", parent.dataset.tree);
+                }
+            }
+
+            // Hàm trượt mượt
+            function slideDown(el) {
+                el.classList.add("in");
+                el.style.maxHeight = el.scrollHeight + "px";
+                el.style.opacity = "1";
+                el.style.transform = "translateY(0)";
+                el.classList.add("show");
+            }
+
+            function slideUp(el) {
+                el.style.maxHeight = el.scrollHeight + "px"; // set tạm để có giá trị ban đầu
+                el.offsetHeight; // kích hoạt reflow
+                el.style.maxHeight = "0";
+                el.style.opacity = "0";
+                el.style.transform = "translateY(-4px)";
+                setTimeout(() => {
+                    el.classList.remove("in", "show");
+                    el.removeAttribute("style");
+                }, 400);
+            }
+
+            // Khởi tạo submenu
+            document.querySelectorAll(".has-arrow").forEach(link => {
+                const submenu = link.nextElementSibling;
+                if (!submenu) return;
+                submenu.classList.add("slide", "collapse");
+
+                // Khôi phục nếu không phải trang chủ
+                const lastOpen = localStorage.getItem("menu-open");
+                if (!isHome && lastOpen) {
+                    const openItem = document.querySelector(`.sidebar-item[data-tree='${lastOpen}']`);
+                    if (openItem && openItem.contains(link)) {
+                        submenu.classList.add("show", "in");
+                        link.setAttribute("aria-expanded", "true");
+                        submenu.style.maxHeight = submenu.scrollHeight + "px";
+                    }
+                }
+
+                // Sự kiện click
+                link.addEventListener("click", e => {
+                    e.preventDefault();
+                    const isOpen = submenu.classList.contains("show");
+
+                    // Đóng menu khác
+                    document.querySelectorAll(".slide.show").forEach(s => {
+                        if (s !== submenu) {
+                            slideUp(s);
+                            s.previousElementSibling?.setAttribute("aria-expanded", "false");
+                        }
+                    });
+
+                    // Mở/đóng hiện tại
+                    if (!isOpen) {
+                        slideDown(submenu);
+                        link.setAttribute("aria-expanded", "true");
+                        const parent = link.closest(".sidebar-item");
+                        if (parent?.dataset.tree) localStorage.setItem("menu-open", parent.dataset.tree);
+                    } else {
+                        slideUp(submenu);
+                        link.setAttribute("aria-expanded", "false");
+                        localStorage.removeItem("menu-open");
+                    }
+                });
+            });
+
+            // Trang chủ -> luôn đóng menu
+            if (isHome) setTimeout(() => localStorage.removeItem("menu-open"), 300);
+        });
+    </script>
+
+
+
+
+</aside>

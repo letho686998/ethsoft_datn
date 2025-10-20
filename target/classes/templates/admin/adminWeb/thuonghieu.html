@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/Layout}">
+
+<head>
+    <title layout:title="Quản lý thương hiệu"></title>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f6f9;
+        }
+
+        .page-content-section {
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            padding: 10px 20px;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        #brand-form {
+            background: #f9fafc;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .table-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .table thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+        }
+
+        .table tr.selected {
+            background-color: #d0ebff;
+        }
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="page-content-section container-fluid">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white py-2">
+                <h5 class="mb-0"><i class="fas fa-copyright"></i> Quản lý thương hiệu</h5>
+            </div>
+
+            <div class="card-body">
+                <!-- 🌿 FORM THƯƠNG HIỆU -->
+                <form id="brand-form">
+                    <input type="hidden" id="brand-id">
+                    <div class="form-row align-items-center">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" id="tenThuongHieu" placeholder="Tên thương hiệu">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select id="trangThai" class="form-control">
+                                <option value="1">Đang kinh doanh</option>
+                                <option value="0">Ngừng kinh doanh</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" id="btn-add" title="Thêm">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-success btn-sm" id="btn-update" title="Cập nhật">
+                                <i class="fas fa-save"></i>
+                            </button>
+                            <button type="reset" class="btn btn-warning btn-sm text-white" id="btn-reset"
+                                title="Làm mới">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 📋 DANH SÁCH THƯƠNG HIỆU -->
+                <div class="table-container">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="thead-light text-center">
+                            <tr>
+                                <th>Tên thương hiệu</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="brandTable">
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Đang tải...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div layout:fragment="scripts">
+        <script>
+            $(function () {
+                const $table = $('#brandTable');
+                const $form = $('#brand-form');
+                let selectedId = null;
+
+                // 🧭 Load danh sách thương hiệu
+                async function loadBrands() {
+                    try {
+                        const res = await axios.get('/api/thuong-hieu/getAll');
+                        const data = res.data || [];
+                        $table.empty();
+                        if (!data.length) {
+                            $table.html('<tr><td colspan="3" class="text-center text-muted">Không có thương hiệu nào</td></tr>');
+                            return;
+                        }
+
+                        data.forEach(th => {
+                            $table.append(`
+                            <tr class="text-center brand-row" data-id="${th.id}">
+                                <td>${th.tenThuongHieu}</td>
+                                <td>${th.trangThai === 1 ? 'Đang kinh doanh' : 'Ngừng kinh doanh'}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger btn-delete" data-id="${th.id}" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>`);
+                        });
+                    } catch {
+                        $table.html('<tr><td colspan="3" class="text-danger text-center">Lỗi tải dữ liệu!</td></tr>');
+                    }
+                }
+
+                // 🖱️ Chọn hàng -> load chi tiết
+                $(document).on('click', '.brand-row', async function (e) {
+                    if ($(e.target).is('button')) return;
+                    $('.brand-row').removeClass('selected');
+                    $(this).addClass('selected');
+                    selectedId = $(this).data('id');
+                    const res = await axios.get(`/api/thuong-hieu/${selectedId}`);
+                    const th = res.data;
+                    $('#tenThuongHieu').val(th.tenThuongHieu);
+                    $('#trangThai').val(String(th.trangThai));
+                });
+
+                // ➕ Thêm thương hiệu
+                $('#btn-add').click(async () => {
+                    const th = {
+                        tenThuongHieu: $('#tenThuongHieu').val(),
+                        trangThai: $('#trangThai').val()
+                    };
+                    await axios.post('/api/thuong-hieu/add', th);
+                    alert('✅ Thêm thương hiệu thành công!');
+                    $form.trigger('reset');
+                    loadBrands();
+                });
+
+                // 💾 Cập nhật thương hiệu
+                $('#btn-update').click(async () => {
+                    if (!selectedId) return alert('⚠️ Vui lòng chọn thương hiệu để cập nhật!');
+                    const th = {
+                        tenThuongHieu: $('#tenThuongHieu').val(),
+                        trangThai: $('#trangThai').val()
+                    };
+                    await axios.put(`/api/thuong-hieu/update/${selectedId}`, th);
+                    alert('✅ Cập nhật thành công!');
+                    loadBrands();
+                });
+
+                // ❌ Xóa thương hiệu
+                $(document).on('click', '.btn-delete', async function () {
+                    const id = $(this).data('id');
+                    if (!confirm('Bạn có chắc muốn xóa thương hiệu này?')) return;
+                    await axios.delete(`/api/thuong-hieu/delete/${id}`);
+                    alert('Đã xóa!');
+                    loadBrands();
+                });
+
+                // 🔄 Làm mới form
+                $('#btn-reset').click(() => {
+                    selectedId = null;
+                    $('.brand-row').removeClass('selected');
+                });
+
+                loadBrands();
+            });
+        </script>
+    </div>
+</body>
+
+</html>

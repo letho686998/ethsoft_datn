@@ -1,0 +1,3154 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/Layout}">
+
+<head>
+    <title layout:title="Thêm sản phẩm"></title>
+
+    <style>
+
+        html {
+            height: 100%;
+            scrollbar-gutter: unset;
+        }
+
+        /*html,*/
+        /*body {*/
+        /*    height: 100%;*/
+        /*    background-color: #f4f6f9;*/
+        /*    overflow: hidden;*/
+        /*    !* ngăn cuộn toàn trang *!*/
+        /*}*/
+
+        /* ✅ Cho phép body cuộn thật */
+        /*.layout-fixed .content-wrapper {*/
+        /*    overflow: visible !important;*/
+        /*}*/
+
+        /* ✅ Body chịu trách nhiệm cuộn */
+        body {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Custom scrollbar đẹp */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+
+        .page-content-section {
+            height: auto; /* tránh mâu thuẫn với fixed bên trên */
+            min-height: 100%; /* hoặc bỏ hẳn thuộc tính height cũ */
+        }
+
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            background: #fff;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #007bff, #14F5F1);
+            color: #fff;
+            padding: 8px 15px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-header h6 {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .form-control,
+        .dropdown-input {
+            height: 36px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-input {
+            background: #fff;
+            cursor: pointer;
+        }
+
+        /* 🔹 Hàng chứa ô input và nút + */
+        .input-with-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 🔹 Nút dấu cộng – hình vuông, nằm ngoài bên phải */
+        .btn-add-icon {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid #007bff;
+            background: #f0f8ff;
+            color: #007bff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-add-icon:hover {
+            background: #14F5F1;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        /* Hai khung trên cùng chia đôi */
+        .top-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;  /* hai cột đều nhau */
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .top-row .card {
+            flex: 1;
+        }
+
+        /* Bảng chi tiết sản phẩm */
+
+        table th {
+            background: #f8f9fa;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        table td {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        /* ✅ Giữ bảng có bố cục cố định */
+        .table {
+            table-layout: fixed; /* bắt buộc để width: px có hiệu lực đều */
+            width: 100%;
+        }
+
+        /* ✅ Cố định chiều rộng từng cột */
+        .table th:nth-child(1) {
+            width: 20px;   /* Box chọn */
+        }
+
+        .table th:nth-child(2) {
+            width: 50px;   /* STT */
+        }
+
+        .table th:nth-child(3) {
+            width: 165px;  /* Tên sản phẩm */
+        }
+
+        .table th:nth-child(4) {
+            width: 85px;  /* Màu sắc */
+        }
+
+        .table th:nth-child(5) {
+            width: 75px;  /* Kích cỡ */
+        }
+
+        .table th:nth-child(6) {
+            width: 95px;   /* SLT */
+        }
+
+        .table th:nth-child(7) {
+            width: 100px;  /* Giá nhập */
+        }
+
+        .table th:nth-child(8) {
+            width: 100px;  /* Giá bán */
+        }
+
+        .table th:nth-child(9) {
+            width: 95px;   /* Thao tác */
+        }
+
+        .table th:nth-child(10) {
+            width: 365px;  /* Ảnh sản phẩm */
+        }
+
+        section[layout\:fragment="content"] {
+            position: fixed !important;
+            top: 70px !important;         /* đúng chiều cao header thực tế */
+            left: 250px !important;       /* đúng chiều rộng sidebar */
+            right: 0 !important;          /* thay cho width calc(...) */
+            bottom: 0 !important;         /* thay cho height calc(...) */
+            box-sizing: border-box !important; /* padding không làm tràn */
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            padding: 15px 25px !important;
+            background: #f4f6f9 !important;
+        }
+
+
+        .save-container {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            padding: 6px 14px;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.25);
+        }
+
+        /* ⭐️ Bố cục dọc: khoảng cách giữa các section = 15px, tuyệt đối, không collapse */
+        .section-stack {
+            display: grid;
+            row-gap: 16px;
+            /* chỉ số bạn muốn = đúng bằng gap giữa 2 card */
+        }
+
+        /* Giữ gap ngang giữa 2 card, bỏ mọi margin dọc để không cộng dồn */
+        .top-row {
+            display: flex;
+            gap: 15px;
+            margin: 0 !important;
+            /* xoá margin dưới */
+            padding: 0 !important;
+            /* bỏ padding dưới đã thêm trước đó */
+        }
+
+        /* Đảm bảo các card bên trong không có margin “lỡ tay” nào */
+        .top-row>.card {
+            margin: 0 !important;
+        }
+
+        /* Bảng 3: KHÔNG margin-top; khoảng cách do .section-stack quản */
+        .table-container {
+            margin: 0 !important;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            padding: 10px 15px 50px;
+            position: relative;
+        }
+
+        /* ===============================
+   🔹 DROPDOWN CHUNG – CÂN ĐỐI ĐẸP MẮT
+   =============================== */
+        .dropdown-list {
+            display: none;
+            position: absolute;
+            top: 38px;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #d0d4da;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            overflow-y: hidden;
+            z-index: 3000;
+            padding: 4px 0;
+            /*transition: all 0.2s ease;*/
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.2s ease, transform 0.25s ease;
+        }
+
+        .dropdown-list.show {
+            display: block !important;
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeSlideDown 0.25s ease forwards;
+        }
+
+        /* 🌿 Mục dropdown */
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #333;
+            transition: all 0.15s ease;
+        }
+
+        /* 🟦 Biểu tượng checkbox / tick */
+        .dropdown-item i {
+            font-size: 0.9rem;
+            color: #888;
+            min-width: 16px;
+            text-align: center;
+            margin-right: 8px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        /* 🟩 Hiệu ứng hover mượt */
+        .dropdown-item:hover {
+            background: #f1f7ff;
+            color: #007bff;
+        }
+
+        .dropdown-item:hover i {
+            color: #007bff;
+        }
+
+        /* 🟢 Khi được chọn */
+        .dropdown-item.selected {
+            background: #e6f0ff;
+            color: #001f3f;
+            font-weight: 600;
+        }
+
+        .dropdown-item.selected i {
+            color: #007bff;
+            animation: tickPop 0.25s ease forwards;
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Khi bỏ chọn thì thu nhỏ mượt */
+        .dropdown-item:not(.selected) i {
+            transform: scale(0.9);
+            opacity: 0.7;
+        }
+
+        /* ✨ Dòng “Thêm mới” */
+        .dropdown-item.add-new {
+            font-style: italic;
+            color: #007bff;
+        }
+
+        .dropdown-item.add-new:hover {
+            background: #e8f0ff;
+            color: #0056b3;
+        }
+
+        /* Giới hạn chiều cao khi nhiều mục */
+        .dropdown-list.scrollable {
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        /* Cuộn thanh mảnh, tinh tế */
+        .dropdown-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dropdown-list::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+        }
+
+        .dropdown-list::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Keyframes cho hiệu ứng tick xuất hiện */
+        @keyframes tickPop {
+            0% {
+                transform: scale(0.4);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+
+        /* 🔹 Popup chọn màu sắc dạng grid */
+        /* Popup chọn màu sắc dạng grid */
+        .color-popup {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            display: none;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 10px;
+            width: 100%;
+            min-width: 240px;
+            height: auto;
+            overflow: hidden;
+            /* quan trọng: ẩn tooltip khi chưa hover */
+            z-index: 3000;
+            transition: all 0.25s ease;
+            animation: fadeIn 0.15s ease-in-out;
+        }
+
+        /* Khi hiển thị */
+        .color-popup.show {
+            display: flex;
+        }
+
+        /* Khi hover màu: popup mở cao nhẹ & nổi lên */
+        .color-popup.expanded {
+            padding-bottom: 28px;
+            /* chừa chỗ cho tooltip */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            overflow: visible;
+            /* cho phép tooltip hiển thị */
+        }
+
+        /* Ô màu nhỏ */
+        .color-item {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1.5px #ccc;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        /* Hover: dùng màu chủ đạo xanh than */
+        .color-item:hover {
+            transform: scale(1.12);
+            box-shadow: 0 0 0 2px #1E90FF;
+        }
+
+        /* Khi được chọn */
+        .color-item.selected {
+            box-shadow: 0 0 0 3px #1E90FF;
+            transform: scale(1.1);
+        }
+
+        /* Tooltip hiển thị tên màu */
+        .color-item::after {
+            content: attr(title);
+            position: absolute;
+            bottom: -26px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #001f3f;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+        }
+
+        /* Hiện tooltip khi hover */
+        .color-item:hover::after {
+            opacity: 1;
+        }
+
+
+
+        /* Hiệu ứng fade popup */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        #mauSacPopup {
+            top: calc(100% + 6px);
+            /* cách input một đoạn nhỏ */
+        }
+
+        /* 🔹 Popup chọn kích cỡ dạng grid */
+        .size-popup {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            display: none;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 10px;
+            width: 100%;
+            min-width: 240px;
+            height: auto;
+            overflow: hidden;
+            z-index: 3000;
+            transition: all 0.25s ease;
+            animation: fadeIn 0.15s ease-in-out;
+        }
+
+        /* Khi hiển thị */
+        .size-popup.show {
+            display: flex;
+        }
+
+        /* Khi hover: mở cao hơn nhẹ */
+        .size-popup.expanded {
+            padding-bottom: 12px;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            overflow: visible;
+        }
+
+        /* Ô kích cỡ vuông */
+        .size-item {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1.5px solid #ccc;
+            background: #f9fafc;
+            color: #001f3f;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* Hover */
+        .size-item:hover {
+            transform: scale(1.12);
+            background: #e9f1ff;
+            border-color: #001f3f;
+        }
+
+        /* Khi chọn */
+        .size-item.selected {
+            background: #001f3f;
+            color: #fff;
+            transform: scale(1.08);
+            border-color: #001f3f;
+        }
+
+        /* 🔹 Nền mờ popup */
+        .quick-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+            z-index: 1055;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Khi mở popup */
+        .quick-modal.show {
+            display: flex;
+        }
+
+        /* Nội dung popup */
+        .quick-modal-content {
+            background: #fff;
+            border-radius: 14px;
+            width: min(600px, 90vw);
+            aspect-ratio: 1.618 / 1;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            padding: 20px 24px 65px;
+            position: relative;
+            animation: zoomIn 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .quick-modal-content .modal-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+            color: #001f3f;
+            font-size: 1.05rem;
+        }
+
+        .quick-modal-content .modal-footer {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+        }
+
+        /* 🔽 Dropdown trạng thái trong popup */
+        /* 🔽 Dropdown trạng thái trong popup thêm nhanh */
+        #attrStatusList {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            /*z-index: 9999;*/
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            overflow: visible !important;
+            z-index: 99999 !important;
+        }
+
+        #attrStatusList.show {
+            display: block !important; /* ✅ cần để ghi đè display:none */
+            opacity: 1 !important;;
+            transform: translateY(0) !important;;
+            /*display: block !important;*/
+            /*opacity: 1 !important;*/
+            /*transform: translateY(0) !important;*/
+        }
+
+        /* ✅ FIX dropdown trạng thái không hiển thị trong popup */
+        #quickAddModal .dropdown {
+            overflow: visible !important; /* Cho phép list tràn ra ngoài khung */
+            position: relative !important; /* Giúp list định vị chính xác */
+        }
+
+        #quickAddModal #attrStatusList {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            z-index: 99999 !important; /* luôn nổi trên mọi thứ */
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        #quickAddModal #attrStatusList.show {
+            display: block !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* ===================== 🔹 UPLOAD CONTAINER STYLE (Shopee-like) ===================== */
+        .upload-container {
+            position: relative;
+            border: 2px dashed #c7d3e3;
+            border-radius: 10px;
+            padding: 10px;
+            background: #fafbfd;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            width: 355px; /* ✅ vừa cho 4 ảnh */
+            height: 100px; /* ✅ cố định chiều cao */
+            display: flex;
+            align-items: center;          /* ✅ căn giữa theo chiều dọc */
+            justify-content: flex-start;  /* ✅ ảnh canh trái trong khung */
+            overflow-x: auto;             /* ✅ cuộn ngang khi nhiều ảnh */
+            overflow-y: hidden;
+            flex-wrap: nowrap;
+            gap: 10px;
+            margin: 0 auto;               /* ✅ căn giữa khung trong cột */
+            scroll-behavior: smooth;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch; /* iOS hỗ trợ trượt mượt */
+        }
+        .upload-container:hover {
+            border-color: #007bff;
+            background: #f1f7ff;
+        }
+        .upload-container input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-container::-webkit-scrollbar {
+            height: 6px; /* ✅ thanh kéo ngang mảnh */
+        }
+        .upload-container::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+        .upload-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* Placeholder khi chưa chọn ảnh */
+        .upload-placeholder {
+            flex: 0 0 auto;
+            width: 80px;
+            height: 80px;
+            min-width: 90px;
+            border: 2px dashed #c7d3e3;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #7b8ca8;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            margin-left: -8px; /* ✅ đảm bảo sát trái */
+            order: 2;
+        }
+        .upload-placeholder i {
+            font-size: 1.5rem;
+            color: #007bff;
+            margin-bottom: 4px;
+        }
+        .upload-placeholder:hover {
+            border-color: #007bff;
+            background: #eef6ff;
+            color: #0056b3;
+        }
+
+        /* Preview ảnh */
+        .preview-container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 10px;
+            overflow: visible;
+            flex-shrink: 0;
+            align-items: center; /* ✅ căn giữa ảnh trong khung */
+            order: 1;
+        }
+        .preview-item {
+            flex: 0 0 auto;
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* Nút xóa ảnh */
+        .btn-remove-image {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .btn-remove-image:hover {
+            background: rgba(255, 0, 0, 0.8);
+        }
+
+        /* ✅ Khung chính giữa trang */
+        .page-wrapper {
+            max-width: 1150px; /* hoặc bất kỳ kích thước bạn muốn */
+            margin: 0 auto;
+            padding: 0 8px;
+            box-sizing: border-box;
+        }
+
+
+        /* Nếu muốn có khoảng cách đều hai bên hơn (hiệu ứng nền lộ ra rõ hơn) */
+        @media (min-width: 1200px) {
+            .page-wrapper {
+                max-width: 1250px;  /* hoặc tùy bạn chọn */
+            }
+        }
+
+        /* 🌈 Modern color picker box */
+        .color-picker-box input[type="color"] {
+            appearance: none;
+            -webkit-appearance: none;
+            border: none;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .color-picker-box input[type="color"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+
+        #quickAddForm {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        #quickAddForm > div {
+            flex: 1;
+        }
+
+        #colorPickerSection {
+            max-width: 220px;
+        }
+
+        #colorInfoSection {
+            flex-grow: 1;
+        }
+
+        #colorInfoSection .form-label {
+            font-size: 0.9rem;
+        }
+
+        #customColorPickerContainer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        #selectedColorBox {
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+        #selectedColorBox:hover {
+            transform: scale(1.1);
+            border-color: #007bff;
+        }
+
+        #colorHexDisplay {
+            width: 100px;
+            font-size: 0.9rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 6px 8px;
+            font-family: monospace;
+        }
+
+        .color-palette {
+            position: absolute;
+            bottom: -160px; /* Đưa xuống dưới khung chọn */
+            left: 0;
+            background: #fff;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            width: 250px;
+            z-index: 50;
+            display: none;
+            animation: fadeIn 0.15s ease-in-out;
+        }
+
+        .color-palette-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+        }
+
+        .color-item {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+        .color-item:hover {
+            transform: scale(1.2);
+            border-color: #000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        /* ============================================================
+   ✅ HIỆU ỨNG Ô TICK GIỐNG DROPDOWN (CHO BẢNG CHI TIẾT)
+   ============================================================ */
+        .table .row-select,
+        #selectAllRows {
+            font-size: 1rem;
+            color: #888;
+            cursor: pointer;
+            transition: transform 0.15s ease, color 0.15s ease;
+        }
+
+        .table .row-select:hover,
+        #selectAllRows:hover {
+            color: #001f3f;
+            transform: scale(1.15);
+        }
+
+        /* 🟩 Khi được chọn */
+        .table .row-select.fa-check-square,
+        #selectAllRows.fa-check-square {
+            color: #007bff !important;
+            animation: tickPop 0.25s ease;
+        }
+
+        /* 🔹 Hiệu ứng bật tick giống dropdown */
+        @keyframes tickPop {
+            0% {
+                transform: scale(0.4);
+                opacity: 0.4;
+            }
+            60% {
+                transform: scale(1.25);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.1rem rgba(220,53,69,0.25);
+        }
+        .error-message {
+            display: block;
+            margin-top: 3px;
+            font-size: 0.8rem;
+        }
+
+        .btn-group-right {
+            display: flex;
+            justify-content: flex-end; /* nằm bên phải */
+            gap: 12px; /* khoảng cách giữa 2 nút */
+            margin-bottom: 12px;
+        }
+
+
+        .gradient-flame-btn-crt,
+        .gradient-flame-btn-cls{
+            background-color: initial;
+
+            border-radius: 8px;
+
+            font-weight: 600;
+            color: #2f3542;
+            cursor: pointer;
+            display: inline-block;
+            outline: 0;
+            overflow: hidden;
+            padding: 6px 14px;
+            pointer-events: auto;
+            position: relative;
+            text-align: center;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            vertical-align: top;
+            white-space: nowrap;
+            width: 100px;
+            gap: 20px;
+            z-index: 9;
+            border: 0;
+            transition: box-shadow .2s;
+        }
+
+        .gradient-flame-btn-crt{
+            background-image: linear-gradient(135deg, #14F5F1, #007bff);
+            box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+        }
+
+        .gradient-flame-btn-cls{
+            background-image: linear-gradient(135deg, #D4FF00, #FFFF00);
+            box-shadow: #535714 0 2px 4px;
+        }
+
+        .gradient-flame-btn-crt:hover,
+        .gradient-flame-btn-cls:hover{
+            box-shadow: #25aaaa 0 3px 8px;
+        }
+
+        #btnGenerateVariants:disabled {
+            background: #ccc !important;
+            border: none;
+            cursor: not-allowed;
+        }
+
+        .preview-item {
+            position: relative;
+        }
+        .btn-set-cover {
+            position: absolute;
+            top: 5px;
+            right: 30px;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .btn-set-cover.active {
+            background: gold;
+            color: white;
+        }
+
+        #tenSanPhamList {
+            position: absolute;
+            width: 100%;
+            top: 100%;           /* nằm ngay dưới input */
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            z-index: 1000;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Dropdown danh sách sản phẩm */
+        #tenSanPhamList {
+            position: absolute;
+            width: 100%;
+            top: 100%;                  /* nằm ngay dưới input */
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            transition: all 0.15s ease;
+        }
+
+        /* Các item trong danh sách */
+        #tenSanPhamList .dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #tenSanPhamList .dropdown-item:hover {
+            background: #f2f4f8;
+        }
+
+        /* Khi có thanh cuộn — tùy chọn thêm scrollbar đẹp */
+        #tenSanPhamList::-webkit-scrollbar {
+            width: 6px;
+        }
+        #tenSanPhamList::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        #tenSanPhamList::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .fw-semibold-header {
+            background: linear-gradient(135deg, #007bff, #14F5F1);
+            border-radius: 8px;
+            padding: 4px 10px;
+            color: #fff; /* 🔹 Màu chữ trắng */
+            /*display: inline-block;*/
+        }
+
+    </style>
+</head>
+
+<body>
+    <section layout:fragment="content" class="page-content-section">
+        <div class="page-wrapper">
+            <div class="section-stack">
+                <div class="top-row">
+                    <!-- 🟩 BẢNG 1: THÔNG TIN CHI TIẾT -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-info-circle"></i> Thông tin chi tiết</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">Tên sản phẩm</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="tenSanPhamInput"
+                                               placeholder="Nhập hoặc chọn tên sản phẩm...">
+                                        <div class="dropdown-list" id="tenSanPhamList"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Thương hiệu</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="thuongHieuInput"
+                                               placeholder="Chọn thương hiệu" readonly>
+                                        <button class="btn-add-icon" id="btn-add-thuongHieu"><i
+                                                class="fas fa-plus"></i></button>
+                                        <!-- 🔽 Thêm dropdown-list tương ứng -->
+                                        <div class="dropdown-list single-select" id="thuongHieuList"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Danh mục</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="danhMucInput"
+                                               placeholder="Chọn danh mục" readonly>
+                                        <button class="btn-add-icon" id="btn-add-danhMuc"><i
+                                                class="fas fa-plus"></i></button>
+                                        <!-- 🔽 Thêm dropdown-list tương ứng -->
+                                        <div class="dropdown-list single-select" id="danhMucList"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Chất liệu</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="chatLieuInput"
+                                               placeholder="Chọn chất liệu" readonly>
+                                        <button class="btn-add-icon" id="btn-add-chatLieu"><i
+                                                class="fas fa-plus"></i></button>
+                                        <!-- 🔽 Thêm dropdown-list tương ứng -->
+                                        <div class="dropdown-list single-select" id="chatLieuList"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Đế giày</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="deGiayInput"
+                                               placeholder="Chọn đế giày" readonly>
+                                        <button class="btn-add-icon" id="btn-add-deGiay"><i
+                                                class="fas fa-plus"></i></button>
+                                        <!-- 🔽 Thêm dropdown-list tương ứng -->
+                                        <div class="dropdown-list single-select" id="deGiayList"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Giới tính</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="gioiTinhInput"
+                                               placeholder="Chọn giới tính" readonly>
+                                        <div class="dropdown-list" id="gioiTinhList">
+                                            <div class="dropdown-item" data-id="0"><i class="far fa-square me-2"></i> Nam
+                                            </div>
+                                            <div class="dropdown-item" data-id="1"><i class="far fa-square me-2"></i> Nữ
+                                            </div>
+                                            <div class="dropdown-item" data-id="2"><i class="far fa-square me-2"></i> Nam và Nữ
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Trạng thái</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="trangThaiInput"
+                                               placeholder="Chọn trạng thái" readonly>
+
+                                        <div class="dropdown-list" id="trangThaiList">
+                                            <div class="dropdown-item" data-id="1"><i class="far fa-square me-2"></i>Đang kinh doanh</div>
+                                            <div class="dropdown-item" data-id="0"><i class="far fa-square me-2"></i>Ngừng kinh doanh</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-12">
+                                    <label class="form-label">Mô tả</label>
+                                    <textarea class="form-control" id="moTa" rows="3"
+                                              placeholder="Nhập mô tả sản phẩm..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 🟦 BẢNG 2: BIẾN THỂ -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-random"></i> Biến thể</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Màu sắc</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="mauSacInput"
+                                               placeholder="Chọn màu sắc" readonly>
+                                        <button class="btn-add-icon" id="btn-add-mauSac"><i
+                                                class="fas fa-plus"></i></button>
+                                        <!-- ✅ Popup màu dạng grid -->
+                                        <div class="color-popup" id="mauSacPopup"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Kích cỡ</label>
+                                    <div class="input-with-btn position-relative">
+                                        <input type="text" class="form-control dropdown-input" id="kichCoInput"
+                                               placeholder="Chọn kích cỡ" readonly>
+                                        <button class="btn-add-icon" id="btn-add-kichCo"><i
+                                                class="fas fa-plus"></i></button>
+                                        <!-- ✅ Popup kích cỡ dạng grid -->
+                                        <div class="size-popup" id="kichCoPopup"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-group-right">
+                            <button class="gradient-flame-btn-crt" id="btnGenerateVariants" role="button">
+                                <i class="fas fa-plus-circle"></i>Tạo
+                            </button>
+                            <button class="gradient-flame-btn-cls" id="btnClearVariants" role="button">
+                                <i class="fas fa-refresh"></i>Xóa
+                            </button>
+                            <!--                        <button class="btn btn-primary btn-sm" id="btnGenerateVariants">-->
+                            <!--                            <i class="fas fa-plus-circle"></i> Sinh biến thể-->
+                            <!--                        </button>-->
+                            <!--                        <button class="btn btn-outline-danger btn-sm" id="btnClearVariants">-->
+                            <!--                            <i class="fas fa-refresh"></i> Xóa tất cả-->
+                            <!--                        </button>-->
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 🟨 BẢNG 3: DANH SÁCH CHI TIẾT SẢN PHẨM -->
+                <div class="table-container">
+                    <h6 class="fw-semibold-header mb-2"><i class="fas fa-list"></i> Danh sách chi tiết sản phẩm</h6>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width:45px;">
+                                <i id="selectAllRows" class="far fa-square cursor-pointer"></i>
+                            </th>
+                            <th>STT</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Màu sắc</th>
+                            <th>Kích cỡ</th>
+                            <th>SLT</th>
+                            <th>Giá nhập</th>
+                            <th>Giá bán</th>
+                            <th>Trạng thái</th>
+                            <th>Ảnh sản phẩm</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="table-variants">
+                        <tr>
+                            <td colspan="10" class="text-muted">Chưa có dữ liệu</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="save-container">
+                        <button class="btn btn-success btn-sm px-3" id="btn-save-product">
+                            <i class="fas fa-save"></i> Lưu sản phẩm
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- 🪟 POPUP THÊM NHANH THUỘC TÍNH -->
+            <div id="quickAddModal" class="quick-modal">
+                <div class="quick-modal-content">
+                    <h5 id="quickModalTitle" class="modal-title">Thêm mới</h5>
+
+                    <!-- 🔹 Giao diện popup thêm màu sắc -->
+                    <div id="quickAddForm" class="d-flex flex-wrap" style="gap: 20px;">
+
+                        <!-- 🟩 CỘT TRÁI: Chọn mã màu -->
+                        <div id="colorPickerSection" class="flex-fill" style="min-width: 180px;">
+                            <label for="attrColorInput" class="form-label fw-bold">Chọn mã màu:</label>
+                            <!--                            <input type="color" id="attrColorInput" class="form-control form-control-color w-100" value="#000000">-->
+                            <input
+                                    type="color"
+                                    id="attrColorInput"
+                                    value="#000000"
+                                    style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;border:0;padding:0;margin:0;"
+                            />
+                            <!-- 🎨 Ô chọn mã màu đẹp -->
+                            <div id="customColorPickerContainer" style="position: relative;">
+                                <div class="selected-color-box" id="selectedColorBox" title="Bấm để chọn màu"></div>
+                                <input type="text" id="colorHexDisplay" value="#000000" maxlength="7" />
+
+                                <!-- 🎨 Popup bảng chọn màu (NẰM TRONG CONTAINER NÀY) -->
+                                <div id="customColorPalette" class="color-palette shadow">
+                                    <div class="color-palette-grid">
+                                        <div class="color-item" style="background:#FF0000" data-color="#FF0000"></div>
+                                        <div class="color-item" style="background:#00FF00" data-color="#00FF00"></div>
+                                        <div class="color-item" style="background:#0000FF" data-color="#0000FF"></div>
+                                        <div class="color-item" style="background:#FFFF00" data-color="#FFFF00"></div>
+                                        <div class="color-item" style="background:#FFA500" data-color="#FFA500"></div>
+                                        <div class="color-item" style="background:#FFC0CB" data-color="#FFC0CB"></div>
+                                        <div class="color-item" style="background:#8A2BE2" data-color="#8A2BE2"></div>
+                                        <div class="color-item" style="background:#A52A2A" data-color="#A52A2A"></div>
+                                        <div class="color-item" style="background:#008080" data-color="#008080"></div>
+                                        <div class="color-item" style="background:#000000" data-color="#000000"></div>
+                                        <div class="color-item" style="background:#808080" data-color="#808080"></div>
+                                        <div class="color-item" style="background:#FFFFFF; border:1px solid #ccc" data-color="#FFFFFF"></div>
+                                    </div>
+                                    <input type="color" id="colorFreePicker" class="form-control form-control-color mt-2" value="#000000">
+                                </div>
+                            </div>
+
+
+                            <div class="mt-2 small text-muted">
+                                <div>Mã màu: <strong id="colorCodeDisplay">#000000</strong></div>
+                                <div>Tên gợi ý: <strong id="colorNameDisplay">Đen</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- 🟦 CỘT PHẢI: Tên thủ công + Trạng thái -->
+                        <div id="colorInfoSection" class="flex-fill" style="min-width: 240px;">
+                            <!-- Tên màu thủ công -->
+                            <div id="colorNameInputSection" class="mb-3">
+                                <label for="attrColorNameInput" class="form-label fw-bold">Tên màu thủ công (tuỳ chọn):</label>
+                                <input type="text" id="attrColorNameInput" class="form-control" placeholder="VD: Đen tuyền, Đỏ đô, Xanh pastel...">
+                            </div>
+
+                            <!-- Dropdown trạng thái -->
+                            <div id="colorStatusSection">
+                                <label for="attrStatusInput" class="form-label fw-bold">Trạng thái:</label>
+                                <div class="dropdown">
+                                    <input type="text" id="attrStatusInput" class="form-control dropdown-input" placeholder="Chọn trạng thái" readonly>
+                                    <div id="attrStatusList" class="dropdown-list">
+                                        <div class="dropdown-item" data-id="1">Đang hoạt động</div>
+                                        <div class="dropdown-item" data-id="0">Ngừng hoạt động</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button class="btn btn-success btn-sm px-3" id="btnSaveAttr">
+                            <i class="fas fa-save"></i> Lưu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div layout:fragment="scripts">
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+            });
+        </script>
+
+        <script>
+            let finalSanPhamId = null;
+            let sanPhamId = null;
+            // ============================================================
+            // 🟩 1️⃣ LOAD DỮ LIỆU DROPDOWN TỪ API (THƯƠNG HIỆU, DANH MỤC, ...)
+            // ============================================================
+
+            async function loadDropdownData() {
+                try {
+                    const [thuongHieuRes, danhMucRes, chatLieuRes, deGiayRes, mauSacRes, kichCoRes] = await Promise.all([
+                        axios.get('/api/thuong-hieu/getAll'),
+                        axios.get('/api/danh-muc/getAll'),
+                        axios.get('/api/chat-lieu/getAll'),
+                        axios.get('/api/de-giay/getAll'),
+                        axios.get('/api/mau-sac/getAll'),
+                        axios.get('/api/kich-co/getAll')
+                    ]);
+
+                    const mapData = (data, field, listId) => {
+                        const $list = $(`#${listId}`);
+                        $list.empty();
+                        data.forEach(item => {
+                            $list.append(`
+                    <div class="dropdown-item" data-id="${item.id}">
+                        <i class="far fa-square me-2"></i> ${item[field]}
+                    </div>
+                `);
+                        });
+                    };
+
+                    // Gán dữ liệu vào các dropdown
+                    mapData(thuongHieuRes.data, 'tenThuongHieu', 'thuongHieuList');
+                    mapData(danhMucRes.data, 'tenDanhMuc', 'danhMucList');
+                    mapData(chatLieuRes.data, 'tenChatLieu', 'chatLieuList');
+                    mapData(deGiayRes.data, 'tenDeGiay', 'deGiayList');
+                    renderColorPopup(mauSacRes.data); // 🔹 Gọi sau khi load dữ liệu màu
+                    renderSizePopup(kichCoRes.data);
+                } catch (err) {
+                    console.error('❌ Lỗi load dropdown:', err);
+                }
+            }
+
+            // ============================================================
+            // 🟢 HÀM XỬ LÝ CHUNG CHO DROPDOWN SINGLE-SELECT
+            // ============================================================
+            // ✅ Bắt sự kiện mở dropdown cho các single-select chung
+            $(document).on('click', '.dropdown-input', function () {
+                const id = $(this).attr('id');
+                const listId = '#' + id.replace('Input', 'List');
+
+                // ✅ Bỏ qua dropdown riêng (giới tính, trạng thái, popup)
+                if (['#gioiTinhList', '#trangThaiList', '#attrStatusList'].includes(listId)) return;
+
+                $('.dropdown-list').not(listId).removeClass('show');
+                $(listId).toggleClass('show');
+                adjustDropdownHeight($(listId));
+            });
+
+            $(document).on('click', '.dropdown-list.single-select .dropdown-item', function (e) {
+                e.stopPropagation();
+
+                const $item = $(this);
+                const $list = $item.closest('.dropdown-list');
+                const id = $item.data('id');
+                const name = $item.text().trim();
+
+                // 🔹 Xác định input liên kết (VD: #thuongHieuInput)
+                const inputId = '#' + $list.attr('id').replace('List', 'Input');
+                const $input = $(inputId);
+
+                // 🔹 Bỏ chọn tất cả item cũ
+                $list.find('.dropdown-item').removeClass('selected')
+                    .find('i').removeClass('fa-check-square text-primary').addClass('fa-square');
+
+                // 🔹 Chọn item hiện tại
+                $item.addClass('selected')
+                    .find('i').removeClass('fa-square').addClass('fa-check-square text-primary');
+
+                // 🔹 Cập nhật input hiển thị và data
+                $input.val(name).data('ids', [id]);
+                adjustDropdownHeight($(listId));
+
+                // 🔹 Ẩn dropdown
+                $list.removeClass('show');
+            });
+
+
+
+
+            // ============================================================
+            // 🟦 2️⃣ XỬ LÝ DROPDOWN CHỌN NHIỀU (MULTI SELECT)
+            // ============================================================
+            // ✅ Bắt sự kiện mở dropdown chung
+            // $(document).on('click', '.dropdown-input', function () {
+            //     const id = $(this).attr('id');
+            //     const listId = '#' + id.replace('Input', 'List');
+            //
+            //     // ✅ Nếu là các dropdown riêng (giới tính, trạng thái...) thì bỏ qua — có handler riêng
+            //     if (['#gioiTinhList', '#trangThaiList', '#attrStatusList'].includes(listId)) return;
+            //
+            //     $('.dropdown-list').not(listId).removeClass('show');
+            //     $(listId).toggleClass('show');
+            //     adjustDropdownHeight($(listId));
+            // });
+
+
+            // Giới hạn số item hiển thị trong dropdown (>5 thì cho cuộn)
+            function adjustDropdownHeight($list) {
+                const itemCount = $list.find('.dropdown-item').length;
+                if (itemCount > 4) {
+                    $list.css({ 'max-height': '180px', 'overflow-y': 'auto' });
+                } else {
+                    $list.css({ 'max-height': 'none', 'overflow-y': 'hidden' });
+                }
+            }
+
+            // ✅ Cho phép chọn nhiều mục
+            // $(document).on('click', '.dropdown-item', function (e) {
+            //     const parentId = $(this).parent().attr('id');
+            //     if (['trangThaiList', 'attrStatusList', 'gioiTinhList'].includes(parentId)) return;
+            //
+            //
+            //
+            //     e.stopPropagation();
+            //     const $item = $(this);
+            //     const $icon = $item.find('i');
+            //     const $list = $item.parent();
+            //     const inputId = '#' + $list.attr('id').replace('List', 'Input');
+            //
+            //     // Toggle chọn/bỏ chọn
+            //     if ($item.hasClass('selected')) {
+            //         $item.removeClass('selected');
+            //         $icon.removeClass('fa-check-square text-primary').addClass('fa-square');
+            //     } else {
+            //         $item.addClass('selected');
+            //         $icon.removeClass('fa-square').addClass('fa-check-square text-primary');
+            //     }
+            //
+            //     // Cập nhật giá trị hiển thị
+            //     const selected = [], selectedIds = [];
+            //     $list.find('.dropdown-item.selected').each(function () {
+            //         selected.push($(this).text().trim());
+            //         selectedIds.push($(this).data('id'));
+            //     });
+            //
+            //     $(inputId).val(selected.join(', ')).data('ids', selectedIds);
+            // });
+
+
+            // ============================================================
+            // 🔴 VALIDATE TỨC THỜI INPUT BẮT BUỘC
+            // ============================================================
+            function validateRequiredInput(selector, message) {
+                const $input = $(selector);
+                const ids = $input.data('ids') || [];
+
+                // Nếu rỗng
+                if (ids.length === 0 || !$input.val().trim()) {
+                    $input.addClass('is-invalid');
+                    if ($input.next('.error-message').length === 0) {
+                        $input.after(`<small class="error-message text-danger">${message}</small>`);
+                    }
+                    return false;
+                } else {
+                    $input.removeClass('is-invalid');
+                    $input.next('.error-message').remove();
+                    return true;
+                }
+            }
+
+
+
+            // ============================================================
+            // 🟧 3️⃣ POPUP MÀU SẮC (Color Picker)
+            // ============================================================
+            function renderColorPopup(data) {
+                const $popup = $('#mauSacPopup');
+                $popup.empty();
+                data.forEach(item => {
+                    $popup.append(`
+            <div class="color-item"
+                 data-id="${item.id}"
+                 title="${item.tenMau}"
+                 style="background-color: ${item.maMau};">
+            </div>
+        `);
+                });
+            }
+
+            // Hover hiển thị mở rộng
+            $(document).on('mouseenter', '.color-item', function () {
+                $('#mauSacPopup').addClass('expanded');
+            });
+
+            $(document).on('mouseleave', '.color-item', function () {
+                $('#mauSacPopup').removeClass('expanded');
+            });
+
+            // Mở / đóng popup màu
+            $(document).on('click', '#mauSacInput', function (e) {
+                e.stopPropagation();
+                $('.color-popup').not('#mauSacPopup').removeClass('show');
+                $('#mauSacPopup').toggleClass('show');
+            });
+
+            // Chọn màu
+            $(document).on('click', '.color-item', function (e) {
+                e.stopPropagation();
+                const $item = $(this);
+                $item.toggleClass('selected');
+
+                const selectedNames = [], selectedIds = [], selectedColors = [];
+
+                $('#mauSacPopup .color-item.selected').each(function () {
+                    selectedNames.push($(this).attr('title'));
+                    selectedIds.push($(this).data('id'));
+                    selectedColors.push($(this).css('background-color'));
+                });
+
+                $('#mauSacInput').val(selectedNames.join(', ')).data('ids', selectedIds);
+                toggleGenerateButtonState(); // 🔹 thêm dòng này
+            });
+
+            // Ẩn popup khi click ra ngoài
+            $(document).click(function (e) {
+                if (!$(e.target).closest('#mauSacPopup, #mauSacInput').length) {
+                    const hasSelected = $('#mauSacPopup .color-item.selected').length > 0;
+                    if (!hasSelected) $('#mauSacPopup').removeClass('show');
+                }
+            });
+
+
+
+            // ============================================================
+            // 🟨 4️⃣ POPUP KÍCH CỠ (Size Picker)
+            // ============================================================
+            function renderSizePopup(data) {
+                const $popup = $('#kichCoPopup');
+                $popup.empty();
+                data.forEach(item => {
+                    $popup.append(`
+            <div class="size-item"
+                 data-id="${item.id}"
+                 title="${item.tenKichCo}">
+                 ${item.tenKichCo}
+            </div>
+        `);
+                });
+            }
+
+            // Mở / đóng popup kích cỡ
+            $(document).on('click', '#kichCoInput', function (e) {
+                e.stopPropagation();
+                $('.size-popup').not('#kichCoPopup').removeClass('show');
+                $('#kichCoPopup').toggleClass('show');
+            });
+
+            // Chọn kích cỡ
+            $(document).on('click', '.size-item', function (e) {
+                e.stopPropagation();
+                const $item = $(this);
+                $item.toggleClass('selected');
+
+                const selectedNames = [], selectedIds = [];
+                $('#kichCoPopup .size-item.selected').each(function () {
+                    selectedNames.push($(this).text().trim());
+                    selectedIds.push($(this).data('id'));
+                });
+
+                $('#kichCoInput').val(selectedNames.join(', ')).data('ids', selectedIds);
+                toggleGenerateButtonState(); // 🔹 thêm dòng này
+            });
+
+            // Ẩn popup kích cỡ khi click ra ngoài (nếu chưa chọn)
+            $(document).click(function (e) {
+                if (!$(e.target).closest('#kichCoPopup, #kichCoInput').length) {
+                    const hasSelected = $('#kichCoPopup .size-item.selected').length > 0;
+                    if (!hasSelected) $('#kichCoPopup').removeClass('show');
+                }
+            });
+
+
+            // 🔹 Khi bấm "Sinh biến thể" → render bảng
+            $(document).on('click', '#btnGenerateVariants', function () {
+                const tenSanPham = $('#tenSanPhamInput').val().trim();
+                const mauSacIds = $('#mauSacInput').data('ids') || [];
+                const kichCoIds = $('#kichCoInput').data('ids') || [];
+
+                if (!tenSanPham || mauSacIds.length === 0 || kichCoIds.length === 0) {
+                    alert('⚠️ Vui lòng nhập tên sản phẩm, chọn màu sắc và kích cỡ trước!');
+                    return;
+                }
+
+                // 🧠 Gọi hàm render bảng thủ công
+                updateVariantTable();
+            });
+
+            // Disable nút “Sinh biến thể” khi chưa chọn đủ
+            function toggleGenerateButtonState() {
+                const tenSanPham = $('#tenSanPhamInput').val().trim();
+
+                // Dữ liệu từ data() hoặc fallback theo text
+                const mauSacIds = $('#mauSacInput').data('ids');
+                const kichCoIds = $('#kichCoInput').data('ids');
+                const mauSacText = $('#mauSacInput').val().trim();
+                const kichCoText = $('#kichCoInput').val().trim();
+
+                // ✅ Dù data mất thì text vẫn dùng được
+                const mauSacFilled = (Array.isArray(mauSacIds) && mauSacIds.length > 0) || mauSacText.length > 0;
+                const kichCoFilled = (Array.isArray(kichCoIds) && kichCoIds.length > 0) || kichCoText.length > 0;
+
+                const canGenerate = tenSanPham.length > 0 && mauSacFilled && kichCoFilled;
+                $('#btnGenerateVariants').prop('disabled', !canGenerate);
+            }
+
+
+
+            $(document).on('input click', '#tenSanPhamInput, #mauSacInput, #kichCoInput', toggleGenerateButtonState);
+
+
+            // 🔹 Khi bấm "Xóa tất cả biến thể" → dọn bảng
+            $(document).on('click', '#btnClearVariants', function () {
+                if (confirm('Bạn có chắc muốn xóa tất cả biến thể không?')) {
+                    $('#table-variants').html(`
+            <tr><td colspan="10" class="text-muted text-center">Chưa có biến thể nào.</td></tr>
+        `);
+                }
+            });
+
+
+
+
+            // ============================================================
+            // 🟩 5️⃣ SINGLE SELECT TRẠNG THÁI
+            // ============================================================
+            $(document).on('click', '#trangThaiInput', function () {
+                $('.dropdown-list').not('#trangThaiList').removeClass('show');
+                $('#trangThaiList').toggleClass('show');
+                adjustDropdownHeight($('#trangThaiList'));
+            });
+
+            $(document).on('click', '#trangThaiList .dropdown-item', function (e) {
+                e.stopPropagation();
+                const $item = $(this);
+                const $list = $item.parent();
+                const $input = $('#trangThaiInput');
+
+                // Nếu item đang được chọn => không làm gì cả
+                if ($item.hasClass('selected')) return;
+
+                // Bỏ chọn tất cả item khác
+                $list.find('.dropdown-item').removeClass('selected')
+                    .find('i')
+                    .removeClass('fa-check-square text-primary')
+                    .addClass('fa-square');
+
+                // Chọn item vừa click
+                $item.addClass('selected');
+                $item.find('i').removeClass('fa-square').addClass('fa-check-square text-primary');
+
+                // Gán giá trị hiển thị và data-id
+                $input.val($item.text().trim()).data('id', $item.data('id'));
+
+                // Ẩn dropdown sau khi chọn
+                $list.removeClass('show');
+            });
+
+
+
+            // ============================================================
+            // 🟦 6️⃣ SINGLE SELECT GIỚI TÍNH
+            // ============================================================
+            $(document).on('click', '#gioiTinhInput', function () {
+                $('.dropdown-list').not('#gioiTinhList').removeClass('show');
+                $('#gioiTinhList').toggleClass('show');
+                adjustDropdownHeight($('#gioiTinhList'));
+            });
+
+            $(document).on('click', '#gioiTinhList .dropdown-item', function (e) {
+                e.stopPropagation();
+                const $item = $(this);
+                const $list = $item.parent();
+                const $input = $('#gioiTinhInput');
+
+                // Nếu item đang được chọn => không làm gì cả
+                if ($item.hasClass('selected')) return;
+
+                // Bỏ chọn tất cả item khác
+                $list.find('.dropdown-item').removeClass('selected')
+                    .find('i')
+                    .removeClass('fa-check-square text-primary')
+                    .addClass('fa-square');
+
+                // Chọn item vừa click
+                $item.addClass('selected');
+                $item.find('i').removeClass('fa-square').addClass('fa-check-square text-primary');
+
+                // Gán giá trị hiển thị và data-id
+                $input.val($item.text().trim()).data('id', $item.data('id'));
+
+                // Ẩn dropdown sau khi chọn
+                $list.removeClass('show');
+            });
+
+
+
+
+            // ============================================================
+            // 🟪 7️⃣ DROPDOWN TÊN SẢN PHẨM (SEARCHABLE SINGLE SELECT - FIXED)
+            // ============================================================
+
+            // 🟩 Load dữ liệu sản phẩm ban đầu
+            async function loadTenSanPhamList() {
+                try {
+                    const res = await axios.get('/api/san-pham/getAll');
+                    window.tenSanPhamData = res.data || [];
+                    renderTenSanPhamList(window.tenSanPhamData);
+                } catch (err) {
+                    console.error('❌ Lỗi load sản phẩm:', err);
+                }
+            }
+
+            // 🟦 Hàm render danh sách sản phẩm theo keyword
+            function renderTenSanPhamList(list, keyword = '') {
+                const $list = $('#tenSanPhamList');
+                $list.empty();
+
+                let filtered = list;
+                if (keyword.trim() !== '') {
+                    filtered = list.filter(sp =>
+                        sp.tenSanPham.toLowerCase().includes(keyword.toLowerCase())
+                    );
+                }
+
+                // 🔹 Nếu không có kết quả, hiển thị tùy chọn thêm mới
+                if (filtered.length === 0 && keyword.trim() !== '') {
+                    $list.append(`
+            <div class="dropdown-item add-new" data-id="null">
+                ➕ Thêm sản phẩm mới: <strong>${keyword}</strong>
+            </div>
+        `);
+                } else {
+                    filtered.forEach(sp => {
+                        $list.append(`
+                <div class="dropdown-item" data-id="${sp.id}">
+                    ${sp.tenSanPham}
+                </div>
+            `);
+                    });
+                }
+
+                // ✅ Cập nhật chiều cao cuộn
+                adjustDropdownHeight($list);
+            }
+
+            // 🟨 Khi click hoặc focus vào input → mở dropdown, hiển thị toàn bộ list
+            $(document).on('focus click', '#tenSanPhamInput', function (e) {
+                e.stopPropagation();
+                const $list = $('#tenSanPhamList');
+                renderTenSanPhamList(window.tenSanPhamData || []); // luôn render full khi mở
+                $('.dropdown-list').not($list).removeClass('show');
+                $list.addClass('show');
+                adjustDropdownHeight($list);
+            });
+
+            // 🟧 Khi người dùng gõ → lọc danh sách theo keyword
+            $(document).on('input', '#tenSanPhamInput', function () {
+                const keyword = $(this).val();
+                renderTenSanPhamList(window.tenSanPhamData || [], keyword);
+
+                const $list = $('#tenSanPhamList');
+                if (!$list.hasClass('show')) $list.addClass('show');
+            });
+
+            // 🟫 Khi chọn 1 mục trong danh sách
+            $(document).on('click', '#tenSanPhamList .dropdown-item', function (e) {
+                e.stopPropagation();
+                const $item = $(this);
+                const rawId = $item.data('id');
+                const id = (rawId === null || rawId === 'null' || rawId === undefined) ? null : Number(rawId);
+                const name = $item.text().replace(/^➕\s*Thêm sản phẩm mới:\s*/i, '').trim();
+
+                $('#tenSanPhamInput').val(name).data('id', id);
+                $('#tenSanPhamList').removeClass('show');
+            });
+
+            // 🟥 Ẩn dropdown khi click ra ngoài
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('#tenSanPhamInput, #tenSanPhamList').length) {
+                    $('#tenSanPhamList').removeClass('show');
+                }
+            });
+
+
+
+
+            // ============================================================
+            // 🟥 8️⃣ POPUP THÊM NHANH THUỘC TÍNH (Add nhanh)
+            // ============================================================
+            $(document).ready(function () {
+
+                // 💾 Lưu nhanh
+                $(document).on('click', '#btnSaveAttr', async function () {
+                    const name = $('#attrColorNameInput').val().trim();
+                    const statusText = $('#attrStatusInput').val().trim();
+                    const status = statusText === 'Đang hoạt động' ? 1 : 0;
+
+                    if (!currentAttrType) return alert('Không xác định được loại thuộc tính.');
+                    if (!name) return alert('Vui lòng nhập tên thuộc tính.');
+                    if (statusText === '') return alert('Vui lòng chọn trạng thái.');
+
+                    const apiMap = {
+                        'thuongHieu': '/api/thuong-hieu/add',
+                        'danhMuc': '/api/danh-muc/add',
+                        'chatLieu': '/api/chat-lieu/add',
+                        'deGiay': '/api/de-giay/add',
+                        'mauSac': '/api/mau-sac/add',
+                        'kichCo': '/api/kich-co/add'
+                    };
+
+                    const fieldMap = {
+                        'thuongHieu': 'tenThuongHieu',
+                        'danhMuc': 'tenDanhMuc',
+                        'chatLieu': 'tenChatLieu',
+                        'deGiay': 'tenDeGiay',
+                        'mauSac': 'tenMau',
+                        'kichCo': 'tenKichCo'
+                    };
+
+                    let payload = {
+                        [fieldMap[currentAttrType]]: name,
+                        trangThai: status
+                    };
+
+                    if (currentAttrType === 'mauSac') {
+                        const colorCode = $('#attrColorInput').val().toUpperCase();
+                        const colorNameManual = $('#attrColorNameInput').val().trim();
+                        const colorNameAuto = colorNameMap[colorCode] || 'Màu không xác định';
+                        const colorName = colorNameManual || colorNameAuto;
+                        payload = {
+                            tenMau: colorName,
+                            maMau: colorCode,
+                            trangThai: status
+                        };
+                    }
+
+                    try {
+                        await axios.post(apiMap[currentAttrType], payload);
+                        alert('✅ Đã lưu thành công!');
+                        await loadDropdownData();
+
+                        // 🟢 Hỏi xem người dùng muốn thêm tiếp hay không
+                        const tiepTuc = confirm('Bạn có muốn thêm tiếp không?');
+
+                        if (tiepTuc) {
+                            // Giữ popup mở, reset form
+                            $('#attrColorNameInput').val('');
+                            $('#attrStatusInput').val('').data('id', null);
+                            $('#attrStatusList .dropdown-item').removeClass('selected')
+                                .find('i').removeClass('fa-check-square text-primary').addClass('fa-square');
+
+                            if (currentAttrType === 'mauSac') {
+                                const defaultColor = '#000000';
+                                updateColorSelection(defaultColor);
+                            }
+                            $('#attrColorNameInput').focus();
+                        } else {
+                            // Đóng popup
+                            $('#quickAddModal').fadeOut(150, () => $('#quickAddModal').removeClass('show'));
+                        }
+
+                    } catch (err) {
+                        console.error('❌ Lỗi khi lưu thuộc tính:', err);
+                        alert('❌ Lỗi khi lưu, vui lòng thử lại.');
+                    }
+                });
+
+
+                // ❌ Đóng popup khi click nền
+                $(document).on('click', '#quickAddModal', function (e) {
+                    if ($(e.target).is('#quickAddModal')) {
+                        $('#quickAddModal').fadeOut(150, function () {
+                            $(this).removeClass('show');
+                        });
+                    }
+                });
+
+                // ===== DROPDOWN TRẠNG THÁI TRONG POPUP =====
+                $(document).on('click', '#attrStatusInput', function (e) {
+                    e.stopPropagation();
+                    $('.dropdown-list').not('#attrStatusList').removeClass('show');
+                    $('#attrStatusList').toggleClass('show');
+                });
+
+                // Chọn 1 trạng thái -> tự đóng
+                $(document).on('click', '#attrStatusList .dropdown-item', function (e) {
+                    e.stopPropagation();
+                    const $item = $(this);
+                    $('#attrStatusList .dropdown-item').removeClass('selected');
+                    $item.addClass('selected');
+                    $('#attrStatusInput').val($item.text().trim()).data('id', $item.data('id'));
+                    $('#attrStatusList').removeClass('show');
+                });
+
+                // Click ra ngoài -> đóng dropdown
+                $(document).on('click', function (e) {
+                    if (!$(e.target).closest('#attrStatusInput, #attrStatusList').length) {
+                        $('#attrStatusList').removeClass('show');
+                    }
+                });
+            });
+
+
+
+            // ============================================================
+            // 🟩 9️⃣ KHỞI TẠO (GỌI LOAD DỮ LIỆU LẦN ĐẦU)
+            // ============================================================
+            $(document).ready(function () {
+                loadDropdownData();
+                loadTenSanPhamList(); // 🔹 load danh sách sản phẩm
+                loadColorMap(); // 🟩 Thêm dòng này
+            });
+
+
+
+            // ============================================================
+            // 🟦 🔟 CẬP NHẬT BẢNG BIẾN THỂ (GỘP ẢNH THEO MÀU)
+            // ============================================================
+            // ============================================================
+            // 🟦 CẬP NHẬT BẢNG BIẾN THỂ (SẢN PHẨM CHI TIẾT)
+            // ============================================================
+            function updateVariantTable() {
+                const tenSanPham = $('#tenSanPhamInput').val().trim();
+                const mauSacNames = ($('#mauSacInput').val() || '').split(',').map(s => s.trim()).filter(Boolean);
+                const kichCoNames = ($('#kichCoInput').val() || '').split(',').map(s => s.trim()).filter(Boolean);
+
+                // Lấy danh sách ID tương ứng từ data()
+                const mauSacIds = $('#mauSacInput').data('ids') || [];
+                const kichCoIds = $('#kichCoInput').data('ids') || [];
+
+                const $tbody = $('#table-variants');
+                $tbody.empty();
+
+                if (!tenSanPham || mauSacNames.length === 0 || kichCoNames.length === 0) {
+                    $tbody.append(`
+            <tr><td colspan="10" class="text-muted text-center">
+                ⚠️ Vui lòng nhập tên sản phẩm và chọn đầy đủ màu sắc, kích cỡ.
+            </td></tr>
+        `);
+                    return;
+                }
+
+                let stt = 1;
+                let rowsHtml = '';
+
+                // Sinh bảng biến thể
+                mauSacNames.forEach((mau, i) => {
+                    const mauId = mauSacIds[i];
+                    const colorRowspan = kichCoNames.length;
+
+                    kichCoNames.forEach((size, j) => {
+                        const sizeId = kichCoIds[j];
+
+                        rowsHtml += `
+            <tr data-mau-id="${mauId}" data-size-id="${sizeId}">
+                <td class="text-center align-middle">
+                    <i class="far fa-square row-select cursor-pointer"></i>
+                </td>
+                <td>${stt++}</td>
+                <td>${tenSanPham}</td>
+                <td>${mau}</td>
+                <td>${size}</td>
+
+                <!-- Số lượng -->
+                <td>
+                    <input type="number" class="form-control form-control-sm text-center soLuongInput" min="0" value="0">
+                </td>
+
+                <!-- Giá nhập -->
+                <td>
+                    <input type="number" class="form-control form-control-sm text-center giaNhapInput" min="0" value="0">
+                </td>
+
+                <!-- Giá bán -->
+                <td>
+                    <input type="number" class="form-control form-control-sm text-center giaBanInput" min="0" value="0">
+                </td>
+
+                <!-- Trạng thái -->
+                <td>
+                    <select class="form-select form-select-sm trangThaiSelect">
+                        <option value="1">Đang bán</option>
+                        <option value="0">Ngừng</option>
+                    </select>
+                </td>
+
+                <!-- Upload ảnh -->
+                <!-- Upload ảnh -->
+${j === 0 ? `
+    <td rowspan="${colorRowspan}" class="align-middle">
+        <div class="upload-container"
+             data-mau-id="${mauId}"
+             data-color="${mau}"
+             data-mode="">
+
+            <!-- Khu chọn ảnh -->
+            <div class="upload-placeholder text-center p-2 border rounded cursor-pointer">
+                <i class="fas fa-cloud-upload-alt fa-2x text-secondary mb-1"></i>
+                <div class="small text-muted">Chọn ảnh</div>
+            </div>
+
+            <!-- Input ẩn -->
+            <input type="file" accept="image/*" multiple style="display:none">
+
+            <!-- Khu preview -->
+            <div class="preview-container d-flex flex-wrap gap-2 mt-2"></div>
+        </div>
+    </td>
+` : ''}
+            </tr>`;
+                    });
+                });
+
+                $tbody.html(rowsHtml);
+            }
+
+            // Khi click vào placeholder -> mở file picker
+            $(document).on('click', '.upload-placeholder', function () {
+                $(this).siblings('input[type="file"]').trigger('click');
+            });
+
+
+            // Gọi lại mỗi khi thay đổi tên SP, màu, hoặc kích cỡ
+            // $('#tenSanPhamInput').on('input', updateVariantTable);
+            // $(document).on('click', '.color-item, .size-item', function () {
+            //     setTimeout(updateVariantTable, 100);
+            // });
+
+
+
+            // ============================================================
+            // 🟩 14️⃣ TÍCH CHỌN DÒNG & CHỌN TẤT CẢ
+            // ============================================================
+
+            // Click chọn từng dòng
+            $(document).on('click', '.row-select', function () {
+                const $icon = $(this);
+
+                if ($icon.hasClass('fa-square')) {
+                    $icon.removeClass('fa-square').addClass('fa-check-square text-primary');
+                } else {
+                    $icon.removeClass('fa-check-square text-primary').addClass('fa-square');
+                }
+
+                updateSelectAllIcon();
+            });
+
+            // Click chọn tất cả
+            $(document).on('click', '#selectAllRows', function () {
+                const $icon = $(this);
+                const allSelected = $icon.hasClass('fa-check-square');
+
+                if (allSelected) {
+                    // Bỏ chọn tất cả
+                    $icon.removeClass('fa-check-square text-primary').addClass('fa-square');
+                    $('.row-select').removeClass('fa-check-square text-primary').addClass('fa-square');
+                } else {
+                    // Chọn tất cả
+                    $icon.removeClass('fa-square').addClass('fa-check-square text-primary');
+                    $('.row-select').removeClass('fa-square').addClass('fa-check-square text-primary');
+                }
+            });
+
+            // Hàm đồng bộ tick tổng khi chọn thủ công
+            function updateSelectAllIcon() {
+                const total = $('.row-select').length;
+                const selected = $('.row-select.fa-check-square').length;
+
+                if (selected === total && total > 0) {
+                    $('#selectAllRows').removeClass('fa-square').addClass('fa-check-square text-primary');
+                } else {
+                    $('#selectAllRows').removeClass('fa-check-square text-primary').addClass('fa-square');
+                }
+            }
+
+
+
+            // ============================================================
+            // 🟨 11️⃣ UPLOAD ẢNH & XEM TRƯỚC (CÓ NÉN + COVER + REORDER)
+            // ============================================================
+
+            // ⚙️ Nén ảnh client-side trước khi preview
+            async function compressImage(file, maxWidth = 900, quality = 0.8) {
+                return new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = event => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const scale = Math.min(maxWidth / img.width, 1);
+                            const width = img.width * scale;
+                            const height = img.height * scale;
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+                            canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // 🧩 Khi chọn file hoặc dán ảnh từ clipboard
+            // Khi chọn file: chỉ preview local, chưa upload
+            $(document).on('change', '.upload-container input[type="file"]', function (e) {
+                const files = Array.from(e.target.files || []);
+                const $container = $(this).closest('.upload-container');
+                const $preview = $container.find('.preview-container');
+
+                // Lưu danh sách file vào container để dùng khi ấn Lưu
+                $container.data('files', files);
+
+                $preview.empty();
+                files.forEach((file, idx) => {
+                    const url = URL.createObjectURL(file);
+                    $preview.append(`
+      <div class="preview-item" draggable="true" data-file-index="${idx}">
+        <img src="${url}" alt="">
+        <button type="button" class="btn-set-cover" title="Đặt làm ảnh chính">
+          <i class="fas fa-star"></i>
+        </button>
+        <button type="button" class="btn-remove-image">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `);
+                });
+
+                $container.find('.upload-placeholder').hide();
+            });
+            $(document).on('paste', '.upload-container', function (e) {
+                const items = e.originalEvent.clipboardData.items;
+                const files = [];
+                for (const item of items) {
+                    if (item.kind === 'file') files.push(item.getAsFile());
+                }
+                if (files.length) handleFiles({ target: { files }, currentTarget: this });
+            });
+
+            // ============================================================
+            // 🟢 XỬ LÝ FILE ẢNH (Preview local → upload thật sau khi lưu)
+            // ============================================================
+//             async function handleFiles(e) {
+//                 const files = e.target.files;
+//                 const $container = $(e.currentTarget).closest('.upload-container');
+//                 const mauSacId = +($container.closest('tr').data('mau-id') || 0);
+//                 const $preview = $container.find('.preview-container');
+//
+//                 // 🟢 Nếu CHƯA có ID sản phẩm → chỉ xem trước local
+//                 if (!finalSanPhamId) {
+//                     $preview.empty();
+//                     for (const file of files) {
+//                         const blob = await compressImage(file);
+//                         const imgUrl = URL.createObjectURL(blob);
+//                         $preview.append(`
+//                 <div class="preview-item" draggable="true">
+//                     <img src="${imgUrl}" alt="">
+//                         <button type="button" class="btn-set-cover" title="Đặt làm ảnh chính">
+//                             <i class="fas fa-star"></i>
+//                         </button>
+//                         <button type="button" class="btn-remove-image">
+//                             <i class="fas fa-times"></i>
+//                         </button>
+//                 </div>
+//             `);
+//                     }
+//                     $container.find('.upload-placeholder').hide();
+//                     console.log('🖼 Xem trước ảnh local (chưa upload vì chưa có ID sản phẩm)');
+//                     return;
+//                 }
+//
+//                 // 🟢 Nếu ĐÃ có ID sản phẩm → upload thật
+//                 for (const file of files) {
+//                     const formData = new FormData();
+//                     formData.append("sanPhamId", finalSanPhamId);
+//                     formData.append("mauSacId", mauSacId);
+//                     formData.append("file", file);
+//                     formData.append("laAnhBia", false);
+//                     formData.append("thuTu", $preview.children().length);
+//
+//                     try {
+//                         const res = await axios.post("/api/san-pham-mau-anh/upload", formData, {
+//                             headers: { "Content-Type": "multipart/form-data" }
+//                         });
+//                         const imgUrl = res.data.duongDan;
+//
+// // 🛠️ Nếu backend chỉ trả tên file (trường hợp API cũ) → tự thêm prefix
+//                         const fixedUrl = imgUrl.startsWith('http')
+//                             ? imgUrl
+//                             : `http://localhost:8080/uploads/sanpham/${finalSanPhamId}/${imgUrl}`;
+//
+//                         $preview.append(`
+//   <div class="preview-item" draggable="true">
+//       <img src="${fixedUrl}" alt="">
+//       <button type="button" class="btn-set-cover"
+//               data-id="${res.data.id}"
+//               title="Đặt làm ảnh chính">
+//           <i class="fas fa-star"></i>
+//       </button>
+//       <button type="button" class="btn-remove-image"
+//               data-id="${res.data.id}">
+//           <i class="fas fa-times"></i>
+//       </button>
+//   </div>
+// `);
+//
+//                         $container.find('.upload-placeholder').hide();
+//                         console.log('✅ Upload ảnh thành công:', imgUrl);
+//                     } catch (err) {
+//                         console.error('❌ Upload ảnh lỗi:', err);
+//                         alert('Không thể upload ảnh này!');
+//                     }
+//                 }
+//             }
+            // ============================================================
+            // 🟢 1️⃣ Khi chọn file (chưa upload — chỉ preview local)
+            // ============================================================
+            async function handleFiles(e) {
+                const files = e.target.files;
+                const $container = $(e.currentTarget).closest('.upload-container');
+                const $preview = $container.find('.preview-container');
+
+                // Hiển thị preview local
+                $preview.empty();
+                for (const file of files) {
+                    const imgUrl = URL.createObjectURL(file);
+                    $preview.append(`
+            <div class="preview-item" draggable="true">
+                <img src="${imgUrl}" alt="">
+                <button type="button" class="btn-set-cover" title="Đặt làm ảnh chính">
+                    <i class="fas fa-star"></i>
+                </button>
+                <button type="button" class="btn-remove-image">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `);
+                }
+
+                $container.find('.upload-placeholder').hide();
+                console.log('🖼 Hiển thị preview local, chưa upload.');
+            }
+
+            // ============================================================
+            // ⭐ 2️⃣ Chọn ảnh bìa (local — chỉ cập nhật giao diện & flag)
+            // ============================================================
+            $(document).on('click', '.btn-set-cover', function () {
+                const $this = $(this);
+                const $container = $this.closest('.upload-container');
+
+                // Chỉ cho phép 1 ảnh bìa mỗi màu
+                $container.find('.btn-set-cover').removeClass('active').attr('title', 'Đặt làm ảnh chính');
+                $container.find('.preview-item').removeAttr('data-cover');
+
+                // Kích hoạt ảnh này làm bìa
+                $this.addClass('active').attr('title', 'Ảnh chính');
+                $this.closest('.preview-item').attr('data-cover', 'true');
+
+                console.log('⭐ Đã chọn ảnh bìa local.');
+            });
+
+            // ============================================================
+            // ❌ 3️⃣ Xóa ảnh preview local
+            // ============================================================
+            $(document).on('click', '.btn-remove-image', function (e) {
+                e.stopPropagation();
+                const $container = $(this).closest('.upload-container');
+                $(this).closest('.preview-item').remove();
+
+                if ($container.find('.preview-item').length === 0) {
+                    $container.find('.upload-placeholder').show();
+                    $container.find('input[type="file"]').val('');
+                }
+            });
+
+
+            // ❌ Xóa ảnh
+            // $(document).on('click', '.btn-remove-image', function (e) {
+            //     e.stopPropagation();
+            //     const $container = $(this).closest('.upload-container');
+            //     $(this).closest('.preview-item').remove();
+            //
+            //     if ($container.find('.preview-item').length === 0) {
+            //         $container.find('.upload-placeholder').show();
+            //         $container.find('input[type="file"]').val('');
+            //     }
+            // });
+
+            // ⭐️ Đặt ảnh cover (ảnh chính)
+            // $(document).on('click', '.btn-set-cover', function () {
+            //     const $this = $(this);
+            //     const $container = $this.closest('.upload-container');
+            //     $container.find('.btn-set-cover').removeClass('active').attr('title', 'Đặt làm ảnh chính');
+            //     $this.addClass('active').attr('title', 'Ảnh chính');
+            // });
+            // $(document).on('click', '.btn-set-cover', async function () {
+            //     const $this = $(this);
+            //     const $container = $this.closest('.upload-container');
+            //     const $img = $this.siblings('img');
+            //     const imgSrc = $img.attr('src');
+            //     const mauSacId = +($container.closest('tr').data('mau-id') || 0);
+            //
+            //     // Cập nhật UI
+            //     $container.find('.btn-set-cover').removeClass('active').attr('title', 'Đặt làm ảnh chính');
+            //     $this.addClass('active').attr('title', 'Ảnh chính');
+            //
+            //     // Nếu có finalSanPhamId => gọi API cập nhật
+            //     if (finalSanPhamId) {
+            //         try {
+            //             // await axios.put('/api/san-pham-mau-anh/${imgId}/cover', {
+            //             //     sanPhamId: finalSanPhamId,
+            //             //     mauSacId: mauSacId,
+            //             //     duongDan: imgSrc
+            //             // });
+            //             await axios.put(`/api/san-pham-mau-anh/${imgId}/cover`);
+            //             console.log('⭐️ Cập nhật ảnh bìa thành công!');
+            //         } catch (err) {
+            //             console.error('❌ Lỗi cập nhật ảnh bìa:', err);
+            //         }
+            //     }
+            // });
+            $(document).on('click', '.btn-set-cover', async function () {
+                const $btn = $(this);
+                const $container = $btn.closest('.upload-container');
+                const imgId = $btn.data('id'); // chỉ có nếu ảnh đã tồn tại trên server
+
+                // Luôn đảm bảo trong 1 container chỉ có 1 ảnh bìa
+                $container.find('.btn-set-cover').removeClass('active').attr('title', 'Đặt làm ảnh chính');
+                $container.find('.preview-item').removeAttr('data-cover');
+                $btn.addClass('active').attr('title', 'Ảnh chính');
+                $btn.closest('.preview-item').attr('data-cover', 'true');
+
+                // Nếu là ảnh SERVER (đã có id) -> cập nhật cover ngay
+                if (imgId) {
+                    try {
+                        await axios.put(`/api/san-pham-mau-anh/${imgId}/cover`);
+                        console.log('⭐ Đã cập nhật ảnh bìa (server).');
+                    } catch (err) {
+                        console.error('❌ Lỗi cập nhật ảnh bìa:', err);
+                        alert('Không thể cập nhật ảnh bìa!');
+                    }
+                }
+                // Nếu là ảnh LOCAL (chưa có id) -> KHÔNG gọi API ở đây
+                // -> flag data-cover sẽ được gửi kèm khi upload lúc bấm Lưu
+            });
+
+
+
+
+            // ============================================================
+            // 🟣 UPLOAD TẤT CẢ ẢNH SAU KHI LƯU SẢN PHẨM
+            // ============================================================
+            // async function uploadAllImagesAfterSave(sanPhamId) {
+            //     const uploadPromises = [];
+            //
+            //     $('.upload-container').each(function () {
+            //         const $container = $(this);
+            //         const mauSacId = +($container.closest('tr').data('mau-id') || 0);
+            //         const $input = $container.find('input[type="file"]')[0];
+            //         const files = $input?.files || [];
+            //         const $preview = $container.find('.preview-container');
+            //
+            //         $preview.empty();
+            //
+            //         for (const file of files) {
+            //             const formData = new FormData();
+            //             formData.append("sanPhamId", sanPhamId);
+            //             formData.append("mauSacId", mauSacId);
+            //             formData.append("file", file);
+            //             formData.append("laAnhBia", false);
+            //             formData.append("thuTu", $preview.children().length);
+            //
+            //             const promise = axios.post("/api/san-pham-mau-anh/upload", formData, {
+            //                 headers: { "Content-Type": "multipart/form-data" }
+            //             })
+            //                 .then(res => {
+            //                     const imgId = res.data.id;
+            //                     const imgUrl = res.data.duongDan;
+            //
+            //                     // ✅ Append ảnh mới kèm data-id
+            //                     $preview.append(`
+            //             <div class="preview-item" draggable="true">
+            //                 <img src="${imgUrl}" alt="">
+            //                 <button type="button"
+            //                         class="btn-set-cover"
+            //                         data-id="${imgId}"
+            //                         title="Đặt làm ảnh chính">
+            //                     <i class="fas fa-star"></i>
+            //                 </button>
+            //                 <button type="button"
+            //                         class="btn-remove-image"
+            //                         data-id="${imgId}">
+            //                     <i class="fas fa-times"></i>
+            //                 </button>
+            //             </div>
+            //         `);
+            //
+            //                     $container.find('.upload-placeholder').hide();
+            //                 })
+            //                 .catch(err => {
+            //                     console.error('❌ Lỗi upload ảnh:', err);
+            //                 });
+            //
+            //             uploadPromises.push(promise);
+            //         }
+            //     });
+            //
+            //     await Promise.all(uploadPromises);
+            //     console.log('📦 Đã upload toàn bộ ảnh thật sau khi lưu sản phẩm.');
+            // }
+            // ============================================================
+            // 💾 4️⃣ Khi bấm Lưu sản phẩm → upload thật toàn bộ ảnh local
+            // ============================================================
+            async function uploadAllImagesAfterSave(sanPhamId) {
+                const jobs = [];
+
+                $('.upload-container').each(function () {
+                    const $container = $(this);
+                    const mauSacId = +($container.closest('tr').data('mau-id') || 0);
+                    const $items = $container.find('.preview-item');
+
+                    // Lấy danh sách file local đã lưu ở bước chọn file
+                    const filesArr = $container.data('files') || [];
+
+                    $items.each(function () {
+                        const $item = $(this);
+                        const btn = $item.find('.btn-set-cover');
+                        const serverId = btn.data('id');                 // tồn tại nếu ảnh đã có trên server
+                        const isCover = $item.attr('data-cover') === 'true';
+
+                        if (serverId) {
+                            // Ảnh đã ở server: nếu được chọn bìa ở UI -> gọi API cover
+                            if (isCover) {
+                                const p = axios.put(`/api/san-pham-mau-anh/${serverId}/cover`)
+                                    .then(() => console.log('⭐ Đã set cover cho ảnh server:', serverId))
+                                    .catch(err => console.error('❌ Lỗi set cover server:', err));
+                                jobs.push(p);
+                            }
+                        } else {
+                            // Ảnh local: tìm file tương ứng bằng data-file-index
+                            const idx = +($item.data('file-index'));
+                            const file = filesArr[idx];
+                            if (!file) return;
+
+                            const formData = new FormData();
+                            formData.append('sanPhamId', sanPhamId);
+                            formData.append('mauSacId', mauSacId);
+                            formData.append('file', file);
+                            formData.append('laAnhBia', isCover);          // ✅ gửi flag cover theo UI
+                            formData.append('thuTu', idx);
+
+                            const p = axios.post('/api/san-pham-mau-anh/upload', formData, {
+                                headers: { 'Content-Type': 'multipart/form-data' }
+                            }).then(res => {
+                                console.log(`📤 Uploaded ${isCover ? '[⭐ bìa]' : ''}:`, res.data);
+                                // Optionally: cập nhật DOM thành bản server (gắn data-id để về sau có thể set cover trực tiếp)
+                                btn.attr('data-id', res.data.id);
+                            }).catch(err => console.error('❌ Lỗi upload ảnh local:', err));
+
+                            jobs.push(p);
+                        }
+                    });
+                });
+
+                await Promise.all(jobs);
+                console.log('✅ Hoàn thành upload + set cover theo lựa chọn UI.');
+            }
+
+
+            // async function uploadAllImagesAfterSave(sanPhamId) {
+            //     const uploadPromises = [];
+            //     $('.upload-container').each(function () {
+            //         const $container = $(this);
+            //         const mauSacId = +($container.closest('tr').data('mau-id') || 0);
+            //         const $input = $container.find('input[type="file"]')[0];
+            //         const files = $input?.files || [];
+            //         const $preview = $container.find('.preview-container');
+            //
+            //         for (const file of files) {
+            //             const formData = new FormData();
+            //             formData.append("sanPhamId", sanPhamId);
+            //             formData.append("mauSacId", mauSacId);
+            //             formData.append("file", file);
+            //             formData.append("laAnhBia", false);
+            //             formData.append("thuTu", $preview.children().length);
+            //
+            //             const promise = axios.post("/api/san-pham-mau-anh/upload", formData, {
+            //                 headers: { "Content-Type": "multipart/form-data" }
+            //             }).then(res => {
+            //                 const imgUrl = res.data.duongDan;
+            //                 $preview.empty().append(`
+            //         <div class="preview-item">
+            //             <img src="${imgUrl}" alt="">
+            //             <button type="button" class="btn-set-cover active" title="Ảnh chính"><i class="fas fa-star"></i></button>
+            //             <button type="button" class="btn-remove-image"><i class="fas fa-times"></i></button>
+            //         </div>
+            //     `);
+            //             }).catch(err => {
+            //                 console.error('❌ Lỗi upload ảnh:', err);
+            //             });
+            //
+            //             uploadPromises.push(promise);
+            //         }
+            //     });
+            //
+            //     await Promise.all(uploadPromises);
+            //     console.log('📦 Đã upload toàn bộ ảnh thật sau khi lưu sản phẩm.');
+            // }
+
+            // ============================================================
+            // 🔄 KÉO–THẢ REORDER ẢNH (DRAG & DROP)
+            // ============================================================
+            let draggedImg = null;
+
+            $(document).on('dragstart', '.preview-item', function (e) {
+                draggedImg = this;
+                $(this).addClass('dragging');
+                e.originalEvent.dataTransfer.effectAllowed = 'move';
+            });
+
+            $(document).on('dragend', '.preview-item', function () {
+                $(this).removeClass('dragging');
+                draggedImg = null;
+            });
+
+            $(document).on('dragover', '.preview-container', function (e) {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(this, e.clientX);
+                const draggable = document.querySelector('.dragging');
+                if (afterElement == null) {
+                    this.appendChild(draggable);
+                } else {
+                    this.insertBefore(draggable, afterElement);
+                }
+            });
+
+            function getDragAfterElement(container, x) {
+                const elements = [...container.querySelectorAll('.preview-item:not(.dragging)')];
+                return elements.reduce(
+                    (closest, child) => {
+                        const box = child.getBoundingClientRect();
+                        const offset = x - box.left - box.width / 2;
+                        if (offset < 0 && offset > closest.offset) {
+                            return { offset: offset, element: child };
+                        } else {
+                            return closest;
+                        }
+                    },
+                    { offset: Number.NEGATIVE_INFINITY }
+                ).element;
+            }
+
+            // ============================================================
+            // 🌐 NÚT “TẢI TỪ URL” (dán link ảnh trực tiếp)
+            // ============================================================
+            $(document).on('dblclick', '.upload-container', async function (e) {
+                const $container = $(this);
+                const mauSacId = +($container.closest('tr').data('mau-id') || 0);
+
+                const url = prompt('🔗 Nhập URL ảnh để tải về:');
+                if (!url) return;
+
+                try {
+                    // 1️⃣ Tải blob từ URL
+                    const res = await fetch(url);
+                    const blob = await res.blob();
+
+                    // 2️⃣ Gửi blob này lên server
+                    const formData = new FormData();
+                    formData.append("sanPhamId", finalSanPhamId);
+                    formData.append("mauSacId", mauSacId);
+                    formData.append("file", blob, "from-url.jpg");
+                    formData.append("laAnhBia", false);
+                    formData.append("thuTu", $container.find('.preview-item').length);
+
+                    const uploadRes = await axios.post("/api/san-pham-mau-anh/upload", formData, {
+                        headers: { "Content-Type": "multipart/form-data" }
+                    });
+
+                    const imgId = uploadRes.data.id;
+                    const imgUrl = uploadRes.data.duongDan;
+
+                    // 3️⃣ Render preview có data-id
+                    $container.find('.preview-container').append(`
+            <div class="preview-item" draggable="true">
+                <img src="${imgUrl}" alt="">
+                <button type="button" class="btn-set-cover" data-id="${imgId}" title="Đặt làm ảnh chính">
+                    <i class="fas fa-star"></i>
+                </button>
+                <button type="button" class="btn-remove-image" data-id="${imgId}">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `);
+                    $container.find('.upload-placeholder').hide();
+
+                    console.log('✅ Đã tải và lưu ảnh URL vào SQL:', imgUrl);
+                } catch (err) {
+                    alert('❌ Không thể tải ảnh từ URL này!');
+                    console.error(err);
+                }
+            });
+
+            // $(document).on('dblclick', '.upload-container', async function () {
+            //     const url = prompt('🔗 Nhập URL ảnh để tải về:');
+            //     if (!url) return;
+            //     try {
+            //         const res = await fetch(url);
+            //         const blob = await res.blob();
+            //         const reader = new FileReader();
+            //         reader.onload = ev => {
+            //             const imgHtml = `
+            //     <div class="preview-item" draggable="true">
+            //         <img src="${ev.target.result}" alt="">
+            //         <div class="img-tools">
+            //             <button type="button" class="btn-set-cover" title="Đặt làm ảnh chính"><i class="fas fa-star"></i></button>
+            //             <button type="button" class="btn-remove-image"><i class="fas fa-times"></i></button>
+            //         </div>
+            //     </div>`;
+            //             $(e.currentTarget).find('.preview-container').append(imgHtml);
+            //         };
+            //         reader.readAsDataURL(blob);
+            //     } catch (err) {
+            //         alert('❌ Không thể tải ảnh từ URL này!');
+            //         console.error(err);
+            //     }
+            // });
+
+
+
+
+            // ============================================================
+            // 🟦 12️⃣ KÉO NGANG TRONG KHUNG UPLOAD ẢNH
+            // ============================================================
+            $(document).on('mousedown', '.upload-container', function (e) {
+                if ($(e.target).closest('.btn-remove-image').length) return;
+
+                const $this = $(this);
+                const startX = e.pageX - $this.offset().left;
+                const scrollLeft = $this.scrollLeft();
+                let isDown = true;
+
+                $this.addClass('dragging');
+
+                $(document).on('mousemove.dragscroll', function (e2) {
+                    if (!isDown) return;
+                    e2.preventDefault();
+                    const x = e2.pageX - $this.offset().left;
+                    const walk = (x - startX) * 1.5;
+                    $this.scrollLeft(scrollLeft - walk);
+                });
+
+                $(document).on('mouseup.dragscroll mouseleave.dragscroll', function () {
+                    isDown = false;
+                    $(document).off('.dragscroll');
+                    $this.removeClass('dragging');
+                });
+            });
+
+            $(document).on('dragstart', '.upload-container img', function (e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // ============================================================
+            // 🟢 Reload ảnh từ API (nếu muốn hiển thị lại sau khi lưu)
+            // ============================================================
+            async function reloadApiImagesForAllRows(sanPhamId) {
+                $('#table-variants tr').each(async function () {
+                    const $row = $(this);
+                    const $container = $row.find('.upload-container');
+                    if (!$container.length) return;
+
+                    const mauSacId = Number($row.data('mau-id')) || null;
+                    const params = mauSacId ? { params: { mauSacId } } : {};
+                    const res = await axios.get(`/api/san-pham-mau-anh/by-san-pham/${sanPhamId}`, params);
+                    const list = res.data || [];
+
+                    const $preview = $container.find('.preview-container');
+                    $preview.empty();
+
+                    if (!list.length) {
+                        $container.find('.upload-placeholder').show();
+                        return;
+                    }
+
+                    $container.find('.upload-placeholder').hide();
+                    list.forEach(img => {
+                        $preview.append(`
+  <div class="preview-item" draggable="true">
+    <img src="${img.duongDan}" alt="">
+    <button type="button" class="btn-set-cover ${img.laAnhBia ? 'active' : ''}"
+            data-id="${img.id}"
+            title="${img.laAnhBia ? 'Ảnh chính' : 'Đặt làm ảnh chính'}">
+      <i class="fas fa-star"></i>
+    </button>
+    <button type="button" class="btn-remove-image" data-id="${img.id}">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+`);
+                    });
+                });
+            }
+
+
+
+
+            // ============================================================
+            // 🟥 13️⃣ POPUP THÊM MỚI MÀU SẮC (CÓ COLOR PICKER)
+            // ============================================================
+            let currentAttrType = null; // 🔹 khai báo global
+
+            // Khi mở popup thêm nhanh
+            $(document).on('click', '.btn-add-icon', function (e) {
+                e.preventDefault();
+
+                const id = $(this).attr('id');
+                const attr = id.replace('btn-add-', '');
+                currentAttrType = attr;
+
+                const labelMap = {
+                    'thuongHieu': 'Thương hiệu',
+                    'danhMuc': 'Danh mục',
+                    'chatLieu': 'Chất liệu',
+                    'deGiay': 'Đế giày',
+                    'mauSac': 'Màu sắc',
+                    'kichCo': 'Kích cỡ'
+                };
+
+                // 🧹 Reset popup trước khi hiển thị
+                $('#attrColorNameInput').val('');
+                $('#attrStatusInput').val('').data('id', null);
+                $('#colorPickerSection').hide();
+                $('#colorInfoSection').hide();
+
+                // 🧹 Reset dropdown trạng thái (bỏ sáng)
+                $('#attrStatusList .dropdown-item').removeClass('selected');
+                $('#attrStatusList .dropdown-item i')
+                    .removeClass('fa-check-square text-primary')
+                    .addClass('fa-square');
+
+                // 🏷️ Đặt tiêu đề popup
+                $('#quickModalTitle').text('Thêm ' + (labelMap[attr] || 'Thuộc tính mới'));
+
+                // 🖌️ Nếu là Màu sắc
+                if (attr === 'mauSac') {
+                    $('#colorPickerSection').show();
+                    $('#colorInfoSection').show();
+
+                    $('#colorInfoSection label[for="attrColorNameInput"]').text('Tên màu sắc:');
+                    $('#attrColorNameInput').attr('placeholder', 'Nhập tên màu sắc...');
+
+                    const defaultColor = '#000000';
+                    updateColorSelection(defaultColor);
+                }
+                // 🧩 Nếu là các thuộc tính khác
+                else {
+                    $('#colorInfoSection').show();
+                    $('#colorPickerSection').hide();
+
+                    const tenLabel = 'Tên ' + labelMap[attr].toLowerCase() + ':';
+                    $('#colorInfoSection label[for="attrColorNameInput"]').text(tenLabel);
+                    $('#attrColorNameInput').attr('placeholder', 'Nhập ' + labelMap[attr].toLowerCase() + '...');
+                }
+
+                // 🎬 Hiển thị popup
+                $('#quickAddModal').addClass('show').hide().fadeIn(150);
+            });
+
+
+
+            // ===============================
+            // 🎨 BẢNG CHỌN MÀU TÙY CHỈNH
+            // ===============================
+            $(document).on('click', '#selectedColorBox', function(e) {
+                e.stopPropagation();
+                $('#customColorPalette').fadeToggle(120);
+            });
+
+
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#customColorPalette, #selectedColorBox').length) {
+                    $('#customColorPalette').fadeOut(100);
+                }
+            });
+
+            // 🔹 Chọn màu từ ô bảng
+            $(document).on('click', '.color-item', function() {
+                const color = $(this).data('color').toUpperCase();
+                updateColorSelection(color);
+            });
+
+            // 🔹 Chọn màu tự do từ input type=color
+            $(document).on('input', '#colorFreePicker', function() {
+                const color = $(this).val().toUpperCase();
+                updateColorSelection(color);
+            });
+
+            // 🔹 Nhập thủ công mã hex
+            $(document).on('input', '#colorHexDisplay', function() {
+                let val = $(this).val().trim();
+                if (!val.startsWith('#')) val = '#' + val;
+                if (/^#[0-9A-F]{6}$/i.test(val)) {
+                    updateColorSelection(val.toUpperCase());
+                }
+            });
+
+            // Hàm cập nhật toàn bộ UI
+            function updateColorSelection(color) {
+                $('#selectedColorBox').css('background', color);
+                $('#colorHexDisplay').val(color);
+                $('#attrColorInput').val(color).trigger('input'); // 🔹 cập nhật tên màu tiếng Việt
+            }
+
+
+            // ===============================
+            // 🟪 MAP MÃ MÀU → TÊN TIẾNG VIỆT
+            // ===============================
+
+            let colorNameMap = {};
+
+            async function loadColorMap() {
+                try {
+                    const res = await axios.get('/data/color-name-map.json');
+                    colorNameMap = res.data;
+                    console.log('🎨 Đã load bảng màu:', Object.keys(colorNameMap).length, 'màu');
+                } catch (err) {
+                    console.error('❌ Lỗi load color-name-map.json:', err);
+                }
+            }
+
+            $(document).on('input', '#attrColorInput', function() {
+                const colorValue = $(this).val().toUpperCase();
+                $('#colorCodeDisplay').text(colorValue);
+
+                // 🔹 Ưu tiên tên chính xác trong map
+                let colorName = colorNameMap[colorValue];
+
+                // 🔹 Nếu không có, ước lượng màu gần nhất
+                if (!colorName) {
+                    const nearest = findNearestColorName(colorValue, colorNameMap);
+                    colorName = nearest.name + ' (≈ ' + nearest.hex + ')';
+                }
+
+                $('#colorNameDisplay').text(colorName);
+            });
+
+            // ===============================
+            // 🎨 HÀM HỖ TRỢ XỬ LÝ MÀU
+            // ===============================
+
+            // Chuyển mã HEX → {r,g,b}
+            function hexToRgb(hex) {
+                const cleanHex = hex.replace('#', '');
+                const bigint = parseInt(cleanHex, 16);
+                return {
+                    r: (bigint >> 16) & 255,
+                    g: (bigint >> 8) & 255,
+                    b: bigint & 255
+                };
+            }
+
+            // Tính khoảng cách giữa 2 màu RGB
+            function colorDistance(c1, c2) {
+                const dr = c1.r - c2.r;
+                const dg = c1.g - c2.g;
+                const db = c1.b - c2.b;
+                return Math.sqrt(dr * dr + dg * dg + db * db);
+            }
+
+            // Tìm tên màu gần nhất trong bảng JSON
+            function findNearestColorName(hexInput, map) {
+                if (!map || Object.keys(map).length === 0) return 'Không xác định';
+
+                const inputRgb = hexToRgb(hexInput);
+                let minDist = Infinity;
+                let nearestName = 'Không xác định';
+                let nearestHex = null;
+
+                for (const [hex, name] of Object.entries(map)) {
+                    const rgb = hexToRgb(hex);
+                    const dist = colorDistance(inputRgb, rgb);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        nearestName = name;
+                        nearestHex = hex;
+                    }
+                }
+
+                return { name: nearestName, hex: nearestHex, distance: minDist.toFixed(2) };
+            }
+
+            // ============================================================
+            // 🟢 15️⃣ XỬ LÝ NÚT "LƯU SẢN PHẨM" (CÓ GIỚI TÍNH)
+            // ============================================================
+            // ============================================================
+            // 🔹 HÀM CHUẨN HÓA TÊN SẢN PHẨM TRƯỚC KHI DÙNG TRONG MA_SPCT
+            // ============================================================
+            function normalizeName(name) {
+                return name
+                    .trim()                       // bỏ khoảng trắng đầu-cuối
+                    .replace(/\s+/g, ' ')          // gộp nhiều khoảng trắng thành 1
+                    .replace(/[^\p{L}\p{N}\s]/gu, '') // loại bỏ ký tự đặc biệt (giữ chữ & số)
+                    .replace(/\s+/g, '-')          // đổi khoảng trắng còn lại thành dấu gạch nối
+                    .toUpperCase();                // viết hoa cho đồng nhất
+            }
+
+            // === NÚT LƯU SẢN PHẨM ===
+            $(document).on('click', '#btn-save-product', async function () {
+                try {
+                    // --- Lấy thông tin cơ bản ---
+                    const tenSanPham = $('#tenSanPhamInput').val().trim();
+                    const moTa = $('#moTa').val().trim();
+                    const trangThai = $('#trangThaiInput').data('id')?.[0] || 1;
+
+                    // --- Lấy danh sách ID từ các dropdown ---
+                    const thuongHieuIds = $('#thuongHieuInput').data('ids') || [];
+                    const danhMucIds = $('#danhMucInput').data('ids') || [];
+                    const chatLieuIds = $('#chatLieuInput').data('ids') || [];
+                    const deGiayIds = $('#deGiayInput').data('ids') || [];
+                    const gioiTinhIds = $('#gioiTinhInput').data('ids') || [];
+
+                    // --- Kiểm tra đầu vào ---
+                    if (!tenSanPham) {
+                        alert('⚠️ Vui lòng nhập tên sản phẩm!');
+                        return;
+                    }
+
+                    const validBrand  = validateRequiredInput('#thuongHieuInput', 'Vui lòng chọn thương hiệu!');
+                    const validCate   = validateRequiredInput('#danhMucInput', 'Vui lòng chọn danh mục!');
+                    const validChat   = validateRequiredInput('#chatLieuInput', 'Vui lòng chọn chất liệu!');
+                    const validDeGiay = validateRequiredInput('#deGiayInput', 'Vui lòng chọn đế giày!');
+
+                    if (!validBrand || !validCate || !validChat || !validDeGiay) {
+                        alert('⚠️ Vui lòng chọn đầy đủ các trường bắt buộc!');
+                        return;
+                    }
+
+                    // Nếu có nhiều hơn 1 phần tử (tránh lỗi backend lấy [0])
+                    if (thuongHieuIds.length > 1 || danhMucIds.length > 1 || chatLieuIds.length > 1 || deGiayIds.length > 1) {
+                        alert('⚠️ Chỉ được chọn 1 mục cho mỗi loại (Thương hiệu, Danh mục, Chất liệu, Đế giày)!');
+                        return;
+                    }
+
+
+                    // --- Tạo danh sách biến thể SPCT ---
+                    const spctList = [];
+                    $('#table-variants tr[data-mau-id]').each(function () {
+                        const $row = $(this);
+                        // 🔹 Lấy ID trực tiếp từ data-* (ổn định, không phụ thuộc text)
+                        const mauSacId = +$row.data('mau-id');
+                        const kichCoId = +$row.data('size-id');
+
+                        // 🔹 Lấy giá trị trong các input
+                        const soLuongTon = parseInt($row.find('.soLuongInput').val()) || 0;
+                        const giaNhap = parseFloat($row.find('.giaNhapInput').val()) || 0;
+                        const giaBan = parseFloat($row.find('.giaBanInput').val()) || 0;
+
+                        // 🔹 Có thể thêm trạng thái từng dòng nếu có dropdown
+                        const trangThai = $row.find('.trangThaiSelect').val() || 1;
+
+                        // 🔹 Chuẩn hóa tên SP để sinh mã ổn định
+                        // const normalizedName = normalizeName(tenSanPham);
+                        // 🔹 Sinh mã SPCT (nếu cần — có thể giữ nguyên như cũ)
+                        // const maSpct = `${maSanPham}-${normalizedName}-M${mauSacId}-S${kichCoId}`;
+
+
+                        // ✅ Đưa vào danh sách gửi backend
+                        spctList.push({
+                            mauSacId,
+                            kichCoId,
+                            soLuongTon,
+                            giaNhap,
+                            giaBan,
+                            trangThai
+                        });
+                    });
+
+
+                    // --- Nếu sản phẩm chưa có ID => tạo mới trước ---
+                    if (!finalSanPhamId) finalSanPhamId = sanPhamId;
+
+                    if (finalSanPhamId === null) {
+                        console.log('🆕 Chưa có ID, tạo mới sản phẩm...');
+                        const sanPhamData = {
+                            tenSanPham,
+                            moTa,
+                            trangThai,
+                            thuongHieuId: thuongHieuIds[0] || null,
+                            danhMucId: danhMucIds[0] || null,
+                            chatLieuId: chatLieuIds[0] || null,
+                            deGiayId: deGiayIds[0] || null,
+                            gioiTinh: gioiTinhIds[0] || 2
+                        };
+                        const createRes = await axios.post('/api/san-pham/them-san-pham', sanPhamData);
+                        finalSanPhamId = createRes.data?.id;
+                        sanPhamId = finalSanPhamId;
+                        if (!finalSanPhamId) {
+                            alert('❌ Không thể tạo mới sản phẩm!');
+                            return;
+                        }
+                        console.log('✅ Đã tạo sản phẩm ID =', finalSanPhamId);
+                    }
+
+                    // --- Gắn ID cho từng SPCT ---
+                    spctList.forEach(spct => spct.sanPhamId = finalSanPhamId);
+
+                    // --- Gửi danh sách SPCT ---
+                    const bulkRes = await axios.post('/api/san-pham-chi-tiet/bulk', spctList);
+                    if (bulkRes.status === 200 || bulkRes.data?.status === 'success') {
+                        alert('✅ Lưu sản phẩm thành công!');
+
+                        // 🟢 1️⃣ Upload toàn bộ ảnh sau khi đã có ID sản phẩm
+                        await uploadAllImagesAfterSave(finalSanPhamId);
+
+                        // 🟢 2️⃣ Load lại ảnh từ API để đảm bảo hiển thị đúng dữ liệu trong SQL
+                        await reloadApiImagesForAllRows(finalSanPhamId);
+
+                    }
+                    else {
+                        alert('❌ Lỗi khi lưu sản phẩm chi tiết!');
+                        console.error(bulkRes.data);
+                    }
+                } catch (error) {
+                    console.error('❌ Lỗi khi lưu sản phẩm:', error);
+                    alert('Lưu sản phẩm thất bại, vui lòng kiểm tra Console.');
+                }
+            });
+
+
+
+
+
+        </script>
+
+    </div>
+</body>
+
+</html>
