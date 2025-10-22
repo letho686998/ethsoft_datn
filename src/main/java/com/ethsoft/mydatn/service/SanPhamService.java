@@ -9,5 +9,9 @@ public interface SanPhamService {
     SanPhamDTO create(SanPhamCreateRequest req);
     SanPhamDTO update(Long id, SanPhamUpdateRequest req);
     SanPhamDTO getById(Long id);
-    List<SanPhamDTO> getAllForList();
+    SanPhamDTO updateTrangThai(Long id, int trangThai);
+    List<SanPhamDTO> getAll();
+
+
 }
+

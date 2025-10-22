@@ -24,7 +24,7 @@ public class MauSacEntity extends BaseAuditable {
 
     // 🔁 Liên kết ngược với ảnh
     @OneToMany(mappedBy = "mauSac", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<SanPhamMauAnhEntity> mauAnhList;
+    private List<HinhAnhSanPhamEntity> mauAnhList;
 
     // 🔁 Liên kết ngược với SPCT
     @OneToMany(mappedBy = "mauSac", cascade = CascadeType.ALL, orphanRemoval = false)

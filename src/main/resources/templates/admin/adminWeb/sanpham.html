@@ -699,6 +699,81 @@
         <script>
             $(document).ready(function () {
 
+                // ===========================
+                // 🌈 Aurora Toast Notification
+                // ===========================
+                function showToast(message, type = 'success') {
+                    // Nếu container chưa có, tạo 1 cái
+                    let container = document.querySelector('.aurora-toast-container');
+                    if (!container) {
+                        container = document.createElement('div');
+                        container.className = 'aurora-toast-container';
+                        Object.assign(container.style, {
+                            position: 'fixed',
+                            top: '20px',
+                            right: '20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px',
+                            zIndex: 9999,
+                            pointerEvents: 'none' // không chặn click các phần tử khác
+                        });
+                        document.body.appendChild(container);
+                    }
+
+                    // Tạo phần tử toast
+                    const toast = document.createElement('div');
+                    toast.className = `aurora-toast ${type}`;
+                    toast.innerHTML = `
+        <div class="aurora-toast-content">
+            ${message}
+        </div>
+    `;
+
+                    // Style Aurora/iOS-like
+                    Object.assign(toast.style, {
+                        minWidth: '240px',
+                        padding: '10px 16px',
+                        borderRadius: '12px',
+                        color: '#fff',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        opacity: 0,
+                        transform: 'translateY(-10px)',
+                        transition: 'all 0.3s ease',
+                        pointerEvents: 'auto'
+                    });
+
+                    // Màu theo loại
+                    if (type === 'error') {
+                        toast.style.background = 'linear-gradient(135deg, #ff5f6d, #d43f8d)';
+                    } else if (type === 'warning') {
+                        toast.style.background = 'linear-gradient(135deg, #f7971e, #ffd200)';
+                        toast.style.color = '#333';
+                    } else {
+                        toast.style.background = 'linear-gradient(135deg, var(--aurora-primary, #00b4d8), #007bff)';
+                    }
+
+                    // Thêm vào container
+                    container.appendChild(toast);
+
+                    // Hiện lên
+                    requestAnimationFrame(() => {
+                        toast.style.opacity = 1;
+                        toast.style.transform = 'translateY(0)';
+                    });
+
+                    // Tự ẩn sau 3s
+                    setTimeout(() => {
+                        toast.style.opacity = 0;
+                        toast.style.transform = 'translateY(-10px)';
+                        setTimeout(() => toast.remove(), 400);
+                    }, 2000);
+                }
+
                 // --- CHUYỂN TRANG THÊM MỚI ---
                 $('#btn-open-add-modal').click(() => {
                     window.location.href = '/admin/san-pham/them-san-pham';
@@ -883,7 +958,7 @@
                         $('#trangThaiInput').val(sp.trangThai === 1 ? 'Đang kinh doanh' : 'Ngừng kinh doanh');
                         $('#chatLieuInput').val(sp.tenChatLieu || '—');
                         $('#deGiayInput').val(sp.tenDeGiay || '—');
-                        $('#gioiTinhInput').val(sp.gioiTinh === 1 ? 'Nam' : sp.gioiTinh === 0 ? 'Nữ' : 'Nam và Nữ');
+                        $('#gioiTinhInput').val(sp.gioiTinh === 0 ? 'Nam' : sp.gioiTinh === 1 ? 'Nữ' : 'Nam và Nữ');
                         $('#moTa').val(sp.moTa || '');
                         $('#nguoiTao').val(sp.nguoiTao || '');
                         $('#ngayTao').val(sp.ngayTao ? new Date(sp.ngayTao).toLocaleDateString('vi-VN') : '');
@@ -902,28 +977,30 @@
                     if (id) window.location.href = `/admin/san-pham/san-pham-chi-tiet?id=${id}`;
                 });
 
-                // --- CHUYỂN TRẠNG THÁI ---
+
+
+
                 $(document).on('click', '.btn-toggle', async function () {
                     const id = $(this).data('id');
                     const isActive = $(this).hasClass('btn-warning');
                     const newStatus = isActive ? 0 : 1;
-                    if (!id) return;
-                    if (!confirm(isActive ? 'Ngừng kinh doanh sản phẩm này?' : 'Khôi phục kinh doanh sản phẩm này?')) return;
+
+                    const confirmMsg = newStatus === 0
+                        ? "Bạn có chắc muốn NGỪNG BÁN sản phẩm này? Tất cả biến thể con sẽ bị ngừng bán."
+                        : "Bạn có chắc muốn MỞ BÁN sản phẩm này? Tất cả biến thể con sẽ được mở bán.";
+
+                    if (!confirm(confirmMsg)) return;
+
                     try {
-                        const res = await axios.get(`/api/san-pham/${id}`);
-                        const sp = res.data;
-                        await axios.put(`/api/san-pham/update/${id}`, {
-                            tenSanPham: sp.tenSanPham,
-                            thuongHieuId: sp.thuongHieuId,
-                            danhMucId: sp.danhMucId,
-                            trangThai: newStatus
-                        });
-                        alert('✅ Cập nhật trạng thái thành công!');
+                        await axios.put(`/api/san-pham/update-trang-thai/${id}?trangThai=${newStatus}`);
+                        showToast('Cập nhật trạng thái thành công!');
                         loadProducts();
-                    } catch {
-                        alert('❌ Lỗi khi cập nhật trạng thái!');
+                    } catch (err) {
+                        console.error(err);
+                        showToast('Lỗi khi cập nhật trạng thái!', 'error');
                     }
                 });
+
 
                 // --- TÌM KIẾM ---
                 $('#search-input').on('input', function () {
@@ -957,6 +1034,32 @@
                         $btn.html('<i class="fas fa-layer-group me-1"></i> <span>Hiển thị: Tất cả sản phẩm</span>');
                     }
                 });
+
+                $(document).on('change', '.trang-thai-select', async function () {
+                    const id = $(this).data('id');
+                    const newStatus = parseInt($(this).val());
+                    let confirmMsg = "";
+
+                    if (newStatus === 0)
+                        confirmMsg = "Bạn có chắc muốn NGỪNG BÁN sản phẩm này? Toàn bộ biến thể con sẽ bị ngừng bán.";
+                    else if (newStatus === 1)
+                        confirmMsg = "Bạn có chắc muốn MỞ BÁN lại sản phẩm này? Toàn bộ biến thể con sẽ được mở bán.";
+
+                    if (confirmMsg && !confirm(confirmMsg)) {
+                        // hoàn tác dropdown
+                        $(this).val(newStatus === 1 ? 0 : 1);
+                        return;
+                    }
+
+                    try {
+                        await axios.put(`/api/san-pham/update-trang-thai/${id}?trangThai=${newStatus}`);
+                        showToast('Cập nhật trạng thái thành công!');
+                    } catch (err) {
+                        console.error(err);
+                        showToast('Lỗi khi cập nhật trạng thái!', 'error');
+                    }
+                });
+
 
                 // 🚀 INIT
                 loadProducts();

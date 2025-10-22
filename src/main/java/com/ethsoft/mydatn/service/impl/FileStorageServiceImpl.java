@@ -1,4 +1,3 @@
-// src/main/java/com/ethsoft/mydatn/service/impl/FileStorageServiceImpl.java
 package com.ethsoft.mydatn.service.impl;
 
 import com.ethsoft.mydatn.service.FileStorageService;
@@ -11,57 +10,57 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
-    // /datn/uploads/sanpham
-    @Value("${app.upload.root-abs}")
-    private String uploadRootAbs;
+    @Value("${app.upload.root-dir:uploads/sanpham}")
+    private String uploadRoot; // "uploads/sanpham"
 
-    // http://localhost:8080/uploads/sanpham/
-    @Value("${app.upload.public-base}")
-    private String publicBase;
+    @Value("${app.upload.base-url:http://localhost:8080/uploads/sanpham}")
+    private String baseUrl; // "http://localhost:8080/uploads/sanpham"
 
     @Override
     public String saveProductImage(Long sanPhamId, MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("File rỗng!");
+            throw new RuntimeException("❌ File upload trống!");
         }
+
         try {
-            Path productDir = Paths.get(uploadRootAbs, String.valueOf(sanPhamId)).normalize();
-            Files.createDirectories(productDir);
+            Path dirPath = Paths.get(uploadRoot, sanPhamId.toString());
+            Files.createDirectories(dirPath);
 
-            String ext = getExt(file.getOriginalFilename());
-            String stamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-            String fileName = UUID.randomUUID() + "_" + stamp + (ext.isEmpty() ? ".jpg" : ext);
-            Path out = productDir.resolve(fileName);
+            String timestamp = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+            String ext = Optional.ofNullable(file.getOriginalFilename())
+                    .filter(f -> f.contains("."))
+                    .map(f -> f.substring(f.lastIndexOf(".")))
+                    .orElse(".jpg");
 
-            Files.copy(file.getInputStream(), out, StandardCopyOption.REPLACE_EXISTING);
-            String url = (publicBase.endsWith("/") ? publicBase : publicBase + "/") + sanPhamId + "/" + fileName;
-            log.info("Saved image: {}", out);
-            return url;
+            String newName = UUID.randomUUID() + "_" + timestamp + ext;
+            Path fullPath = dirPath.resolve(newName);
+
+            Files.copy(file.getInputStream(), fullPath, StandardCopyOption.REPLACE_EXISTING);
+            String fileUrl = baseUrl + "/" + sanPhamId + "/" + newName;
+
+            log.info("✅ Lưu file thành công: {}", fileUrl);
+            return fileUrl;
+
         } catch (IOException e) {
-            throw new RuntimeException("Không thể lưu file ảnh!", e);
+            throw new RuntimeException("❌ Lỗi khi lưu file: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public boolean deleteProductImage(Long sanPhamId, String fileName) {
-        try {
-            Path p = Paths.get(uploadRootAbs, String.valueOf(sanPhamId), fileName).normalize();
-            return Files.deleteIfExists(p);
-        } catch (IOException e) {
-            log.error("Delete fail: {}/{} - {}", sanPhamId, fileName, e.getMessage());
-            return false;
+    public boolean deleteFile(String relativePath) throws IOException {
+        Path filePath = Paths.get(relativePath);
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
+            return true;
         }
-    }
-
-    private static String getExt(String name) {
-        if (name == null) return "";
-        int dot = name.lastIndexOf('.');
-        return dot >= 0 ? name.substring(dot) : "";
+        return false;
     }
 }
