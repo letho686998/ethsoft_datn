@@ -95,7 +95,7 @@
             font-size: 1.2rem;
             font-weight: 600;
             letter-spacing: 0.3px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
         }
 
         /***************************************************
@@ -282,6 +282,7 @@
             background-color: #e7f1ff;
             color: #007bff;
         }
+
         /* 🎨 Scrollbar đẹp cho dropdown "Sắp xếp theo" */
         /*#sortSelectList {*/
         /*    max-height: 220px; !* ✅ Giới hạn chiều cao, bắt đầu có thanh cuộn *!*/
@@ -308,7 +309,6 @@
         #sortSelectList::-webkit-scrollbar-thumb:hover {
             background: rgba(0, 123, 255, 0.5);
         }
-
 
 
         /***************************************************
@@ -660,6 +660,7 @@
         .table-container::-webkit-scrollbar {
             height: 6px;
         }
+
         .table-container::-webkit-scrollbar-thumb {
             background-color: #cfd4da;
             border-radius: 3px;
@@ -766,6 +767,7 @@
             transition: all 0.15s ease-in-out;
             box-shadow: none !important;
         }
+
         .table td .btn:hover {
             transform: scale(1.08);
             background-color: #f0f4ff;
@@ -776,27 +778,71 @@
          ***************************************************/
         /* 📏 ĐỘ RỘNG CỘT (11 CỘT - MỚI) */
         .table th:nth-child(1),
-        .table td:nth-child(1) { width: 42px; }   /* Tick */
+        .table td:nth-child(1) {
+            width: 42px;
+        }
+
+        /* Tick */
         .table th:nth-child(2),
-        .table td:nth-child(2) { width: 50px; }   /* STT */
+        .table td:nth-child(2) {
+            width: 50px;
+        }
+
+        /* STT */
         .table th:nth-child(3),
-        .table td:nth-child(3) { width: 150px; }  /* Ảnh bìa */
+        .table td:nth-child(3) {
+            width: 150px;
+        }
+
+        /* Ảnh bìa */
         .table th:nth-child(4),
-        .table td:nth-child(4) { width: 120px; }  /* Mã SPCT */
+        .table td:nth-child(4) {
+            width: 120px;
+        }
+
+        /* Mã SPCT */
         .table th:nth-child(5),
-        .table td:nth-child(5) { min-width: 180px; } /* Tên sản phẩm */
+        .table td:nth-child(5) {
+            min-width: 180px;
+        }
+
+        /* Tên sản phẩm */
         .table th:nth-child(6),
-        .table td:nth-child(6) { width: 90px; }   /* Số lượng */
+        .table td:nth-child(6) {
+            width: 90px;
+        }
+
+        /* Số lượng */
         .table th:nth-child(7),
-        .table td:nth-child(7) { width: 110px; }  /* Giá bán */
+        .table td:nth-child(7) {
+            width: 110px;
+        }
+
+        /* Giá bán */
         .table th:nth-child(8),
-        .table td:nth-child(8) { width: 90px; }   /* Màu sắc */
+        .table td:nth-child(8) {
+            width: 90px;
+        }
+
+        /* Màu sắc */
         .table th:nth-child(9),
-        .table td:nth-child(9) { width: 90px; }   /* Kích cỡ */
+        .table td:nth-child(9) {
+            width: 90px;
+        }
+
+        /* Kích cỡ */
         .table th:nth-child(10),
-        .table td:nth-child(10) { width: 120px; } /* Trạng thái */
+        .table td:nth-child(10) {
+            width: 120px;
+        }
+
+        /* Trạng thái */
         .table th:nth-child(11),
-        .table td:nth-child(11) { width: 100px; } /* Thao tác */
+        .table td:nth-child(11) {
+            width: 100px;
+        }
+
+        /* Thao tác */
 
         /***************************************************
          * 🌈 DÒNG ĐƯỢC CHỌN
@@ -816,11 +862,13 @@
                 min-width: 950px;
             }
         }
+
         @media (max-width: 576px) {
             .table th,
             .table td {
                 padding: 6px 4px;
             }
+
             .table-container {
                 border-radius: 6px;
             }
@@ -852,9 +900,6 @@
         }
 
 
-
-
-
         /***************************************************
          * 9️⃣  HIỆU ỨNG LOADING SHIMMER
          ***************************************************/
@@ -863,10 +908,10 @@
             overflow: hidden;
             background: #f6f7f8;
             background-image: linear-gradient(to right,
-                    #f6f7f8 0%,
-                    #edeef1 20%,
-                    #f6f7f8 40%,
-                    #f6f7f8 100%);
+            #f6f7f8 0%,
+            #edeef1 20%,
+            #f6f7f8 40%,
+            #f6f7f8 100%);
             background-repeat: no-repeat;
             background-size: 800px 100%;
             animation: shimmer 1.2s linear infinite forwards;
@@ -923,7 +968,7 @@
             appearance: none;
             /* ẩn mũi tên mặc định */
             background-image: linear-gradient(45deg, transparent 50%, #007bff 50%),
-                linear-gradient(135deg, #007bff 50%, transparent 50%);
+            linear-gradient(135deg, #007bff 50%, transparent 50%);
             background-position: calc(100% - 18px) 13px, calc(100% - 13px) 13px;
             /* vị trí mũi tên */
             background-size: 6px 6px, 6px 6px;
@@ -1234,7 +1279,7 @@
 
         .table input.editable {
             background-color: #ffffff;
-            border-color: var(--bs-showToast-border, #007bff);
+            border-color: var(--bs-accordion-active-bg #007bff);
             box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
         }
 
@@ -1243,6 +1288,7 @@
             border-radius: 6px;
             transition: all 0.15s ease-in-out;
         }
+
         .btn-toggle-status:hover {
             transform: scale(1.05);
             opacity: 0.9;
@@ -1263,6 +1309,7 @@
         .bg-danger-subtle {
             background-color: #fdeaea !important;
         }
+
         .input-giaban[readonly] {
             background-color: #fafafa;
             color: #333;
@@ -1272,97 +1319,94 @@
     </style>
 </head>
 <body>
-    <section layout:fragment="content" class="page-content-section container-fluid">
-        <div class="card shadow-sm border-0">
-            <div class="card-header text-white py-2 d-flex justify-content-between align-items-center"
-                style="background: linear-gradient(135deg, #007bff, #14F5F1)">
-                <h5 class="mb-1 mt-1"><i class="fas fa-boxes"></i> Quản lý sản phẩm chi tiết</h5>
-            </div>
-
-            <div class="card-body">
-                <div class="table-container mt-3">
-                    <!-- 🔍 Ô tìm kiếm + Nút lọc trạng thái -->
-                    <div class="search-filter-bar">
-                        <input type="text" id="search-input" class="form-control form-control-sm"
-                            placeholder="Tìm kiếm sản phẩm chi tiết">
-                        <button class="btn btn-primary btn-sm" id="btnBulkUpdateSPCT">
-                            <i class="fas fa-save"></i> Cập nhật
-                        </button>
-
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="position-relative" style="min-width:180px;">
-                                <input type="text" class="form-control dropdown-input" id="sortSelectInput"
-                                    placeholder="Sắp xếp theo" readonly value="Ngày cập nhật mới nhất">
-                                <div class="dropdown-list" id="sortSelectList">
-                                    <!-- Mã SPCT -->
-                                    <div class="dropdown-item" data-value="maSPCT-asc">Mã SPCT ↑ (A → Z)</div>
-                                    <div class="dropdown-item" data-value="maSPCT-desc">Mã SPCT ↓ (Z → A)</div>
-                                    <hr class="dropdown-divider my-1">
-                                    <!-- Giá nhập -->
-                                    <div class="dropdown-item" data-value="giaNhap-asc">Giá nhập ↑ (thấp → cao)</div>
-                                    <div class="dropdown-item" data-value="giaNhap-desc">Giá nhập ↓ (cao → thấp)</div>
-                                    <!-- Giá bán -->
-                                    <div class="dropdown-item" data-value="giaBan-asc">Giá bán ↑ (thấp → cao)</div>
-                                    <div class="dropdown-item" data-value="giaBan-desc">Giá bán ↓ (cao → thấp)</div>
-                                    <!-- Số lượng -->
-                                    <div class="dropdown-item" data-value="soLuong-asc">Số lượng ↑ (ít → nhiều)</div>
-                                    <div class="dropdown-item" data-value="soLuong-desc">Số lượng ↓ (nhiều → ít)</div>
-                                    <!-- Kích cỡ -->
-                                    <div class="dropdown-item" data-value="kichCo-asc">Kích cỡ ↑ (nhỏ → lớn)</div>
-                                    <div class="dropdown-item" data-value="kichCo-desc">Kích cỡ ↓ (lớn → nhỏ)</div>
-                                    <hr class="dropdown-divider my-1">
-                                    <!-- Ngày cập nhật -->
-                                    <div class="dropdown-item" data-value="date-desc">Ngày cập nhật mới nhất</div>
-                                    <div class="dropdown-item" data-value="date-asc">Ngày cập nhật cũ nhất</div>
-                                </div>
-                            </div>
-
-                            <div class="btn-group btn-group-sm" role="group" id="status-filters">
-                                <button type="button" class="btn btn-outline-secondary active" data-status="all">
-                                    <i class="fas fa-list"></i> Tất cả
-                                </button>
-                                <button type="button" class="btn btn-success" data-status="1">
-                                    <i class="fas fa-check-circle"></i> Đang KD
-                                </button>
-                                <button type="button" class="btn btn-warning" data-status="0">
-                                    <i class="fas fa-ban"></i> Ngừng KD
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <table class="table table-bordered table-hover mb-0">
-                        <thead class="thead-light text-center">
-                        <tr>
-                            <th><input type="checkbox" id="selectAllSPCT"></th>
-                            <th>STT</th>
-                            <th>Ảnh bìa</th>
-                            <th>Giá nhập</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng tồn</th>
-<!--                            <th>Giá nhập</th>-->
-                            <th>Giá</th>
-                            <th>Màu sắc</th>
-                            <th>Kích cỡ</th>
-                            <th>Trạng thái</th>
-                            <th>Thao tác</th>
-                        </tr>
-                        </thead>
-                        <tbody id="spctTable">
-                            <tr>
-                                <td colspan="11" class="text-center text-muted">Đang tải dữ liệu...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- 📄 Thanh phân trang -->
-                    <div id="pagination" class="d-flex justify-content-center align-items-center mt-2"></div>
-                </div>
-            </div>
+<section layout:fragment="content" class="page-content-section container-fluid">
+    <div class="card shadow-sm border-0">
+        <div class="card-header text-white py-2 d-flex justify-content-between align-items-center"
+             style="background: linear-gradient(135deg, #007bff, #14F5F1)">
+            <h5 class="mb-1 mt-1"><i class="fas fa-boxes"></i> Quản lý sản phẩm chi tiết</h5>
         </div>
 
+        <div class="card-body">
+            <div class="table-container mt-3">
+                <!-- 🔍 Ô tìm kiếm + Nút lọc trạng thái -->
+                <div class="search-filter-bar">
+                    <input type="text" id="search-input" class="form-control form-control-sm"
+                           placeholder="Tìm kiếm sản phẩm chi tiết">
+                    <button class="btn btn-primary btn-sm" id="btnBulkUpdateSPCT">
+                        <i class="fas fa-save"></i> Cập nhật
+                    </button>
 
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="position-relative" style="min-width:180px;">
+                            <input type="text" class="form-control dropdown-input" id="sortSelectInput"
+                                   placeholder="Sắp xếp theo" readonly value="Ngày cập nhật mới nhất">
+                            <div class="dropdown-list" id="sortSelectList">
+                                <!-- Mã SPCT -->
+                                <div class="dropdown-item" data-value="maSPCT-asc">Mã SPCT ↑ (A → Z)</div>
+                                <div class="dropdown-item" data-value="maSPCT-desc">Mã SPCT ↓ (Z → A)</div>
+                                <hr class="dropdown-divider my-1">
+                                <!-- Giá nhập -->
+                                <div class="dropdown-item" data-value="giaNhap-asc">Giá nhập ↑ (thấp → cao)</div>
+                                <div class="dropdown-item" data-value="giaNhap-desc">Giá nhập ↓ (cao → thấp)</div>
+                                <!-- Giá bán -->
+                                <div class="dropdown-item" data-value="giaBan-asc">Giá bán ↑ (thấp → cao)</div>
+                                <div class="dropdown-item" data-value="giaBan-desc">Giá bán ↓ (cao → thấp)</div>
+                                <!-- Số lượng -->
+                                <div class="dropdown-item" data-value="soLuong-asc">Số lượng ↑ (ít → nhiều)</div>
+                                <div class="dropdown-item" data-value="soLuong-desc">Số lượng ↓ (nhiều → ít)</div>
+                                <!-- Kích cỡ -->
+                                <div class="dropdown-item" data-value="kichCo-asc">Kích cỡ ↑ (nhỏ → lớn)</div>
+                                <div class="dropdown-item" data-value="kichCo-desc">Kích cỡ ↓ (lớn → nhỏ)</div>
+                                <hr class="dropdown-divider my-1">
+                                <!-- Ngày cập nhật -->
+                                <div class="dropdown-item" data-value="date-desc">Ngày cập nhật mới nhất</div>
+                                <div class="dropdown-item" data-value="date-asc">Ngày cập nhật cũ nhất</div>
+                            </div>
+                        </div>
 
-    </section>
+                        <div class="btn-group btn-group-sm" role="group" id="status-filters">
+                            <button type="button" class="btn btn-outline-secondary active" data-status="all">
+                                <i class="fas fa-list"></i> Tất cả
+                            </button>
+                            <button type="button" class="btn btn-success" data-status="1">
+                                <i class="fas fa-check-circle"></i> Đang KD
+                            </button>
+                            <button type="button" class="btn btn-warning" data-status="0">
+                                <i class="fas fa-ban"></i> Ngừng KD
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-hover mb-0">
+                    <thead class="thead-light text-center">
+                    <tr>
+                        <th><input type="checkbox" id="selectAllSPCT"></th>
+                        <th>STT</th>
+                        <th>Ảnh bìa</th>
+                        <th>Giá nhập</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng tồn</th>
+                        <!--                            <th>Giá nhập</th>-->
+                        <th>Giá</th>
+                        <th>Màu sắc</th>
+                        <th>Kích cỡ</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody id="spctTable">
+                    <tr>
+                        <td colspan="11" class="text-center text-muted">Đang tải dữ liệu...</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!-- 📄 Thanh phân trang -->
+                <div id="pagination" class="d-flex justify-content-center align-items-center mt-2"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- 🪟 POPUP THÊM / SỬA SẢN PHẨM CHI TIẾT -->
     <div class="modal fade" id="spctModal" tabindex="-1" aria-labelledby="spctModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -1372,465 +1416,466 @@
                         <i class="fas fa-box-open"></i> Thêm / Cập nhật sản phẩm chi tiết
                     </h6>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                            aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body p-3">
                     <!-- ✅ GIỮ NGUYÊN TOÀN BỘ FORM GỐC -->
                     <form id="spct-form" class="spct-form">
-                        <!-- Cột trái -->
-                        <div class="col-left">
-                            <!-- Hàng 1 -->
-                            <div class="form-row">
-                                <div class="col">
-                                    <input type="text" class="form-control" id="maSPCT" placeholder="Mã SPCT (auto)"
-                                        readonly>
+                        <div class="row g-3">
+                            <!-- Cột trái -->
+                            <div class="col-md-8">
+                                <!-- Mã SPCT + Mã sản phẩm -->
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Mã SPCT</label>
+                                        <input type="text" class="form-control" id="maSPCT" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Mã sản phẩm</label>
+                                        <input type="text" class="form-control" id="maSanPham" readonly>
+                                    </div>
                                 </div>
-                                <div class="col position-relative">
-                                    <input type="text" class="form-control dropdown-input" id="sanPhamInput"
-                                        placeholder="Chọn sản phẩm" readonly>
-                                    <div class="dropdown-list" id="sanPhamList"></div>
-                                </div>
-                            </div>
 
-                            <!-- Hàng 2 -->
-                            <div class="form-row">
-                                <div class="col position-relative">
-                                    <input type="text" class="form-control dropdown-input" id="mauSacInput"
-                                        placeholder="Chọn màu sắc" readonly>
-                                    <div class="dropdown-list" id="mauSacList"></div>
+                                <!-- Tên SP + Màu + Kích cỡ -->
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Tên sản phẩm</label>
+                                        <input type="text" class="form-control" id="tenSanPham" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Màu sắc</label>
+                                        <input type="text" class="form-control" id="tenMau" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Kích cỡ</label>
+                                        <input type="text" class="form-control" id="tenKichCo" readonly>
+                                    </div>
                                 </div>
-                                <div class="col position-relative">
-                                    <input type="text" class="form-control dropdown-input" id="kichCoInput"
-                                        placeholder="Chọn kích cỡ" readonly>
-                                    <div class="dropdown-list" id="kichCoList"></div>
+
+                                <!-- Giá + Số lượng + Trạng thái -->
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Giá bán</label>
+                                        <input type="text" class="form-control" id="giaBan" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Số lượng tồn</label>
+                                        <input type="text" class="form-control" id="soLuongTon" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Trạng thái</label>
+                                        <input type="text" class="form-control" id="trangThai" readonly>
+                                    </div>
                                 </div>
-                                <div class="col position-relative">
-                                    <input type="text" class="form-control dropdown-input" id="trangThaiInput"
-                                        placeholder="Trạng thái" readonly>
-                                    <div class="dropdown-list" id="trangThaiList">
-                                        <div class="dropdown-item" data-id="1">Đang kinh doanh</div>
-                                        <div class="dropdown-item" data-id="0">Ngừng kinh doanh</div>
+
+                                <!-- Người tạo / cập nhật / ngày tạo / ngày cập nhật -->
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Người tạo</label>
+                                        <input type="text" class="form-control" id="nguoiTao" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Ngày tạo</label>
+                                        <input type="text" class="form-control" id="ngayTao" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Người cập nhật</label>
+                                        <input type="text" class="form-control" id="nguoiCapNhat" readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label fw-semibold">Ngày cập nhật</label>
+                                        <input type="text" class="form-control" id="ngayCapNhat" readonly>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Hàng 3 -->
-                            <div class="form-row">
-                                <div class="col">
-                                    <input type="number" class="form-control" id="giaBan" placeholder="Đơn giá">
+                            <!-- Cột phải: ảnh -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold d-block">Ảnh bìa</label>
+                                <div id="preview-container" class="border rounded p-2 text-center" style="min-height: 200px;">
+                                    <p class="text-muted fst-italic">Chưa có ảnh</p>
                                 </div>
-                                <div class="col">
-                                    <input type="number" class="form-control" id="soLuongTon"
-                                        placeholder="Số lượng tồn">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" id="nguoiTao" placeholder="Người tạo"
-                                        readonly>
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" id="nguoiCapNhat"
-                                        placeholder="Người cập nhật" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Cột phải -->
-                        <div class="col-right">
-                            <div class="upload-container" id="upload-container">
-                                <input type="file" id="image-input" multiple accept="image/*">
-                                <div class="upload-placeholder">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <span>Kéo hoặc chọn ảnh</span>
-                                </div>
-                                <div id="preview-container" class="preview-container"></div>
-                            </div>
-
-                            <div class="btn-group-vertical mt-2">
-                                <button type="button" class="btn btn-primary btn-sm mb-2" id="btn-add">
-                                    <i class="fas fa-plus"></i> <span>Thêm</span>
-                                </button>
-                                <button type="button" class="btn btn-success btn-sm mb-2" id="btn-update">
-                                    <i class="fas fa-save"></i> <span>Lưu</span>
-                                </button>
-                                <button type="reset" class="btn btn-warning btn-sm text-white" id="btn-reset">
-                                    <i class="fas fa-undo"></i> <span>Mới</span>
-                                </button>
                             </div>
                         </div>
                     </form>
+Sửa
                 </div>
             </div>
         </div>
     </div>
 
-    <div layout:fragment="scripts">
-<!--        <script th:inline="javascript">-->
-<!--            const PRODUCT_ID = /*[[${sanPhamId}]]*/ null;-->
-<!--        </script>-->
 
-        <script>
-            $(function () {
-                // 🧭 Đọc sanPhamId từ URL nếu có
-                function getSanPhamIdFromUrl() {
-                    const params = new URLSearchParams(window.location.search);
-                    const id = params.get('id');
-                    return id ? Number(id) : null;
-                }
+</section>
 
-                const PRODUCT_ID = getSanPhamIdFromUrl();
 
-                /* =====================================================
-                * 1️⃣ HẰNG SỐ & API (CHUẨN HÓA)
-                * ===================================================== */
+<div layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-                // 👤 Tên người thao tác mặc định
-                const ADMIN_NAME = 'Quản trị viên';
+    <script>
 
-                // 🌐 Tập hợp các endpoint API RESTful
-                const API = {
-                    // 🧩 Sản phẩm chi tiết
-                    SPCT_LIST: '/api/san-pham-chi-tiet/getAll',
-                    SPCT_BY_SP: spId => `/api/san-pham-chi-tiet/by-san-pham?sanPhamId=${spId}`,
-                    SPCT_ADD: '/api/san-pham-chi-tiet/add',
-                    SPCT_UPDATE: '/api/san-pham-chi-tiet/bulk-update',
-                    SPCT_DELETE: id => `/api/san-pham-chi-tiet/delete/${id}`,
+        // 🧭 Đọc sanPhamId từ URL nếu có
+        function getSanPhamIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            return id ? Number(id) : null;
+        }
 
-                    // 🏷️ Danh mục cơ bản
-                    SP_LIST: '/api/san-pham/getAll',
-                    MS_LIST: '/api/mau-sac/getAll',
-                    KC_LIST: '/api/kich-co/getAll',
+        const PRODUCT_ID = getSanPhamIdFromUrl();
 
-                    // 🖼️ Ảnh sản phẩm
-                    IMGS_BY_SPCT: id => `/api/san-pham-chi-tiet/anh/${id}`,
-                    IMGS_UPLOAD: id => `/api/san-pham-chi-tiet/anh/upload/${id}`,
-                    IMG_DELETE: imgId => `/api/san-pham-chi-tiet/anh/${imgId}`,
-                    IMG_SET_COVER: (spctId, imgId) =>
-                        `/api/san-pham-chi-tiet/anh/set-cover?spctId=${spctId}&imageId=${imgId}`
-                };
+        /* =====================================================
+        * 1️⃣ HẰNG SỐ & API (CHUẨN HÓA)
+        * ===================================================== */
 
-                // ===========================
-                // 🌈 Aurora Toast Notification
-                // ===========================
-                function showToast(message, type = 'success') {
-                    // Nếu container chưa có, tạo 1 cái
-                    let container = document.querySelector('.aurora-toast-container');
-                    if (!container) {
-                        container = document.createElement('div');
-                        container.className = 'aurora-toast-container';
-                        Object.assign(container.style, {
-                            position: 'fixed',
-                            top: '20px',
-                            right: '20px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '10px',
-                            zIndex: 9999,
-                            pointerEvents: 'none' // không chặn click các phần tử khác
-                        });
-                        document.body.appendChild(container);
-                    }
+        // 👤 Tên người thao tác mặc định
+        const ADMIN_NAME = 'Quản trị viên';
 
-                    // Tạo phần tử toast
-                    const toast = document.createElement('div');
-                    toast.className = `aurora-toast ${type}`;
-                    toast.innerHTML = `
+        // 🌐 Tập hợp các endpoint API RESTful
+        const API = {
+            // 🧩 Sản phẩm chi tiết
+            SPCT_LIST: '/api/san-pham-chi-tiet/getAll',
+            SPCT_BY_SP: spId => `/api/san-pham-chi-tiet/by-san-pham?sanPhamId=${spId}`,
+            SPCT_ADD: '/api/san-pham-chi-tiet/add',
+            SPCT_UPDATE: '/api/san-pham-chi-tiet/bulk-update',
+            SPCT_DELETE: id => `/api/san-pham-chi-tiet/delete/${id}`,
+
+            // 🏷️ Danh mục cơ bản
+            SP_LIST: '/api/san-pham/getAll',
+            MS_LIST: '/api/mau-sac/getAll',
+            KC_LIST: '/api/kich-co/getAll',
+
+            // 🖼️ Ảnh sản phẩm
+            IMGS_BY_SPCT: id => `/api/san-pham-chi-tiet/anh/${id}`,
+            IMGS_UPLOAD: id => `/api/san-pham-chi-tiet/anh/upload/${id}`,
+            IMG_DELETE: imgId => `/api/san-pham-chi-tiet/anh/${imgId}`,
+            IMG_SET_COVER: (spctId, imgId) =>
+                `/api/san-pham-chi-tiet/anh/set-cover?spctId=${spctId}&imageId=${imgId}`
+        };
+
+        // ===========================
+        // 🌈 Aurora Toast Notification
+        // ===========================
+        function showToast(message, type = 'success') {
+            // Nếu container chưa có, tạo 1 cái
+            let container = document.querySelector('.aurora-toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'aurora-toast-container';
+                Object.assign(container.style, {
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                    zIndex: 9999,
+                    pointerEvents: 'none' // không chặn click các phần tử khác
+                });
+                document.body.appendChild(container);
+            }
+
+            // Tạo phần tử toast
+            const toast = document.createElement('div');
+            toast.className = `aurora-toast ${type}`;
+            toast.innerHTML = `
         <div class="aurora-toast-content">
             ${message}
         </div>
     `;
 
-                    // Style Aurora/iOS-like
-                    Object.assign(toast.style, {
-                        minWidth: '240px',
-                        padding: '10px 16px',
-                        borderRadius: '12px',
-                        color: '#fff',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                        backdropFilter: 'blur(12px)',
-                        WebkitBackdropFilter: 'blur(12px)',
-                        opacity: 0,
-                        transform: 'translateY(-10px)',
-                        transition: 'all 0.3s ease',
-                        pointerEvents: 'auto'
-                    });
+            // Style Aurora/iOS-like
+            Object.assign(toast.style, {
+                minWidth: '240px',
+                padding: '10px 16px',
+                borderRadius: '12px',
+                color: '#fff',
+                fontSize: '14px',
+                fontWeight: '500',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                opacity: 0,
+                transform: 'translateY(-10px)',
+                transition: 'all 0.3s ease',
+                pointerEvents: 'auto'
+            });
 
-                    // Màu theo loại
-                    if (type === 'error') {
-                        toast.style.background = 'linear-gradient(135deg, #ff5f6d, #d43f8d)';
-                    } else if (type === 'warning') {
-                        toast.style.background = 'linear-gradient(135deg, #f7971e, #ffd200)';
-                        toast.style.color = '#333';
-                    } else {
-                        toast.style.background = 'linear-gradient(135deg, var(--aurora-primary, #00b4d8), #007bff)';
-                    }
+            // Màu theo loại
+            if (type === 'error') {
+                toast.style.background = 'linear-gradient(135deg, #ff5f6d, #d43f8d)';
+            } else if (type === 'warning') {
+                toast.style.background = 'linear-gradient(135deg, #f7971e, #ffd200)';
+                toast.style.color = '#333';
+            } else {
+                toast.style.background = 'linear-gradient(135deg, var(--aurora-primary, #00b4d8), #007bff)';
+            }
 
-                    // Thêm vào container
-                    container.appendChild(toast);
+            // Thêm vào container
+            container.appendChild(toast);
 
-                    // Hiện lên
-                    requestAnimationFrame(() => {
-                        toast.style.opacity = 1;
-                        toast.style.transform = 'translateY(0)';
-                    });
+            // Hiện lên
+            requestAnimationFrame(() => {
+                toast.style.opacity = 1;
+                toast.style.transform = 'translateY(0)';
+            });
 
-                    // Tự ẩn sau 3s
-                    setTimeout(() => {
-                        toast.style.opacity = 0;
-                        toast.style.transform = 'translateY(-10px)';
-                        setTimeout(() => toast.remove(), 400);
-                    }, 2000);
-                }
+            // Tự ẩn sau 3s
+            setTimeout(() => {
+                toast.style.opacity = 0;
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 2000);
+        }
 
-                /* =====================================================
-                * 2️⃣ DOM & STATE (CHUẨN HÓA)
-                * ===================================================== */
+        /* =====================================================
+        * 2️⃣ DOM & STATE (CHUẨN HÓA)
+        * ===================================================== */
 
-                // 🧩 Tham chiếu các phần tử DOM chính
-                const $table = $('#spctTable');          // Bảng dữ liệu sản phẩm chi tiết
-                const $upload = $('#upload-container');   // Khu vực upload ảnh
-                const $preview = $('#preview-container');  // Vùng hiển thị ảnh preview
-                const $fileInp = $('#image-input');        // Input file ảnh
+        // 🧩 Tham chiếu các phần tử DOM chính
+        const $table = $('#spctTable');          // Bảng dữ liệu sản phẩm chi tiết
+        const $upload = $('#upload-container');   // Khu vực upload ảnh
+        const $preview = $('#preview-container');  // Vùng hiển thị ảnh preview
+        const $fileInp = $('#image-input');        // Input file ảnh
 
-                // 🧠 Biến trạng thái
-                let selectedId = null;     // ID của SPCT đang chọn
-                let selectedFiles = [];       // Danh sách ảnh local người dùng vừa chọn
-                let selectedCover = null;     // Ảnh nào được chọn làm "Ảnh bìa"
-                let cachedSpctList = [];       // Cache danh sách SPCT từ API
-                let searchKeyword = '';         // Tìm kiếm
-                let currentStatus = 'all'; // all | 1 | 0
-                let currentPage = 1;
-                const pageSize = 8;
-                let PRODUCT_INDEX = new Map(); // Map: id sản phẩm → mã sản phẩm (dùng để sinh mã SPCT)
+        // 🧠 Biến trạng thái
+        let selectedId = null;     // ID của SPCT đang chọn
+        let selectedFiles = [];       // Danh sách ảnh local người dùng vừa chọn
+        let selectedCover = null;     // Ảnh nào được chọn làm "Ảnh bìa"
+        let cachedSpctList = [];       // Cache danh sách SPCT từ API
+        let searchKeyword = '';         // Tìm kiếm
+        let currentStatus = 'all'; // all | 1 | 0
+        let currentPage = 1;
+        const pageSize = 8;
+        let PRODUCT_INDEX = new Map(); // Map: id sản phẩm → mã sản phẩm (dùng để sinh mã SPCT)
 
-                /* =====================================================
-                * 3️⃣ TIỆN ÍCH (CHUẨN HÓA)
-                * ===================================================== */
+        /* =====================================================
+        * 3️⃣ TIỆN ÍCH (CHUẨN HÓA)
+        * ===================================================== */
 
-                // 🧠 Hàm tiện ích: sinh thông tin người tạo / cập nhật chuẩn
-                function buildAuditFields(isCreate = false) {
-                    const CURRENT_ADMIN = window.ADMIN_NAME
-                        || localStorage.getItem('adminName')
-                        || 'ADMIN';
+        // 🧠 Hàm tiện ích: sinh thông tin người tạo / cập nhật chuẩn
+        function buildAuditFields(isCreate = false) {
+            const CURRENT_ADMIN = window.ADMIN_NAME
+                || localStorage.getItem('adminName')
+                || 'ADMIN';
 
-                    const now = new Date().toISOString().slice(0, 19); // chuẩn ISO yyyy-MM-dd'T'HH:mm:ss
+            const now = new Date().toISOString().slice(0, 19); // chuẩn ISO yyyy-MM-dd'T'HH:mm:ss
 
-                    // Nếu là tạo mới
-                    if (isCreate) {
-                        return {
-                            nguoiTao: CURRENT_ADMIN,
-                            nguoiCapNhat: CURRENT_ADMIN,
-                            ngayTao: now,
-                            ngayCapNhat: now
-                        };
-                    }
-
-                    // Nếu chỉ cập nhật
-                    return {
-                        nguoiCapNhat: CURRENT_ADMIN,
-                        ngayCapNhat: now
-                    };
-                }
-
-
-                // 💰 Định dạng tiền tệ Việt Nam
-                const formatVnd = n => {
-                    if (n == null || Number.isNaN(Number(n))) return '-';
-                    return Number(n).toLocaleString('vi-VN') + ' ₫';
+            // Nếu là tạo mới
+            if (isCreate) {
+                return {
+                    nguoiTao: CURRENT_ADMIN,
+                    nguoiCapNhat: CURRENT_ADMIN,
+                    ngayTao: now,
+                    ngayCapNhat: now
                 };
+            }
+
+            // Nếu chỉ cập nhật
+            return {
+                nguoiCapNhat: CURRENT_ADMIN,
+                ngayCapNhat: now
+            };
+        }
 
 
-                /* =====================================================
-                * 9️⃣ BẢNG DỮ LIỆU
-                * ===================================================== */
+        // 💰 Định dạng tiền tệ Việt Nam
+        const formatVnd = n => {
+            if (n == null || Number.isNaN(Number(n))) return '-';
+            return Number(n).toLocaleString('vi-VN') + ' ₫';
+        };
 
-                function showSkeleton(tableId, rowCount = 6, colCount = 11) {
-                    const $t = $(tableId).empty();
-                    for (let i = 0; i < rowCount; i++) {
-                        let row = '<tr class="skeleton-row">';
-                        for (let j = 0; j < colCount; j++) {
-                            row += `<td><div class="shimmer skeleton-cell"></div></td>`;
-                        }
-                        row += '</tr>';
-                        $t.append(row);
-                    }
+
+        /* =====================================================
+        * 9️⃣ BẢNG DỮ LIỆU
+        * ===================================================== */
+
+        function showSkeleton(tableId, rowCount = 6, colCount = 11) {
+            const $t = $(tableId).empty();
+            for (let i = 0; i < rowCount; i++) {
+                let row = '<tr class="skeleton-row">';
+                for (let j = 0; j < colCount; j++) {
+                    row += `<td><div class="shimmer skeleton-cell"></div></td>`;
+                }
+                row += '</tr>';
+                $t.append(row);
+            }
+        }
+
+        /* =====================================================
+        * 📦 LOAD DỮ LIỆU CHÍNH & RENDER BẢNG SPCT (11 CỘT) (NEW)
+        * ===================================================== */
+
+        // 🔹 Gọi API lấy toàn bộ SPCT (hoặc theo sản phẩm)
+        async function fetchSPCTList(spId = null) {
+            const url = spId ? API.SPCT_BY_SP(spId) : API.SPCT_LIST;
+            console.log("📡 Gọi API:", url); // 👈 kiểm tra log
+            const res = await axios.get(url);
+            return res.data || [];
+        }
+
+        // 🧩 Hàm sắp xếp theo mã có cả chữ và số
+        function compareMixedCode(a, b) {
+            if (!a) return -1;
+            if (!b) return 1;
+
+            // Tách phần chữ và số đầu tiên
+            const matchA = a.match(/^([A-Za-z]+)(\d+)/);
+            const matchB = b.match(/^([A-Za-z]+)(\d+)/);
+
+            if (matchA && matchB) {
+                const prefixA = matchA[1];
+                const prefixB = matchB[1];
+                const numA = parseInt(matchA[2]);
+                const numB = parseInt(matchB[2]);
+
+                // So sánh phần chữ trước
+                const cmpPrefix = prefixA.localeCompare(prefixB);
+                if (cmpPrefix !== 0) return cmpPrefix;
+
+                // Nếu phần chữ giống → so sánh phần số
+                if (numA !== numB) return numA - numB;
+            }
+
+            // Nếu không khớp định dạng (fallback)
+            return a.localeCompare(b);
+        }
+
+        function compareKichCo(a, b) {
+            if (!a) return -1;
+            if (!b) return 1;
+
+            const numA = parseFloat(a);
+            const numB = parseFloat(b);
+
+            // Nếu cả hai là số (VD: 38, 39, 40)
+            if (!isNaN(numA) && !isNaN(numB)) {
+                return numA - numB;
+            }
+
+            // Nếu là ký hiệu (S, M, L, XL, XXL, v.v.)
+            const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+            const idxA = sizeOrder.indexOf(a.toUpperCase());
+            const idxB = sizeOrder.indexOf(b.toUpperCase());
+            if (idxA >= 0 && idxB >= 0) return idxA - idxB;
+
+            // Fallback: sắp xếp chữ thường
+            return a.localeCompare(b);
+        }
+
+
+        // 🔹 Lọc, tìm kiếm, sắp xếp danh sách
+        function filterSPCTData() {
+            let data = [...cachedSpctList];
+
+            // Tìm kiếm theo từ khóa
+            if (searchKeyword.trim() !== '') {
+                const kw = searchKeyword.toLowerCase();
+                data = data.filter(sp =>
+                    (sp.tenSanPham || '').toLowerCase().includes(kw) ||
+                    (sp.tenMau || '').toLowerCase().includes(kw) ||
+                    (sp.tenKichCo || '').toLowerCase().includes(kw)
+                );
+            }
+
+            // Lọc theo trạng thái
+            if (currentStatus !== 'all') {
+                data = data.filter(sp => String(sp.trangThai) === String(currentStatus));
+            }
+
+            // Sắp xếp
+            const sortVal = $('#sortSelectInput').data('value');
+            if (sortVal) {
+                switch (sortVal) {
+                    /* 🔹 MÃ SPCT */
+                    case 'maSPCT-asc':
+                        data.sort((a, b) => compareMixedCode(a.maSpct, b.maSpct));
+                        break;
+                    case 'maSPCT-desc':
+                        data.sort((a, b) => compareMixedCode(b.maSpct, a.maSpct));
+                        break;
+
+                    /* 🔹 GIÁ NHẬP */
+                    case 'giaNhap-asc':
+                        data.sort((a, b) => (a.giaNhap ?? 0) - (b.giaNhap ?? 0));
+                        break;
+                    case 'giaNhap-desc':
+                        data.sort((a, b) => (b.giaNhap ?? 0) - (a.giaNhap ?? 0));
+                        break;
+
+                    /* 🔹 GIÁ BÁN */
+                    case 'giaBan-asc':
+                        data.sort((a, b) => (a.giaBan ?? 0) - (b.giaBan ?? 0));
+                        break;
+                    case 'giaBan-desc':
+                        data.sort((a, b) => (b.giaBan ?? 0) - (a.giaBan ?? 0));
+                        break;
+
+                    /* 🔹 SỐ LƯỢNG TỒN */
+                    case 'soLuong-asc':
+                        data.sort((a, b) => (a.soLuongTon ?? 0) - (b.soLuongTon ?? 0));
+                        break;
+                    case 'soLuong-desc':
+                        data.sort((a, b) => (b.soLuongTon ?? 0) - (a.soLuongTon ?? 0));
+                        break;
+
+                    /* 🔹 KÍCH CỠ (xử lý được cả dạng "38", "39", "40" lẫn "S", "M", "L") */
+                    case 'kichCo-asc':
+                        data.sort((a, b) => compareKichCo(a.tenKichCo, b.tenKichCo));
+                        break;
+                    case 'kichCo-desc':
+                        data.sort((a, b) => compareKichCo(b.tenKichCo, a.tenKichCo));
+                        break;
+
+                    /* 🔹 NGÀY CẬP NHẬT */
+                    case 'date-desc':
+                        data.sort((a, b) => new Date(b.ngayCapNhat) - new Date(a.ngayCapNhat));
+                        break;
+                    case 'date-asc':
+                        data.sort((a, b) => new Date(a.ngayCapNhat) - new Date(b.ngayCapNhat));
+                        break;
                 }
 
-                /* =====================================================
-                * 📦 LOAD DỮ LIỆU CHÍNH & RENDER BẢNG SPCT (11 CỘT) (NEW)
-                * ===================================================== */
+            }
 
-                // 🔹 Gọi API lấy toàn bộ SPCT (hoặc theo sản phẩm)
-                async function fetchSPCTList(spId = null) {
-                    const url = spId ? API.SPCT_BY_SP(spId) : API.SPCT_LIST;
-                    console.log("📡 Gọi API:", url); // 👈 kiểm tra log
-                    const res = await axios.get(url);
-                    return res.data || [];
-                }
+            return data;
+        }
 
-                // 🧩 Hàm sắp xếp theo mã có cả chữ và số
-                function compareMixedCode(a, b) {
-                    if (!a) return -1;
-                    if (!b) return 1;
+        // 🔹 Phân trang & render bảng
+        function renderSPCTTable() {
+            const data = filterSPCTData();
+            const total = data.length;
+            const start = (currentPage - 1) * pageSize;
+            const pageData = data.slice(start, start + pageSize);
 
-                    // Tách phần chữ và số đầu tiên
-                    const matchA = a.match(/^([A-Za-z]+)(\d+)/);
-                    const matchB = b.match(/^([A-Za-z]+)(\d+)/);
+            $table.empty();
 
-                    if (matchA && matchB) {
-                        const prefixA = matchA[1];
-                        const prefixB = matchB[1];
-                        const numA = parseInt(matchA[2]);
-                        const numB = parseInt(matchB[2]);
+            if (pageData.length === 0) {
+                $table.append(`<tr><td colspan="11" class="text-center text-muted py-3">Không có dữ liệu</td></tr>`);
+                $('#pagination').html('');
+                return;
+            }
 
-                        // So sánh phần chữ trước
-                        const cmpPrefix = prefixA.localeCompare(prefixB);
-                        if (cmpPrefix !== 0) return cmpPrefix;
-
-                        // Nếu phần chữ giống → so sánh phần số
-                        if (numA !== numB) return numA - numB;
-                    }
-
-                    // Nếu không khớp định dạng (fallback)
-                    return a.localeCompare(b);
-                }
-
-                function compareKichCo(a, b) {
-                    if (!a) return -1;
-                    if (!b) return 1;
-
-                    const numA = parseFloat(a);
-                    const numB = parseFloat(b);
-
-                    // Nếu cả hai là số (VD: 38, 39, 40)
-                    if (!isNaN(numA) && !isNaN(numB)) {
-                        return numA - numB;
-                    }
-
-                    // Nếu là ký hiệu (S, M, L, XL, XXL, v.v.)
-                    const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
-                    const idxA = sizeOrder.indexOf(a.toUpperCase());
-                    const idxB = sizeOrder.indexOf(b.toUpperCase());
-                    if (idxA >= 0 && idxB >= 0) return idxA - idxB;
-
-                    // Fallback: sắp xếp chữ thường
-                    return a.localeCompare(b);
-                }
-
-
-
-                // 🔹 Lọc, tìm kiếm, sắp xếp danh sách
-                function filterSPCTData() {
-                    let data = [...cachedSpctList];
-
-                    // Tìm kiếm theo từ khóa
-                    if (searchKeyword.trim() !== '') {
-                        const kw = searchKeyword.toLowerCase();
-                        data = data.filter(sp =>
-                            (sp.tenSanPham || '').toLowerCase().includes(kw) ||
-                            (sp.tenMau || '').toLowerCase().includes(kw) ||
-                            (sp.tenKichCo || '').toLowerCase().includes(kw)
-                        );
-                    }
-
-                    // Lọc theo trạng thái
-                    if (currentStatus !== 'all') {
-                        data = data.filter(sp => String(sp.trangThai) === String(currentStatus));
-                    }
-
-                    // Sắp xếp
-                    const sortVal = $('#sortSelectInput').data('value');
-                    if (sortVal) {
-                        switch (sortVal) {
-                            /* 🔹 MÃ SPCT */
-                            case 'maSPCT-asc':
-                                data.sort((a, b) => compareMixedCode(a.maSpct, b.maSpct));
-                                break;
-                            case 'maSPCT-desc':
-                                data.sort((a, b) => compareMixedCode(b.maSpct, a.maSpct));
-                                break;
-
-                            /* 🔹 GIÁ NHẬP */
-                            case 'giaNhap-asc':
-                                data.sort((a, b) => (a.giaNhap ?? 0) - (b.giaNhap ?? 0));
-                                break;
-                            case 'giaNhap-desc':
-                                data.sort((a, b) => (b.giaNhap ?? 0) - (a.giaNhap ?? 0));
-                                break;
-
-                            /* 🔹 GIÁ BÁN */
-                            case 'giaBan-asc':
-                                data.sort((a, b) => (a.giaBan ?? 0) - (b.giaBan ?? 0));
-                                break;
-                            case 'giaBan-desc':
-                                data.sort((a, b) => (b.giaBan ?? 0) - (a.giaBan ?? 0));
-                                break;
-
-                            /* 🔹 SỐ LƯỢNG TỒN */
-                            case 'soLuong-asc':
-                                data.sort((a, b) => (a.soLuongTon ?? 0) - (b.soLuongTon ?? 0));
-                                break;
-                            case 'soLuong-desc':
-                                data.sort((a, b) => (b.soLuongTon ?? 0) - (a.soLuongTon ?? 0));
-                                break;
-
-                            /* 🔹 KÍCH CỠ (xử lý được cả dạng "38", "39", "40" lẫn "S", "M", "L") */
-                            case 'kichCo-asc':
-                                data.sort((a, b) => compareKichCo(a.tenKichCo, b.tenKichCo));
-                                break;
-                            case 'kichCo-desc':
-                                data.sort((a, b) => compareKichCo(b.tenKichCo, a.tenKichCo));
-                                break;
-
-                            /* 🔹 NGÀY CẬP NHẬT */
-                            case 'date-desc':
-                                data.sort((a, b) => new Date(b.ngayCapNhat) - new Date(a.ngayCapNhat));
-                                break;
-                            case 'date-asc':
-                                data.sort((a, b) => new Date(a.ngayCapNhat) - new Date(b.ngayCapNhat));
-                                break;
-                        }
-
-                    }
-
-                    return data;
-                }
-
-                // 🔹 Phân trang & render bảng
-                function renderSPCTTable() {
-                    const data = filterSPCTData();
-                    const total = data.length;
-                    const start = (currentPage - 1) * pageSize;
-                    const pageData = data.slice(start, start + pageSize);
-
-                    $table.empty();
-
-                    if (pageData.length === 0) {
-                        $table.append(`<tr><td colspan="11" class="text-center text-muted py-3">Không có dữ liệu</td></tr>`);
-                        $('#pagination').html('');
-                        return;
-                    }
-
-                    pageData.forEach((spct, idx) => {
-                        const {
-                            id,
-                            maSpct,
-                            tenSanPham,
-                            tenMau,
-                            tenKichCo,
-                            giaNhap,
-                            giaBan,
-                            soLuongTon,
-                            trangThai,
-                            anhBiaUrl
-                        } = spct;
-                        const trangThaiText = trangThai === 1 ? 'Đang bán' : 'Ngừng bán';
-                        const trangThaiClass = trangThai === 1
-                            ? 'badge bg-success-subtle text-success border border-success'
-                            : 'badge bg-danger-subtle text-danger border border-danger';
-                        $table.append(`
+            pageData.forEach((spct, idx) => {
+                const {
+                    id,
+                    maSpct,
+                    tenSanPham,
+                    tenMau,
+                    tenKichCo,
+                    giaNhap,
+                    giaBan,
+                    soLuongTon,
+                    trangThai,
+                    anhBiaUrl
+                } = spct;
+                const trangThaiText = trangThai === 1 ? 'Đang bán' : 'Ngừng bán';
+                const trangThaiClass = trangThai === 1
+                    ? 'badge bg-success-subtle text-success border border-success'
+                    : 'badge bg-danger-subtle text-danger border border-danger';
+                $table.append(`
         <tr class="text-center spct-row" data-id="${id}">
             <td><input type="checkbox" class="spct-checkbox" data-id="${id}"></td>
             <td>${start + idx + 1}</td>
@@ -1857,9 +1902,12 @@
             <td>${tenKichCo || '-'}</td>
             <td><span class="${trangThaiClass}">${trangThaiText}</span></td>
             <td>
-    <button class="btn btn-success btn-sm btn-edit" title="Sửa">
-        <i class="fas fa-edit"></i>
-    </button>
+    <button class="btn btn-success btn-sm btn-edit"
+        title="Xem chi tiết"
+        data-sp-id="${spct.sanPhamId}">
+    <i class="fas fa-eye"></i>
+</button>
+
     <button class="btn btn-sm ${trangThai === 1 ? 'btn-warning' : 'btn-success'} btn-toggle-status"
             data-id="${id}"
             data-status="${trangThai}"
@@ -1868,999 +1916,425 @@
     </button>
 </td>
         </tr>`);
-                    });
-                    renderPagination(total);
-                }
+            });
+            renderPagination(total);
+        }
 
-                // 🔹 Phân trang
-                function renderPagination(total) {
-                    const totalPages = Math.ceil(total / pageSize);
-                    if (totalPages <= 1) return $('#pagination').empty();
+        // 🔹 Phân trang
+        function renderPagination(total) {
+            const totalPages = Math.ceil(total / pageSize);
+            if (totalPages <= 1) return $('#pagination').empty();
 
-                    let html = '<ul class="pagination pagination-sm mb-0">';
-                    for (let i = 1; i <= totalPages; i++) {
-                        html += `
+            let html = '<ul class="pagination pagination-sm mb-0">';
+            for (let i = 1; i <= totalPages; i++) {
+                html += `
         <li class="page-item ${i === currentPage ? 'active' : ''}">
             <a class="page-link" href="#">${i}</a>
         </li>`;
-                    }
-                    html += '</ul>';
-
-                    $('#pagination').html(html);
-                }
-
-                // 🔹 Sự kiện click chuyển trang
-                $(document).off('click.paginate').on('click.paginate', '.page-link', function (e) {
-                    e.preventDefault();
-                    const page = parseInt($(this).text());
-                    if (!isNaN(page)) {
-                        currentPage = page;
-                        renderSPCTTable();
-                    }
-                });
-
-                // 🔹 Load dữ liệu tổng (gọi API một lần rồi render)
-                async function loadSPCTData(spId = null) {
-                    showSkeleton('#spctTable', 8, 11);
-                    cachedSpctList = await fetchSPCTList(spId);
-                    renderSPCTTable();
-                    $('#selectAllSPCT').prop('checked', false);
-                }
-
-                // Khi tìm kiếm
-                $('#search-input').on('input', function() {
-                    searchKeyword = $(this).val().trim();
-                    currentPage = 1;
-                    renderSPCTTable();
-                });
-
-                // Khi lọc trạng thái
-                $('#status-filters .btn').on('click', function() {
-                    $('#status-filters .btn').removeClass('active');
-                    $(this).addClass('active');
-                    currentStatus = $(this).data('status');
-                    currentPage = 1;
-                    renderSPCTTable();
-                });
-
-                // Khi đổi sắp xếp
-                $('#sortSelectList .dropdown-item').on('click', function() {
-                    const val = $(this).data('value');
-                    $('#sortSelectInput').data('value', val).val($(this).text().trim());
-                    currentPage = 1;
-                    renderSPCTTable();
-                });
-
-                //  🔽 DROPDOWN "SẮP XẾP THEO" (HOẠT ĐỘNG CHUẨN)
-
-                // 🟩 Mở / đóng danh sách khi click vào ô "Sắp xếp theo"
-                $(document).off('click.sortOpen').on('click.sortOpen', '#sortSelectInput', function (e) {
-                    e.stopPropagation();
-                    $('#sortSelectList').toggleClass('show');
-                });
-
-                // 🟨 Khi chọn một mục trong dropdown
-                $(document).off('click.sortPick').on('click.sortPick', '#sortSelectList .dropdown-item', function (e) {
-                    e.stopPropagation();
-                    const value = $(this).data('value');
-                    const text = $(this).text().trim();
-
-                    // ✅ Gán giá trị và text vào input
-                    $('#sortSelectInput').val(text).data('value', value);
-                    $('#sortSelectList').removeClass('show');
-
-                    // ✅ Gọi lại render bảng với thứ tự mới
-                    currentPage = 1;
-                    renderSPCTTable();
-                });
-
-                // 🟥 Đóng dropdown khi click ra ngoài
-                $(document).off('click.sortClose').on('click.sortClose', function (e) {
-                    if (!$(e.target).closest('#sortSelectInput, #sortSelectList').length) {
-                        $('#sortSelectList').removeClass('show');
-                    }
-                });
-
-
-                // Lắng nghe sự kiện thay đổi
-                $(document).on('input', '.input-slt, .input-giaban', function () {
-                    const $input = $(this);
-                    $input.addClass('changed'); // đánh dấu là có thay đổi
-                });
-
-                // Khi gõ
-                $(document).on('input', '.input-giaban', function () {
-                    const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
-                    $(this).attr('data-raw', val);
-                });
-
-                // Khi blur
-                $(document).on('blur', '.input-giaban', function () {
-                    const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
-                    $(this).attr('data-raw', val);
-                });
-
-                // Cập nhật hàng loạt
-                $(document).on('click', '#btnBulkUpdateSPCT', async function () {
-
-                    // ✅ Bắt buộc đồng bộ lại 1 lần toàn bộ giá trước khi gửi
-                    $('.input-giaban').each(function () {
-                        const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
-                        $(this).attr('data-raw', val);
-                    });
-                    const reqs = [];
-                    $('.spct-checkbox:checked').each(function () {
-                        const id = $(this).data('id');
-                        const soLuongTon = parseInt($(`.input-slt[data-id="${id}"]`).val() || 0);
-                        const giaBan = Number($(`.input-giaban[data-id="${id}"]`).attr('data-raw') || 0);
-
-
-                        reqs.push({
-                            id,
-                            soLuongTon,
-                            giaBan,
-                            ...buildAuditFields(false)
-                        });
-                    });
-                    if (reqs.length === 0) {
-                        showToast('Vui lòng chọn ít nhất một sản phẩm để cập nhật!');
-                        return;
-                    }
-                    if (!confirm(`Xác nhận cập nhật ${reqs.length} sản phẩm chi tiết?`)) return;
-                    try {
-                        await axios.put('/api/san-pham-chi-tiet/bulk-update', reqs);
-                        showToast('✅ Đã cập nhật thành công!');
-                        loadSPCTData(PRODUCT_ID || null);
-                    } catch (err) {
-                        console.error(err);
-                        showToast('❌ Lỗi khi cập nhật!');
-                    }
-                });
-
-                // ✅ Khi click checkbox từng dòng
-                // ✅ Tick chọn để chỉnh, bỏ tick để format lại
-                $(document).on('change', '.spct-checkbox', function () {
-                    const id = $(this).data('id');
-                    const checked = $(this).is(':checked');
-                    const $inputSLT = $(`.input-slt[data-id="${id}"]`);
-                    const $inputGia = $(`.input-giaban[data-id="${id}"]`);
-
-                    if (checked) {
-                        // 🟢 Cho nhập — hiển thị số thô
-                        const rawVal = String($inputGia.attr('data-raw') || $inputGia.val().replace(/[^\d]/g, '') || 0);
-                        $inputGia.val(rawVal).prop('readonly', false).addClass('editable');
-                        $inputSLT.prop('readonly', false).addClass('editable');
-                    } else {
-                        // 🔵 Khi bỏ tick — lưu lại giá mới, format và khóa lại
-                        const newRaw = Number($inputGia.val().replace(/[^\d]/g, '') || 0);
-                        $inputGia.attr('data-raw', newRaw);
-                        $inputGia.val(formatVnd(newRaw)).prop('readonly', true).removeClass('editable');
-                        $inputSLT.prop('readonly', true).removeClass('editable');
-                    }
-                    // ✅ Highlight dòng khi tick
-                    const $row = $(`tr.spct-row[data-id="${id}"]`);
-                    if (checked) $row.addClass('selected');
-                    else $row.removeClass('selected');
-
-                });
-
-                // 🟢 Khi người dùng nhập vào ô Giá bán — cập nhật ngay data-raw để đảm bảo gửi đúng giá mới
-                $(document).on('input', '.input-giaban', function () {
-                    const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
-                    $(this).attr('data-raw', val);
-                });
-
-                // ✅ Tick chọn tất cả (phiên bản mới)
-                $(document).off('change.selectAllSPCT').on('change.selectAllSPCT', '#selectAllSPCT', function () {
-                    const isChecked = $(this).is(':checked');
-                    const $checkboxes = $('.spct-checkbox');
-
-                    // Ngăn trigger chồng chéo: bỏ trigger('change'), chỉ đổi trạng thái và xử lý thủ công
-                    $checkboxes.prop('checked', isChecked);
-
-                    $checkboxes.each(function () {
-                        const id = $(this).data('id');
-                        const $inputSLT = $(`.input-slt[data-id="${id}"]`);
-                        const $inputGia = $(`.input-giaban[data-id="${id}"]`);
-
-                        if (isChecked) {
-                            // ✅ Bỏ format để nhập thô
-                            const rawVal = String($inputGia.attr('data-raw') || $inputGia.val().replace(/[^\d]/g, '') || 0);
-                            $inputGia.val(rawVal).prop('readonly', false).addClass('editable');
-                            $inputSLT.prop('readonly', false).addClass('editable');
-                        } else {
-                            // ✅ Reformat lại
-                            const newRaw = Number($inputGia.val().replace(/[^\d]/g, '') || 0);
-                            $inputGia.attr('data-raw', newRaw);
-                            $inputGia.val(formatVnd(newRaw)).prop('readonly', true).removeClass('editable');
-                            $inputSLT.prop('readonly', true).removeClass('editable');
-                        }
-                    });
-                });
-
-                // ✅ Đồng bộ giá trị giữa các dòng được chọn
-                $(document).on('input', '.input-slt, .input-giaban', function () {
-                    const $this = $(this);
-                    const val = $this.val();
-                    const cls = $this.hasClass('input-slt') ? '.input-slt' : '.input-giaban';
-
-                    // Chỉ chạy nếu dòng hiện tại đang được tick
-                    const id = $this.data('id');
-                    const isChecked = $(`.spct-checkbox[data-id="${id}"]`).is(':checked');
-                    if (!isChecked) return;
-
-                    // Lặp qua các dòng khác đã tick để đồng bộ
-                    $('.spct-checkbox:checked').each(function () {
-                        const otherId = $(this).data('id');
-                        if (otherId !== id) {
-                            $(`${cls}[data-id="${otherId}"]`).val(val);
-                        }
-                    });
-                });
-
-
-
-
-
-                // 🔁 CHUYỂN ĐỔI TRẠNG THÁI SPCT
-                $(document).on('click', '.btn-toggle-status', async function () {
-                    const id = $(this).data('id');
-                    const currentStatus = Number($(this).data('status'));
-                    const newStatus = currentStatus === 1 ? 0 : 1;
-
-                    const confirmMsg = currentStatus === 1
-                        ? '⚠️ Bạn có chắc muốn NGỪNG kinh doanh sản phẩm này không?'
-                        : '✅ Bạn có muốn KINH DOANH LẠI sản phẩm này không?';
-
-                    if (!confirm(confirmMsg)) return;
-
-                    try {
-                        const body = [{
-                            id: id,
-                            trangThai: newStatus
-                        }];
-
-                        await axios.put('/api/san-pham-chi-tiet/bulk-update', body);
-
-                        showToast('✅ Cập nhật trạng thái thành công!');
-                        await loadSPCTData(PRODUCT_ID || null);
-                    } catch (err) {
-                        console.error('❌ Lỗi khi cập nhật trạng thái:', err);
-                        showToast('❌ Không thể cập nhật trạng thái. Vui lòng thử lại!');
-                    }
-                });
-
-
-                /* =====================================================
-                * 🚀 KHỞI TẠO TRANG (INIT)
-                * ===================================================== */
-                async function init() {
-                    try {
-                        console.log('🚀 Khởi tạo trang Quản lý Sản phẩm Chi tiết.');
-                        // 2️⃣ Hiển thị skeleton loading bảng trước khi dữ liệu được tải
-                        showSkeleton('#spctTable', 8, 11);
-                        // // 3️⃣ Tải dữ liệu dropdown (Sản phẩm / Màu sắc / Kích cỡ)
-                        // await loadDropdownData();
-                        // 4️⃣ Tải danh sách sản phẩm chi tiết (theo sản phẩm nếu có)
-                        console.log('🔎 PRODUCT_ID =', PRODUCT_ID);
-                        await loadSPCTData(PRODUCT_ID || null);
-                        // // 5️⃣ Reset vùng upload ảnh (tránh bị gán trạng thái cũ)
-                        // clearUploadState();
-                        // $upload.removeClass('has-images');
-                        // 6️⃣ Gán sắp xếp mặc định
-                        $('#sortSelectInput').data('value', 'date-desc').val('Ngày cập nhật mới nhất');
-                        console.log('✅ Trang Quản lý SPCT đã khởi tạo xong.');
-                    } catch (err) {
-                        console.error('❌ Lỗi khi khởi tạo trang:', err);
-                        showToast('❌ Không thể tải dữ liệu khởi tạo. Vui lòng thử lại hoặc kiểm tra kết nối!');
-                    }
-                }
-
-                // 👉 Gọi hàm init() khi DOM đã sẵn sàng
-                $(document).ready(() => {
-                    init();
-                });
-
-                // 🧹 Dọn sạch khu vực upload ảnh
-                // function clearUploadState() {
-                //     selectedFiles = [];
-                //     selectedCover = null;
-                //
-                //     // Nếu vùng preview tồn tại, làm sạch nó
-                //     if ($preview && $preview.length) $preview.empty();
-                //
-                //     // Reset input file để có thể chọn lại cùng tên ảnh
-                //     if ($fileInp && $fileInp.length) $fileInp.val('');
-                //
-                //     // Bỏ trạng thái “có ảnh”
-                //     if ($upload && $upload.length) $upload.removeClass('has-images');
-                // }
-
-                // 🧽 Dọn sạch toàn bộ form thêm/sửa SPCT
-                // function clearFormInputs() {
-                //     // 1️⃣ Reset các input text / number
-                //     $('#maSPCT, #giaBan, #soLuongTon, #nguoiTao, #nguoiCapNhat').val('');
-                //
-                //     // 2️⃣ Reset dropdown tùy chỉnh
-                //     const dropdowns = ['#sanPhamInput', '#mauSacInput', '#kichCoInput', '#trangThaiInput'];
-                //     dropdowns.forEach(sel => {
-                //         const $el = $(sel);
-                //         if ($el.length) {
-                //             $el.val('').data('id', null);
-                //             $el.trigger('input'); // buộc re-render UI nếu có binding
-                //         }
-                //     });
-                //
-                //     // 3️⃣ Xóa ảnh preview nếu có
-                //     clearUploadState();
-                //
-                //     // 4️⃣ Reset biến trạng thái trong JS
-                //     selectedId = null;
-                // }
-
-                // // 🖱️ FIX: Khi thả chuột, nút trở lại bình thường (tránh stuck “active”)
-                // $(document).off('mouseup.btnReset').on('mouseup.btnReset', '.btn', function () {
-                //     const $btn = $(this);
-                //     $btn.removeClass('active').blur();
-                // });
-
-
-                /* =====================================================
-                * 4️⃣ HIỆU ỨNG BÓNG MỜ KHI CUỘN ẢNH (CHUẨN HÓA)
-                * ===================================================== */
-                // let shadowTimeout = null;
-                // let lastScrollLeft = 0;
-                //
-                // function updatePreviewShadow() {
-                //     const el = $preview.get(0);
-                //     if (!el) return;
-                //
-                //     const maxScroll = el.scrollWidth - el.clientWidth;
-                //     const scrollLeft = el.scrollLeft;
-                //
-                //     // 🧹 Reset trạng thái cũ
-                //     $upload.removeClass('shadow-left shadow-right');
-                //
-                //     // Nếu không thể cuộn (ít ảnh) → bỏ bóng
-                //     if (maxScroll <= 5) return;
-                //
-                //     // 🟩 Thêm bóng bên trái / phải tùy vị trí cuộn
-                //     if (scrollLeft > 5 && scrollLeft < maxScroll - 5) {
-                //         $upload.addClass('shadow-left shadow-right');
-                //     } else if (scrollLeft <= 5) {
-                //         $upload.addClass('shadow-right');
-                //     } else if (scrollLeft >= maxScroll - 5) {
-                //         $upload.addClass('shadow-left');
-                //     }
-                //
-                //     // 🕓 Debounce xóa bóng sau khi dừng cuộn ~1 giây
-                //     clearTimeout(shadowTimeout);
-                //     shadowTimeout = setTimeout(() => {
-                //         if (Math.abs(el.scrollLeft - lastScrollLeft) < 2) {
-                //             $upload.removeClass('shadow-left shadow-right');
-                //         }
-                //     }, 1000);
-                //
-                //     lastScrollLeft = scrollLeft;
-                // }
-                //
-                // // 🖱️ Gọi update mỗi khi người dùng cuộn hoặc tương tác
-                // $preview
-                //     .off('scroll wheel touchmove mouseup resize')
-                //     .on('scroll', updatePreviewShadow)
-                //     .on('wheel touchmove mouseup', () => setTimeout(updatePreviewShadow, 100));
-                //
-                // // 🪄 Gọi lại khi window resize (phòng trường hợp chiều rộng thay đổi)
-                // $(window).off('resize.previewShadow').on('resize.previewShadow', () => {
-                //     setTimeout(updatePreviewShadow, 150);
-                // });
-
-
-
-                /* =====================================================
-                * 5️⃣ RENDER PREVIEW ẢNH LOCAL (CHUẨN HÓA)
-                * ===================================================== */
-            //     function renderPreviewFromFiles(files) {
-            //         if (!files || files.length === 0) return;
-            //
-            //         // 🧩 Nếu chưa có nút “+” thì thêm vào đầu preview container
-            //         if ($preview.find('.image-add-box').length === 0) {
-            //             const $addBox = $('<div class="image-add-box"><i class="fas fa-plus"></i></div>');
-            //             $addBox.off('click').on('click', () => $fileInp.trigger('click'));
-            //             $preview.prepend($addBox);
-            //         }
-            //
-            //         const $addBox = $preview.find('.image-add-box');
-            //
-            //         // 🖼️ Duyệt danh sách file mới để render preview
-            //         files.forEach(file => {
-            //             const reader = new FileReader();
-            //
-            //             reader.onload = e => {
-            //                 // 🧱 Tạo phần tử preview
-            //                 const $box = $(`
-            //     <div class="image-box" data-local="true" title="${file.name}">
-            //         <img src="${e.target.result}" alt="${file.name}">
-            //         <div class="image-actions">
-            //             <button type="button" class="btn btn-xs btn-warning btn-del-local" title="Xóa ảnh này">
-            //                 <i class="fas fa-times"></i>
-            //             </button>
-            //         </div>
-            //         <span class="badge badge-light border image-badge btn-mark-cover" title="Đặt làm ảnh bìa" style="cursor:pointer">
-            //             Ảnh bìa
-            //         </span>
-            //     </div>
-            // `);
-            //
-            //                 // ❌ Xóa ảnh local
-            //                 $box.find('.btn-del-local').off('click').on('click', () => {
-            //                     selectedFiles = selectedFiles.filter(f => f !== file);
-            //                     $box.fadeOut(200, () => $box.remove());
-            //                     if ($preview.find('.image-box').length <= 1) {
-            //                         $upload.removeClass('has-images');
-            //                     }
-            //                 });
-            //
-            //                 // 🌟 Chọn ảnh bìa (local)
-            //                 $box.find('.btn-mark-cover').off('click').on('click', () => {
-            //                     $preview.find('.image-box').removeClass('cover');
-            //                     $box.addClass('cover');
-            //                     selectedCover = file.name; // ✅ Ghi nhận tên file ảnh bìa
-            //                 });
-            //
-            //                 // ✅ Thêm ảnh sau nút "+"
-            //                 $addBox.after($box);
-            //             };
-            //
-            //             // 🚀 Đọc file thành base64
-            //             reader.readAsDataURL(file);
-            //         });
-            //
-            //         // 🟩 Cập nhật trạng thái vùng upload
-            //         $upload.addClass('has-images');
-            //         updatePreviewShadow();
-            //     }
-
-
-                /* =====================================================
-                * 6️⃣ SỰ KIỆN UPLOAD ẢNH LOCAL (CHUẨN HÓA - FIX VÒNG LẶP, TRÙNG FILE)
-                * ===================================================== */
-
-                // 🟩 Khi click vào vùng upload (chỉ cho phép khi chưa có ảnh)
-                // $upload.off('click').on('click', function (e) {
-                //     // Nếu đã có ảnh trong vùng => KHÔNG mở hộp chọn file
-                //     if ($upload.hasClass('has-images')) return;
-                //
-                //     // Nếu người dùng click trực tiếp vào input file => bỏ qua (tránh vòng lặp)
-                //     if ($(e.target).is('#image-input')) return;
-                //
-                //     // Mở hộp chọn file an toàn
-                //     $fileInp.trigger('click');
-                // });
-
-                // 🟦 Khi người dùng chọn file
-                // $fileInp.off('change').on('change', function () {
-                //     const newFiles = Array.from(this.files || []);
-                //     if (newFiles.length === 0) return;
-                //
-                //     // 🧩 Gộp file mới + file cũ (nếu có) và loại bỏ trùng theo tên hoặc size
-                //     const allFiles = [...selectedFiles, ...newFiles];
-                //     selectedFiles = allFiles.filter(
-                //         (f, index, arr) =>
-                //             index === arr.findIndex(x => x.name === f.name && x.size === f.size)
-                //     );
-                //
-                //     // 🧹 Reset input để lần sau chọn cùng file vẫn trigger được "change" event
-                //     this.value = '';
-                //
-                //     // 🖼️ Render lại preview
-                //     renderPreviewFromFiles(selectedFiles);
-                // });
-
-
-
-                /* =====================================================
-                * 7️⃣ DROPDOWN CHỌN DỮ LIỆU (ĐÃ FIX HOẠT ĐỘNG CỦA "SẮP XẾP THEO")
-                * ===================================================== */
-
-                // 🟩 Mở/đóng danh sách dropdown khi click vào input
-                // $(document).off('click.dd').on('click.dd', '.dropdown-input', function (e) {
-                //     e.stopPropagation();
-                //     const listId = '#' + $(this).attr('id').replace('Input', 'List');
-                //
-                //     // Nếu là dropdown Sắp xếp -> để handler riêng xử lý
-                //     if (listId === '#sortSelectList') return;
-                //
-                //     // Ẩn tất cả danh sách khác
-                //     $('.dropdown-list').not(listId).removeClass('show');
-                //
-                //     // Toggle danh sách tương ứng
-                //     $(listId).toggleClass('show');
-                // });
-
-                // 🟨 Khi người dùng chọn một item trong dropdown thường (SP, Màu, Kích cỡ, Trạng thái)
-                // $(document).off('click.ddItem').on('click.ddItem', '.dropdown-list:not(#sortSelectList) .dropdown-item', function (e) {
-                //     e.stopPropagation();
-                //
-                //     const id = $(this).data('id');
-                //     const text = $(this).text().trim();
-                //     const listId = $(this).parent().attr('id');
-                //     const inputId = '#' + listId.replace('List', 'Input');
-                //
-                //     // Gán giá trị và id vào input
-                //     $(inputId).val(text).data('id', id);
-                //
-                //     // Ẩn dropdown sau khi chọn
-                //     $(this).parent().removeClass('show');
-                // });
-
-                // 🟥 Ẩn dropdown khi click ra ngoài
-                // $(document).off('click.ddClose').on('click.ddClose', function (e) {
-                //     if (!$(e.target).closest('.dropdown-input, .dropdown-list').length) {
-                //         $('.dropdown-list').removeClass('show');
-                //     }
-                // });
-
-
-                /* =====================================================
-                 * 7.1️⃣ DROPDOWN "SẮP XẾP THEO" (RIÊNG BIỆT)
-                 * ===================================================== */
-
-                // 🟩 Mở dropdown sắp xếp
-                // $(document).off('click.sortOpen').on('click.sortOpen', '#sortSelectInput', function (e) {
-                //     e.stopPropagation();
-                //     $('#sortSelectList').toggleClass('show');
-                // });
-
-                // 🟨 Khi chọn item trong dropdown sắp xếp
-                // $(document).off('click.sortPick').on('click.sortPick', '#sortSelectList .dropdown-item', function (e) {
-                //     e.stopPropagation();
-                //     const value = $(this).data('value');
-                //     const text = $(this).text().trim();
-                //
-                //     $('#sortSelectInput').val(text).data('value', value);
-                //     $('#sortSelectList').removeClass('show');
-                //
-                //     // Gọi lại hàm render bảng sau khi đổi thứ tự sắp xếp
-                //     filterAndRenderTable();
-                // });
-
-                // 🟥 Click ngoài để đóng dropdown
-                // $(document).off('click.sortClose').on('click.sortClose', function (e) {
-                //     if (!$(e.target).closest('#sortSelectInput, #sortSelectList').length) {
-                //         $('#sortSelectList').removeClass('show');
-                //     }
-                // });
-
-
-                /* =====================================================
-                * 8️⃣ LOAD DỮ LIỆU DROPDOWN TỪ API (CHUẨN)
-                * ===================================================== */
-        //         async function loadDropdownData() {
-        //             const [sp, ms, kc] = await Promise.all([
-        //                 axios.get(API.SP_LIST),
-        //                 axios.get(API.MS_LIST),
-        //                 axios.get(API.KC_LIST)
-        //             ]);
-        //
-        //             // 🧩 Làm trống danh sách cũ
-        //             $('#sanPhamList').empty();
-        //             $('#mauSacList').empty();
-        //             $('#kichCoList').empty();
-        //
-        //             // 🧩 Làm mới PRODUCT_INDEX (map id -> mã sản phẩm)
-        //             PRODUCT_INDEX.clear();
-        //
-        //             // 🔹 Duyệt danh sách sản phẩm
-        //             sp.data.forEach(p => {
-        //                 PRODUCT_INDEX.set(p.id, p.maSanPham || p.maSP || 'SP');
-        //                 $('#sanPhamList').append(`
-        //     <div class="dropdown-item"
-        //          data-id="${p.id}"
-        //          data-code="${p.maSanPham || p.maSP || ''}"
-        //          data-name="${p.tenSanPham || ''}">
-        //          ${p.tenSanPham}
-        //     </div>
-        // `);
-        //             });
-        //
-        //             // 🔹 Duyệt màu sắc
-        //             ms.data.forEach(m => {
-        //                 $('#mauSacList').append(`
-        //     <div class="dropdown-item" data-id="${m.id}">
-        //         ${m.tenMau}
-        //     </div>
-        // `);
-        //             });
-        //
-        //             // 🔹 Duyệt kích cỡ
-        //             kc.data.forEach(k => {
-        //                 $('#kichCoList').append(`
-        //     <div class="dropdown-item" data-id="${k.id}">
-        //         ${k.tenKichCo}
-        //     </div>
-        // `);
-        //             });
-        //         }
-
-
-
-
-
-
-
-                /* =====================================================
-                *  HÀM TẠO THANH PHÂN TRANG (1, 2, 3, ...)
-                * ===================================================== */
-                // function renderPagination(totalPages) {
-                //     const $pg = $('#pagination');
-                //     $pg.empty();
-                //
-                //     // if (totalPages <= 1) return; // ẩn nếu chỉ 1 trang
-                //
-                //     let html = `<nav><ul class="pagination pagination-sm mb-0">`;
-                //
-                //     // Nút trước
-                //     html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                //     <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
-                //     </li>`;
-                //
-                //     // Các số trang
-                //     for (let i = 1; i <= totalPages; i++) {
-                //         html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                //     <a class="page-link" href="#" data-page="${i}">${i}</a>
-                //     </li>`;
-                //     }
-                //
-                //     // Nút sau
-                //     html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                //     <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
-                //     </li>`;
-                //
-                //     html += `</ul></nav>`;
-                //     $pg.html(html);
-                // }
-
-                /* =====================================================
-                 *  SỰ KIỆN CLICK PHÂN TRANG
-                 * ===================================================== */
-                // $(document).on('click', '#pagination .page-link', function (e) {
-                //     e.preventDefault();
-                //     const page = Number($(this).data('page'));
-                //     if (!page || page === currentPage) return;
-                //     currentPage = page;
-                //     filterAndRenderTable();
-                // });
-
-
-
-
-                /* =====================================================
-                * 🔟 CRUD HANDLERS (THÊM / LƯU / XÓA / XEM)
-                * ===================================================== */
-
-                // 🟩 THÊM MỚI SPCT (có kiểm tra trùng và cộng dồn SLT)
-                // $('#btn-add').on('click', async function () {
-                //     try {
-                //         const sanPhamId = $('#sanPhamInput').data('id');
-                //         const mauSacId = $('#mauSacInput').data('id');
-                //         const kichCoId = $('#kichCoInput').data('id');
-                //         const trangThai = $('#trangThaiInput').data('id') ?? 1;
-                //
-                //         if (!sanPhamId || !mauSacId || !kichCoId) {
-                //             showToast('⚠️ Vui lòng chọn đầy đủ Sản phẩm, Màu sắc, Kích cỡ!');
-                //             return;
-                //         }
-                //
-                //         const dto = {
-                //             maSPCT: $('#maSPCT').val(),
-                //             giaBan: Number($('#giaBan').val() || 0),
-                //             soLuongTon: Number($('#soLuongTon').val() || 0),
-                //             trangThai,
-                //             sanPhamId, mauSacId, kichCoId,
-                //             nguoiTao: ADMIN_NAME,
-                //             nguoiCapNhat: ADMIN_NAME,
-                //             ngayTao: nowIso(),
-                //             ngayCapNhat: nowIso()
-                //         };
-                //
-                //         // 🔍 1️⃣ Kiểm tra xem đã tồn tại SPCT có cùng Sản phẩm - Màu sắc - Kích cỡ chưa
-                //         const resAll = await axios.get(API.SPCT_LIST);
-                //         const existing = (resAll.data || []).find(spct =>
-                //             spct.sanPhamId === sanPhamId &&
-                //             spct.mauSacId === mauSacId &&
-                //             spct.kichCoId === kichCoId
-                //         );
-                //
-                //         // 🔹 Nếu đã tồn tại
-                //         if (existing) {
-                //             const confirmAdd = confirm(`⚠️ Sản phẩm chi tiết này đã tồn tại!\nBạn có muốn CỘNG DỒN số lượng tồn không?\n\n• Hiện tại: ${existing.soLuongTon}\n• Nhập thêm: ${dto.soLuongTon}`);
-                //             if (confirmAdd) {
-                //                 // 🧮 Cộng dồn số lượng tồn
-                //                 const newQty = Number(existing.soLuongTon) + Number(dto.soLuongTon);
-                //                 await axios.put(API.SPCT_UPDATE, {
-                //                     id: existing.id,
-                //                     sanPhamId: existing.sanPhamId,
-                //                     mauSacId: existing.mauSacId,
-                //                     kichCoId: existing.kichCoId,
-                //                     giaBan: dto.giaBan || existing.giaBan,
-                //                     soLuongTon: newQty,
-                //                     trangThai: existing.trangThai,
-                //                     nguoiCapNhat: ADMIN_NAME,
-                //                     ngayCapNhat: nowIso()
-                //                 });
-                //                 showToast(`✅ Đã cộng dồn số lượng tồn thành công!\nSố lượng mới: ${newQty}`);
-                //                 await loadSPCTFiltered();
-                //             } else {
-                //                 showToast('⚠️ Sản phẩm chi tiết này đã tồn tại, dữ liệu được giữ nguyên!');
-                //             }
-                //             return;
-                //         }
-                //
-                //         // 🔹 Nếu chưa tồn tại → thêm mới bình thường
-                //         const res = await axios.post(API.SPCT_ADD, dto);
-                //         const savedId = res?.data?.id;
-                //         if (savedId) {
-                //             await uploadImages(savedId);
-                //         }
-                //
-                //         showToast('✅ Thêm sản phẩm chi tiết thành công!');
-                //         clearUploadState();
-                //         clearFormInputs();
-                //         fillCreatorUpdaterDefaults();
-                //         await loadSPCTFiltered();
-                //
-                //     } catch (err) {
-                //         console.error('❌ Lỗi khi thêm SPCT:', err);
-                //         showToast('❌ Không thể thêm sản phẩm chi tiết. Vui lòng kiểm tra lại dữ liệu!');
-                //     }
-                // });
-
-
-
-                // 🟦 CẬP NHẬT SPCT
-                // $('#btn-update').on('click', async function () {
-                //     try {
-                //         if (!selectedId) return showToast('⚠️ Hãy chọn một dòng để cập nhật!');
-                //
-                //         const dto = {
-                //             id: selectedId,
-                //             sanPhamId: $('#sanPhamInput').data('id'),
-                //             mauSacId: $('#mauSacInput').data('id'),
-                //             kichCoId: $('#kichCoInput').data('id'),
-                //             giaBan: Number($('#giaBan').val() || 0),
-                //             soLuongTon: Number($('#soLuongTon').val() || 0),
-                //             trangThai: $('#trangThaiInput').data('id') ?? 1,
-                //             nguoiCapNhat: ADMIN_NAME,
-                //             ngayCapNhat: nowIso()
-                //         };
-                //
-                //         await axios.put(API.SPCT_UPDATE, dto);
-                //         await uploadImages(selectedId);
-                //
-                //         showToast('✅ Cập nhật sản phẩm chi tiết thành công!');
-                //         await loadSPCTFiltered();
-                //
-                //     } catch (err) {
-                //         console.error('❌ Lỗi khi cập nhật SPCT:', err);
-                //         showToast('❌ Cập nhật thất bại. Vui lòng thử lại!');
-                //     }
-                // });
-
-
-
-
-
-                // 🟨 XEM CHI TIẾT / CHỌN DÒNG
-                // $(document).on('click', '.btn-detail, .spct-row', async function () {
-                //     const $row = $(this).closest('tr');
-                //     const id = $row.data('id');
-                //     const spct = cachedSpctList.find(x => String(x.id) === String(id));
-                //     if (!spct) return;
-                //
-                //     selectedId = id;
-                //     $('.spct-row').removeClass('selected');
-                //     $row.addClass('selected');
-                //
-                //     $('#maSPCT').val(spct.maSPCT || '');
-                //     $('#sanPhamInput').val(spct.tenSanPham).data('id', spct.sanPhamId);
-                //     $('#mauSacInput').val(spct.tenMau).data('id', spct.mauSacId);
-                //     $('#kichCoInput').val(spct.tenKichCo).data('id', spct.kichCoId);
-                //     $('#trangThaiInput').val(spct.trangThai === 1 ? 'Đang kinh doanh' : 'Ngừng kinh doanh')
-                //         .data('id', spct.trangThai);
-                //     $('#giaBan').val(spct.giaBan || '');
-                //     $('#soLuongTon').val(spct.soLuongTon || '');
-                //     $('#nguoiTao').val(spct.nguoiTao || ADMIN_NAME);
-                //     $('#nguoiCapNhat').val(ADMIN_NAME);
-                //
-                //     // 🖼️ Load toàn bộ ảnh liên quan
-                //     await loadExistingImagesFor(id);
-                // });
-
-
-                // 🧹 NÚT LÀM MỚI FORM
-                // $('#btn-reset').on('click', function (e) {
-                //     e.preventDefault();
-                //     clearFormInputs();
-                //     clearUploadState();
-                //     fillCreatorUpdaterDefaults();
-                //     $('.spct-row').removeClass('selected');
-                // });
-
-
-                /* =====================================================
-                * 11️⃣ UPLOAD ẢNH LÊN SERVER (CHUẨN HÓA)
-                * ===================================================== */
-                /* =====================================================
-                * ✅ FIXED FINAL v4 — KHẮC PHỤC NHẤP NHÁY ẢNH BÌA
-                * ===================================================== */
-                // async function uploadImages(spctId) {
-                //     try {
-                //         if (!spctId) return console.warn('⚠️ uploadImages() bị gọi khi chưa có spctId.');
-                //         if (!selectedFiles || selectedFiles.length === 0) return console.info('📁 Không có ảnh mới để upload.');
-                //
-                //         const formData = new FormData();
-                //         selectedFiles.forEach(f => formData.append('files', f));
-                //
-                //         // Hiển thị trạng thái chờ (UX)
-                //         $upload.addClass('loading');
-                //
-                //         const res = await axios.post(API.IMGS_UPLOAD(spctId), formData, {
-                //             headers: { 'Content-Type': 'multipart/form-data' },
-                //             onUploadProgress: (evt) => {
-                //                 const percent = Math.round((evt.loaded * 100) / evt.total);
-                //                 console.log(`Uploading... ${percent}%`);
-                //             }
-                //         });
-                //
-                //         if (res.status === 200) console.log('✅ Upload ảnh thành công.');
-                //
-                //         // 🧹 Dọn state local
-                //         $fileInp.val('');
-                //         const lastCover = selectedCover;
-                //         selectedFiles = [];
-                //         selectedCover = null;
-                //
-                //         // 🔹 Nếu có chọn ảnh bìa local → đặt cover ngay, KHÔNG render lại trước khi set
-                //         if (lastCover) {
-                //             try {
-                //                 const res2 = await axios.get(API.IMGS_BY_SPCT(spctId));
-                //                 const uploaded = Array.isArray(res2.data) ? res2.data : [];
-                //                 const matched = uploaded.find(i =>
-                //                     i.tenTapTin && lastCover && i.tenTapTin.includes(lastCover)
-                //                 );
-                //
-                //                 if (matched) {
-                //                     // 🟢 Gọi API set-cover và CHỜ hoàn tất trước khi render lại
-                //                     await axios.post(API.IMG_SET_COVER(spctId, matched.id));
-                //                     console.log('✅ Đã đặt ảnh bìa mới:', matched.tenTapTin);
-                //                 }
-                //             } catch (err) {
-                //                 console.warn('⚠️ Không thể đặt ảnh bìa tự động sau upload:', err);
-                //             }
-                //         }
-                //
-                //         // 🟩 Sau khi chắc chắn cover đã cập nhật → render lại preview 1 lần duy nhất
-                //         await loadExistingImagesFor(spctId);
-                //
-                //     } catch (err) {
-                //         console.error('❌ Lỗi upload ảnh:', err);
-                //         showToast('❌ Không thể tải ảnh lên máy chủ. Vui lòng thử lại!');
-                //     } finally {
-                //         $upload.removeClass('loading');
-                //     }
-                // }
-
-
-
-                /* =====================================================
-                * 12️⃣ LOAD ẢNH CŨ TỪ SERVER (CHUẨN HÓA)
-                * ===================================================== */
-            //     async function loadExistingImagesFor(spctId) {
-            //         if (!spctId) {
-            //             console.warn('⚠️ loadExistingImagesFor() được gọi mà không có spctId.');
-            //             return;
-            //         }
-            //
-            //         try {
-            //             // 🟦 Gọi API lấy danh sách ảnh
-            //             const res = await axios.get(API.IMGS_BY_SPCT(spctId));
-            //             const images = Array.isArray(res.data) ? res.data : [];
-            //
-            //             // 🧹 Reset biến & giao diện preview
-            //             selectedCover = null;
-            //             $preview.empty();
-            //
-            //             // 🟩 Đảm bảo luôn có nút thêm ảnh
-            //             const $addBox = $('<div class="image-add-box"><i class="fas fa-plus"></i></div>');
-            //             $addBox.off('click').on('click', () => $fileInp.trigger('click'));
-            //             $preview.append($addBox);
-            //
-            //             // 🟨 Nếu không có ảnh => chỉ hiện nút +
-            //             if (images.length === 0) {
-            //                 $upload.removeClass('has-images');
-            //                 updatePreviewShadow();
-            //                 return;
-            //             }
-            //
-            //             // 🟪 Có ảnh => bật trạng thái có ảnh
-            //             $upload.addClass('has-images');
-            //
-            //             // ❗ Trước khi render mới → đảm bảo không còn .cover cũ
-            //             $preview.find('.image-box').removeClass('cover');
-            //
-            //             // 🖼️ Render danh sách ảnh
-            //             images.forEach(img => {
-            //                 // const isCover = img.isCover === true || img.isCover === 1;
-            //                 const isCover = img.laAnhBia === true || img.laAnhBia === 1;
-            //                 const $box = $(`
-            //     <div class="image-box ${isCover ? 'cover' : ''}"
-            //          data-id="${img.id}"
-            //          data-server="true">
-            //         <img src="${img.duongDan || '/img/no-image.png'}"
-            //              alt="Ảnh sản phẩm"
-            //              onerror="this.src='/img/no-image.png';">
-            //         <div class="image-actions">
-            //             <button type="button"
-            //                     class="btn btn-xs btn-warning btn-del-server"
-            //                     title="Xóa ảnh">
-            //                 <i class="fas fa-times"></i>
-            //             </button>
-            //         </div>
-            //         <span class="badge badge-light border image-badge btn-mark-cover"
-            //               style="cursor:pointer"
-            //               title="Đặt làm ảnh bìa">
-            //             Ảnh bìa
-            //         </span>
-            //     </div>
-            // `);
-            //
-            //                 // 🗑️ Xóa ảnh trên server
-            //                 $box.find('.btn-del-server').off('click').on('click', async () => {
-            //                     if (!confirm('⚠️ Bạn có chắc muốn xóa ảnh này?')) return;
-            //                     try {
-            //                         await axios.delete(API.IMG_DELETE(img.id));
-            //                         $box.fadeOut(200, () => $box.remove());
-            //                         if ($preview.find('.image-box').length <= 1) {
-            //                             $upload.removeClass('has-images');
-            //                         }
-            //                     } catch (err) {
-            //                         console.error('❌ Lỗi xóa ảnh:', err);
-            //                         showToast('❌ Không thể xóa ảnh. Vui lòng thử lại!');
-            //                     }
-            //                 });
-            //
-            //                 // 🌟 Đặt ảnh bìa
-            //                 $box.find('.btn-mark-cover').off('click').on('click', async () => {
-            //                     try {
-            //                         await axios.post(API.IMG_SET_COVER(spctId, img.id));
-            //                         // 🧹 Reset toàn bộ cover trước khi set mới
-            //                         $preview.find('.image-box').removeClass('cover');
-            //                         $box.addClass('cover');
-            //                     } catch (err) {
-            //                         console.error('❌ Lỗi đặt ảnh bìa:', err);
-            //                         showToast('❌ Không thể đặt ảnh bìa. Vui lòng thử lại!');
-            //                     }
-            //                 });
-            //
-            //                 // ✅ Chèn sau nút "+"
-            //                 $addBox.after($box);
-            //             });
-            //
-            //             // 🪄 Cập nhật hiệu ứng bóng mờ cuộn ngang
-            //             updatePreviewShadow();
-            //
-            //         } catch (err) {
-            //             console.error('❌ Lỗi load ảnh sản phẩm chi tiết:', err);
-            //             showToast('❌ Không thể tải ảnh sản phẩm. Vui lòng kiểm tra kết nối hoặc thử lại sau!');
-            //         }
-            //     }
-
-
-
+            }
+            html += '</ul>';
+
+            $('#pagination').html(html);
+        }
+
+        // 🔹 Sự kiện click chuyển trang
+        $(document).off('click.paginate').on('click.paginate', '.page-link', function (e) {
+            e.preventDefault();
+            const page = parseInt($(this).text());
+            if (!isNaN(page)) {
+                currentPage = page;
+                renderSPCTTable();
+            }
+        });
+
+        // 🔹 Load dữ liệu tổng (gọi API một lần rồi render)
+        async function loadSPCTData(spId = null) {
+            showSkeleton('#spctTable', 8, 11);
+            cachedSpctList = await fetchSPCTList(spId);
+            renderSPCTTable();
+            $('#selectAllSPCT').prop('checked', false);
+        }
+
+        // Khi tìm kiếm
+        $('#search-input').on('input', function () {
+            searchKeyword = $(this).val().trim();
+            currentPage = 1;
+            renderSPCTTable();
+        });
+
+        // Khi lọc trạng thái
+        $('#status-filters .btn').on('click', function () {
+            $('#status-filters .btn').removeClass('active');
+            $(this).addClass('active');
+            currentStatus = $(this).data('status');
+            currentPage = 1;
+            renderSPCTTable();
+        });
+
+        // Khi đổi sắp xếp
+        $('#sortSelectList .dropdown-item').on('click', function () {
+            const val = $(this).data('value');
+            $('#sortSelectInput').data('value', val).val($(this).text().trim());
+            currentPage = 1;
+            renderSPCTTable();
+        });
+
+        //  🔽 DROPDOWN "SẮP XẾP THEO" (HOẠT ĐỘNG CHUẨN)
+
+        // 🟩 Mở / đóng danh sách khi click vào ô "Sắp xếp theo"
+        $(document).off('click.sortOpen').on('click.sortOpen', '#sortSelectInput', function (e) {
+            e.stopPropagation();
+            $('#sortSelectList').toggleClass('show');
+        });
+
+        // 🟨 Khi chọn một mục trong dropdown
+        $(document).off('click.sortPick').on('click.sortPick', '#sortSelectList .dropdown-item', function (e) {
+            e.stopPropagation();
+            const value = $(this).data('value');
+            const text = $(this).text().trim();
+
+            // ✅ Gán giá trị và text vào input
+            $('#sortSelectInput').val(text).data('value', value);
+            $('#sortSelectList').removeClass('show');
+
+            // ✅ Gọi lại render bảng với thứ tự mới
+            currentPage = 1;
+            renderSPCTTable();
+        });
+
+        // 🟥 Đóng dropdown khi click ra ngoài
+        $(document).off('click.sortClose').on('click.sortClose', function (e) {
+            if (!$(e.target).closest('#sortSelectInput, #sortSelectList').length) {
+                $('#sortSelectList').removeClass('show');
+            }
+        });
+
+
+        // Lắng nghe sự kiện thay đổi
+        $(document).on('input', '.input-slt, .input-giaban', function () {
+            const $input = $(this);
+            $input.addClass('changed'); // đánh dấu là có thay đổi
+        });
+
+        // Khi gõ
+        $(document).on('input', '.input-giaban', function () {
+            const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
+            $(this).attr('data-raw', val);
+        });
+
+        // Khi blur
+        $(document).on('blur', '.input-giaban', function () {
+            const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
+            $(this).attr('data-raw', val);
+        });
+
+        // Cập nhật hàng loạt
+        $(document).on('click', '#btnBulkUpdateSPCT', async function () {
+
+            // ✅ Bắt buộc đồng bộ lại 1 lần toàn bộ giá trước khi gửi
+            $('.input-giaban').each(function () {
+                const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
+                $(this).attr('data-raw', val);
             });
-        </script>
-    </div>
+            const reqs = [];
+            $('.spct-checkbox:checked').each(function () {
+                const id = $(this).data('id');
+                const soLuongTon = parseInt($(`.input-slt[data-id="${id}"]`).val() || 0);
+                const giaBan = Number($(`.input-giaban[data-id="${id}"]`).attr('data-raw') || 0);
+
+
+                reqs.push({
+                    id,
+                    soLuongTon,
+                    giaBan,
+                    ...buildAuditFields(false)
+                });
+            });
+            if (reqs.length === 0) {
+                showToast('Vui lòng chọn ít nhất một sản phẩm để cập nhật!');
+                return;
+            }
+            if (!confirm(`Xác nhận cập nhật ${reqs.length} sản phẩm chi tiết?`)) return;
+            try {
+                await axios.put('/api/san-pham-chi-tiet/bulk-update', reqs);
+                showToast('✅ Đã cập nhật thành công!');
+                loadSPCTData(PRODUCT_ID || null);
+            } catch (err) {
+                console.error(err);
+                showToast('❌ Lỗi khi cập nhật!');
+            }
+        });
+
+        // ✅ Khi click checkbox từng dòng
+        // ✅ Tick chọn để chỉnh, bỏ tick để format lại
+        $(document).on('change', '.spct-checkbox', function () {
+            const id = $(this).data('id');
+            const checked = $(this).is(':checked');
+            const $inputSLT = $(`.input-slt[data-id="${id}"]`);
+            const $inputGia = $(`.input-giaban[data-id="${id}"]`);
+
+            if (checked) {
+                // 🟢 Cho nhập — hiển thị số thô
+                const rawVal = String($inputGia.attr('data-raw') || $inputGia.val().replace(/[^\d]/g, '') || 0);
+                $inputGia.val(rawVal).prop('readonly', false).addClass('editable');
+                $inputSLT.prop('readonly', false).addClass('editable');
+            } else {
+                // 🔵 Khi bỏ tick — lưu lại giá mới, format và khóa lại
+                const newRaw = Number($inputGia.val().replace(/[^\d]/g, '') || 0);
+                $inputGia.attr('data-raw', newRaw);
+                $inputGia.val(formatVnd(newRaw)).prop('readonly', true).removeClass('editable');
+                $inputSLT.prop('readonly', true).removeClass('editable');
+            }
+            // ✅ Highlight dòng khi tick
+            const $row = $(`tr.spct-row[data-id="${id}"]`);
+            if (checked) $row.addClass('selected');
+            else $row.removeClass('selected');
+
+        });
+
+        // 🟢 Khi người dùng nhập vào ô Giá bán — cập nhật ngay data-raw để đảm bảo gửi đúng giá mới
+        $(document).on('input', '.input-giaban', function () {
+            const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
+            $(this).attr('data-raw', val);
+        });
+
+        // ✅ Tick chọn tất cả (phiên bản mới)
+        $(document).off('change.selectAllSPCT').on('change.selectAllSPCT', '#selectAllSPCT', function () {
+            const isChecked = $(this).is(':checked');
+            const $checkboxes = $('.spct-checkbox');
+
+            // Ngăn trigger chồng chéo: bỏ trigger('change'), chỉ đổi trạng thái và xử lý thủ công
+            $checkboxes.prop('checked', isChecked);
+
+            $checkboxes.each(function () {
+                const id = $(this).data('id');
+                const $inputSLT = $(`.input-slt[data-id="${id}"]`);
+                const $inputGia = $(`.input-giaban[data-id="${id}"]`);
+
+                if (isChecked) {
+                    // ✅ Bỏ format để nhập thô
+                    const rawVal = String($inputGia.attr('data-raw') || $inputGia.val().replace(/[^\d]/g, '') || 0);
+                    $inputGia.val(rawVal).prop('readonly', false).addClass('editable');
+                    $inputSLT.prop('readonly', false).addClass('editable');
+                } else {
+                    // ✅ Reformat lại
+                    const newRaw = Number($inputGia.val().replace(/[^\d]/g, '') || 0);
+                    $inputGia.attr('data-raw', newRaw);
+                    $inputGia.val(formatVnd(newRaw)).prop('readonly', true).removeClass('editable');
+                    $inputSLT.prop('readonly', true).removeClass('editable');
+                }
+            });
+        });
+
+        // ✅ Đồng bộ giá trị giữa các dòng được chọn
+        $(document).on('input', '.input-slt, .input-giaban', function () {
+            const $this = $(this);
+            const val = $this.val();
+            const cls = $this.hasClass('input-slt') ? '.input-slt' : '.input-giaban';
+
+            // Chỉ chạy nếu dòng hiện tại đang được tick
+            const id = $this.data('id');
+            const isChecked = $(`.spct-checkbox[data-id="${id}"]`).is(':checked');
+            if (!isChecked) return;
+
+            // Lặp qua các dòng khác đã tick để đồng bộ
+            $('.spct-checkbox:checked').each(function () {
+                const otherId = $(this).data('id');
+                if (otherId !== id) {
+                    $(`${cls}[data-id="${otherId}"]`).val(val);
+                }
+            });
+        });
+
+        // Mở popup sửa từ nút "Sửa"
+
+
+
+        // 🔁 CHUYỂN ĐỔI TRẠNG THÁI SPCT
+        $(document).on('click', '.btn-toggle-status', async function () {
+            const id = $(this).data('id');
+            const currentStatus = Number($(this).data('status'));
+            const newStatus = currentStatus === 1 ? 0 : 1;
+
+            const confirmMsg = currentStatus === 1
+                ? '⚠️ Bạn có chắc muốn NGỪNG kinh doanh sản phẩm này không?'
+                : '✅ Bạn có muốn KINH DOANH LẠI sản phẩm này không?';
+
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                const body = [{
+                    id: id,
+                    trangThai: newStatus
+                }];
+
+                await axios.put('/api/san-pham-chi-tiet/bulk-update', body);
+
+                showToast('✅ Cập nhật trạng thái thành công!');
+                await loadSPCTData(PRODUCT_ID || null);
+            } catch (err) {
+                console.error('❌ Lỗi khi cập nhật trạng thái:', err);
+                showToast('❌ Không thể cập nhật trạng thái. Vui lòng thử lại!');
+            }
+        });
+        // 🟢 Khi nhấn nút Sửa
+        // 🟢 Khi nhấn nút Sửa
+        // ⚡ Khi nhấn nút "Sửa" chỉ để mở popup
+        // ⚡ Khi nhấn nút "Sửa" – mở popup và tự động lấy dữ liệu từ API
+        $(document).off('click.btnEdit').on('click.btnEdit', '.btn-edit', async function (e) {
+            e.preventDefault();
+
+            const spId = $(this).data('sp-id');
+            console.log('🟢 Xem chi tiết sản phẩm ID:', spId);
+
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('spctModal'));
+            modal.show();
+
+            // Reset form
+            $('#spct-form')[0].reset();
+            $('#preview-container').html('<p class="text-muted fst-italic">Đang tải dữ liệu...</p>');
+
+            try {
+                const res = await axios.get(`/api/san-pham-chi-tiet/by-san-pham?sanPhamId=${spId}`);
+                const list = res.data || [];
+
+                if (!Array.isArray(list) || list.length === 0) {
+                    $('#preview-container').html('<p class="text-muted fst-italic">Không có biến thể nào.</p>');
+                    showToast('Không tìm thấy biến thể nào!', 'warning');
+                    return;
+                }
+
+                const spct = list[0]; // Lấy biến thể đầu tiên
+                console.log('📦 SPCT:', spct);
+
+                // Gán dữ liệu vào form
+                $('#maSPCT').val(spct.maSpct);
+                $('#maSanPham').val(spct.maSanPham);
+                $('#tenSanPham').val(spct.tenSanPham);
+                $('#tenMau').val(spct.tenMau);
+                $('#tenKichCo').val(spct.tenKichCo);
+                $('#giaBan').val(Number(spct.giaBan).toLocaleString('vi-VN') + ' ₫');
+                $('#soLuongTon').val(spct.soLuongTon);
+                $('#trangThai').val(spct.trangThai === 1 ? 'Đang kinh doanh' : 'Ngừng kinh doanh');
+                $('#nguoiTao').val(spct.nguoiTao);
+                $('#nguoiCapNhat').val(spct.nguoiCapNhat);
+
+                const fmtDate = d => new Date(d).toLocaleString('vi-VN', { hour12: false });
+                $('#ngayTao').val(fmtDate(spct.ngayTao));
+                $('#ngayCapNhat').val(fmtDate(spct.ngayCapNhat));
+
+                // Ảnh bìa
+                const $preview = $('#preview-container').empty();
+                if (spct.anhBiaUrl) {
+                    $preview.html(`
+                <img src="${spct.anhBiaUrl}" class="rounded shadow-sm"
+                     style="width:100%;height:220px;object-fit:cover">
+            `);
+                } else {
+                    $preview.html('<p class="text-muted fst-italic">Chưa có ảnh bìa</p>');
+                }
+
+            } catch (err) {
+                console.error('❌ Lỗi API:', err);
+                $('#preview-container').html('<p class="text-danger">Không thể tải dữ liệu!</p>');
+                showToast('❌ Lỗi khi tải dữ liệu!', 'error');
+            }
+        });
+
+
+
+
+
+        // 🖼️ Hàm phụ để load ảnh từ API
+        // 🖼️ Hàm phụ để load ảnh từ API (phiên bản chuẩn)
+        async function loadImagesForSPCT(spctId) {
+            if (!spctId) {
+                console.warn('⚠️ Không có spctId để tải ảnh!');
+                $preview.html('<p class="text-muted">Không tìm thấy mã sản phẩm chi tiết.</p>');
+                return;
+            }
+
+            try {
+                $preview.html('<p class="text-muted">Đang tải ảnh...</p>');
+                const res = await axios.get(API.IMGS_BY_SPCT(spctId));
+                console.log('📦 API trả về:', res.data);
+
+                // Chuẩn hóa mảng ảnh trả về
+                let imgs = [];
+                if (Array.isArray(res.data)) imgs = res.data;
+                else if (Array.isArray(res.data?.data)) imgs = res.data.data;
+                else if (Array.isArray(res.data?.images)) imgs = res.data.images;
+
+                $preview.empty();
+
+                if (!imgs.length) {
+                    $preview.html('<p class="text-muted fst-italic">Chưa có ảnh nào cho biến thể này.</p>');
+                    return;
+                }
+
+                imgs.forEach(img => {
+                    const isCover = img.laAnhBia ? 'cover' : '';
+                    $preview.append(`
+                <div class="image-box ${isCover}" data-id="${img.id}">
+                    <img src="${img.duongDan || '/img/no-image.png'}" alt="${img.tenTapTin || 'Ảnh'}"
+                         onerror="this.src='/img/no-image.png'">
+                    <div class="image-actions">
+                        <button class="btn btn-sm btn-outline-success btn-set-cover"
+                                data-id="${img.id}" title="Đặt làm ảnh bìa">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger btn-delete-img"
+                                data-id="${img.id}" title="Xóa ảnh">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `);
+                });
+
+            } catch (err) {
+                console.error('❌ Lỗi tải ảnh:', err);
+                showToast('❌ Không thể tải ảnh sản phẩm chi tiết!', 'error');
+                $preview.html('<p class="text-danger">Không thể tải ảnh. Kiểm tra lại API hoặc kết nối!</p>');
+            }
+        }
+
+
+
+
+
+        /* =====================================================
+        * 🚀 KHỞI TẠO TRANG (INIT)
+        * ===================================================== */
+        async function init() {
+            try {
+                console.log('🚀 Khởi tạo trang Quản lý Sản phẩm Chi tiết.');
+                // 2️⃣ Hiển thị skeleton loading bảng trước khi dữ liệu được tải
+                showSkeleton('#spctTable', 8, 11);
+                // // 3️⃣ Tải dữ liệu dropdown (Sản phẩm / Màu sắc / Kích cỡ)
+                // await loadDropdownData();
+                // 4️⃣ Tải danh sách sản phẩm chi tiết (theo sản phẩm nếu có)
+                console.log('🔎 PRODUCT_ID =', PRODUCT_ID);
+                await loadSPCTData(PRODUCT_ID || null);
+                // // 5️⃣ Reset vùng upload ảnh (tránh bị gán trạng thái cũ)
+                // clearUploadState();
+                // $upload.removeClass('has-images');
+                // 6️⃣ Gán sắp xếp mặc định
+                $('#sortSelectInput').data('value', 'date-desc').val('Ngày cập nhật mới nhất');
+                console.log('✅ Trang Quản lý SPCT đã khởi tạo xong.');
+            } catch (err) {
+                console.error('❌ Lỗi khi khởi tạo trang:', err);
+                showToast('❌ Không thể tải dữ liệu khởi tạo. Vui lòng thử lại hoặc kiểm tra kết nối!');
+            }
+        }
+
+        // 👉 Gọi hàm init() khi DOM đã sẵn sàng
+        $(document).ready(() => {
+            init();
+        });
+
+    </script>
+</div>
 
 
 </body>

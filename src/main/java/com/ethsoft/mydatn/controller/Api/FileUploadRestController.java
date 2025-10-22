@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Paths;
+
 @RestController
 @RequestMapping("/api/upload")
 @RequiredArgsConstructor
@@ -21,10 +23,17 @@ public class FileUploadRestController {
             @RequestParam("sanPhamId") Long sanPhamId,
             @RequestParam(value = "mauSacId", required = false) Long mauSacId) {
 
-        // Lưu ảnh vật lý
         String url = fileStorageService.saveProductImage(sanPhamId, file);
 
-        // Tạo bản ghi ảnh trong DB
-        return hinhAnhService.createOne(sanPhamId, mauSacId, file.getOriginalFilename(), url);
+// Lấy tên file thực tế từ MultipartFile (hoặc từ URL đã tách sẵn)
+        String originalName = file.getOriginalFilename();
+        String fileName = (originalName != null)
+                ? originalName.substring(originalName.lastIndexOf('/') + 1)
+                : url.substring(url.lastIndexOf('/') + 1);
+
+// Ghi DB
+        return hinhAnhService.createOne(sanPhamId, mauSacId, fileName, url);
+
+
     }
 }

@@ -44,14 +44,11 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         dto.setGiaBan(e.getGiaBan());
         dto.setTrangThai(e.getTrangThai());
         dto.setGioiTinh(e.getGioiTinh());
-
-        // Audit
         dto.setNguoiTao(e.getNguoiTao());
         dto.setNguoiCapNhat(e.getNguoiCapNhat());
         dto.setNgayTao(e.getNgayTao());
         dto.setNgayCapNhat(e.getNgayCapNhat());
 
-        // Thông tin hiển thị
         if (e.getSanPham() != null) {
             dto.setMaSanPham(e.getSanPham().getMaSanPham());
             dto.setTenSanPham(e.getSanPham().getTenSanPham());
@@ -59,15 +56,24 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         if (e.getMauSac() != null) dto.setTenMau(e.getMauSac().getTenMau());
         if (e.getKichCo() != null) dto.setTenKichCo(e.getKichCo().getTenKichCo());
 
-        sanPhamMauAnhRepository
-                .findFirstBySanPham_IdAndMauSac_IdAndLaAnhBiaTrue(
-                        e.getSanPham().getId(),
-                        e.getMauSac().getId()
-                )
-                .ifPresent(img -> dto.setAnhBiaUrl(img.getDuongDan()));
+        // ✅ Lấy ảnh bìa (ưu tiên theo màu, fallback về ảnh chung)
+        Long sanPhamId = e.getSanPham() != null ? e.getSanPham().getId() : null;
+        Long mauSacId = e.getMauSac() != null ? e.getMauSac().getId() : null;
 
+        String anhBiaUrl = sanPhamMauAnhRepository
+                .findCoverBySanPhamAndMau(sanPhamId, mauSacId)
+                .map(HinhAnhSanPhamEntity::getDuongDan)
+                .orElseGet(() -> sanPhamMauAnhRepository
+                        .findCoverBySanPhamAndMau(sanPhamId, null)
+                        .map(HinhAnhSanPhamEntity::getDuongDan)
+                        .orElse(null));
+
+        dto.setAnhBiaUrl(anhBiaUrl);
         return dto;
     }
+
+
+
 
     @Transactional
     @Override
@@ -86,23 +92,46 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
             KichCoEntity kc = kichCoRepository.findById(r.getKichCoId())
                     .orElseThrow(() -> new ApiException("Không tìm thấy size ID=" + r.getKichCoId()));
 
-            SanPhamChiTietEntity e = SanPhamChiTietEntity.builder()
-                    .sanPham(sp)
-                    .mauSac(mau)
-                    .kichCo(kc)
-                    .soLuongTon(r.getSoLuongTon())
-                    .giaBan(r.getGiaBan())
-                    .trangThai(Optional.ofNullable(r.getTrangThai()).orElse(1))
-                    .gioiTinh(Optional.ofNullable(r.getGioiTinh()).orElse(2))
-                    .maSpct(CodeGenerator.buildMaSPCT(sp.getMaSanPham(), mau.getTenMau(), kc.getTenKichCo()))
-                    .build();
+            // 🔍 Kiểm tra xem biến thể này đã tồn tại chưa
+            Optional<SanPhamChiTietEntity> existingOpt =
+                    spctRepository.findBySanPham_IdAndMauSac_IdAndKichCo_Id(sanPhamId, mau.getId(), kc.getId());
 
-            entities.add(e);
+            SanPhamChiTietEntity e;
+            if (existingOpt.isPresent()) {
+                // 🔁 Nếu đã tồn tại → cập nhật cộng dồn số lượng
+                e = existingOpt.get();
+                int oldQty = Optional.ofNullable(e.getSoLuongTon()).orElse(0);
+                int addQty = Optional.ofNullable(r.getSoLuongTon()).orElse(0);
+                e.setSoLuongTon(oldQty + addQty);
+                if (r.getGiaBan() != null) e.setGiaBan(r.getGiaBan());
+                if (r.getTrangThai() != null) e.setTrangThai(r.getTrangThai());
+                if (r.getGioiTinh() != null) e.setGioiTinh(r.getGioiTinh());
+                e.setNguoiCapNhat(r.getNguoiTao());
+            } else {
+                // 🆕 Nếu chưa có → tạo mới hoàn toàn
+                e = SanPhamChiTietEntity.builder()
+                        .sanPham(sp)
+                        .mauSac(mau)
+                        .kichCo(kc)
+                        .soLuongTon(r.getSoLuongTon())
+                        .giaBan(r.getGiaBan())
+                        .trangThai(Optional.ofNullable(r.getTrangThai()).orElse(1))
+                        .gioiTinh(Optional.ofNullable(r.getGioiTinh()).orElse(2))
+                        .maSpct(CodeGenerator.buildMaSPCT(sp.getMaSanPham(), mau.getTenMau(), kc.getTenKichCo()))
+                        .build();
+
+                // ✅ Set audit thủ công sau khi build
+                e.setNguoiTao(r.getNguoiTao());
+                e.setNguoiCapNhat(r.getNguoiTao());
+            }
+
+            entities.add(spctRepository.save(e));
         }
 
-        entities = spctRepository.saveAll(entities);
         return entities.stream().map(this::toDTO).collect(Collectors.toList());
     }
+
+
 
     @Transactional
     @Override

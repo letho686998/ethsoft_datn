@@ -1,10 +1,11 @@
 package com.ethsoft.mydatn.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-@Getter
-@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

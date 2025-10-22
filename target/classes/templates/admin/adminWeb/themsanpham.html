@@ -1248,11 +1248,9 @@
                                            placeholder="Chọn trạng thái" readonly>
 
                                     <div class="dropdown-list" id="trangThaiList">
-                                        <div class="dropdown-item" data-id="1"><i class="far fa-square me-2"></i>Đang
-                                            bán
+                                        <div class="dropdown-item" data-id="1"><i class="far fa-square me-2"></i>Đang bán
                                         </div>
-                                        <div class="dropdown-item" data-id="0"><i class="far fa-square me-2"></i>Ngừng
-                                            bán
+                                        <div class="dropdown-item" data-id="0"><i class="far fa-square me-2"></i>Ngừng bán
                                         </div>
                                     </div>
                                 </div>
@@ -2773,19 +2771,28 @@
         // ⭐ 2️⃣ Chọn ảnh bìa (local — chỉ cập nhật giao diện & flag)
         // ============================================================
         $(document).on('click', '.btn-set-cover', function () {
-            const $this = $(this);
-            const $container = $this.closest('.upload-container');
+            const $btn = $(this);
+            const $container = $btn.closest('.upload-container');
+            const $previewItems = $container.find('.preview-item');
 
-            // Chỉ cho phép 1 ảnh bìa mỗi màu
-            $container.find('.btn-set-cover').removeClass('active').attr('title', 'Đặt làm ảnh chính');
-            $container.find('.preview-item').removeAttr('data-cover');
+            // 🔸 Bỏ active ở tất cả ảnh khác trong cùng màu
+            $previewItems.find('.btn-set-cover').removeClass('active').attr('title', 'Đặt làm ảnh chính');
+            $previewItems.removeAttr('data-cover');
 
-            // Kích hoạt ảnh này làm bìa
-            $this.addClass('active').attr('title', 'Ảnh chính');
-            $this.closest('.preview-item').attr('data-cover', 'true');
+            // 🔸 Gắn active cho ảnh hiện tại
+            $btn.addClass('active').attr('title', 'Ảnh chính');
+            $btn.closest('.preview-item').attr('data-cover', 'true');
 
-            console.log('⭐ Đã chọn ảnh bìa local.');
+            // 🔸 Nếu bạn đang quản lý danh sách ảnh trong JS (ví dụ images[mauSacId] = []),
+            //     thì cập nhật flag laAnhBia trong mảng đó
+            const mauId = $container.data('mau-id');
+            const imgIndex = $btn.closest('.preview-item').index();
+
+            if (window.imageDataMap && window.imageDataMap[mauId]) {
+                window.imageDataMap[mauId].forEach((img, i) => img.laAnhBia = (i === imgIndex));
+            }
         });
+
 
         // ============================================================
         // ❌ 3️⃣ Xóa ảnh preview local
@@ -2802,7 +2809,7 @@
                 if (!confirmDel) return;
 
                 try {
-                    await axios.delete(`/api/san-pham-mau-anh/${imgId}`);
+                    await axios.delete(`/api/hinh-anh-san-pham/${imgId}`);
                     toastSuccess('✅ Đã xóa ảnh trên server.');
                 } catch (err) {
                     toastError('❌ Không thể xóa ảnh trên server!');
@@ -2836,7 +2843,7 @@
             // Nếu là ảnh server -> cập nhật ảnh bìa ngay
             if (imgId) {
                 try {
-                    await axios.put(`/api/san-pham-mau-anh/${imgId}/cover`);
+                    await axios.put(`/api/hinh-anh-san-pham/${imgId}/cover`);
                     console.log('⭐ Đã cập nhật ảnh bìa (server).');
                 } catch (err) {
                     console.error('❌ Lỗi cập nhật ảnh bìa:', err);
@@ -2849,6 +2856,9 @@
         // ============================================================
         // 💾 Hàm global: Upload toàn bộ ảnh local sau khi lưu sản phẩm
         // ============================================================
+        // =============================
+        // 📤 HÀM UPLOAD ẢNH SAU KHI LƯU
+        // =============================
         async function uploadAllImagesAfterSave(sanPhamId) {
             const jobs = [];
 
@@ -2866,16 +2876,19 @@
                     const idx = +($item.data('file-index'));
                     const file = filesArr[idx];
 
+                    // 🧩 Ảnh đã tồn tại trên server → chỉ cập nhật cover nếu cần
                     if (serverId) {
-                        // Nếu ảnh đã trên server → chỉ cập nhật cover nếu cần
                         if (isCover) {
-                            const p = axios.put(`/api/san-pham-mau-anh/${serverId}/cover`)
+                            const p = axios.put(`/api/hinh-anh-san-pham/${serverId}/cover`)
                                 .then(() => console.log('⭐ Đã set cover cho ảnh server:', serverId))
                                 .catch(err => console.error('❌ Lỗi set cover server:', err));
                             jobs.push(p);
                         }
-                    } else if (file) {
-                        // Ảnh local → upload thật
+                        return;
+                    }
+
+                    // 🧩 Ảnh local → upload mới
+                    if (file) {
                         const formData = new FormData();
                         formData.append('sanPhamId', sanPhamId);
                         formData.append('mauSacId', mauSacId);
@@ -2883,20 +2896,33 @@
                         formData.append('laAnhBia', isCover);
                         formData.append('thuTu', $item.data('thu-tu') || idx);
 
-                        const p = axios.post('/api/san-pham-mau-anh/upload', formData, {
-                            headers: {'Content-Type': 'multipart/form-data'}
+                        const p = axios.post('/api/upload/hinh-anh-san-pham', formData, {
+                            headers: { 'Content-Type': 'multipart/form-data' }
                         }).then(res => {
-                            console.log(`📤 Uploaded ${isCover ? '[⭐ bìa]' : ''}:`, res.data);
-                            btn.attr('data-id', res.data.id);
-                        }).catch(err => console.error('❌ Lỗi upload ảnh local:', err));
+                            const img = res.data;
+                            console.log(`📤 Uploaded ${isCover ? '[⭐ bìa]' : ''}:`, img);
+
+                            // ✅ Gắn ID server vào ảnh
+                            btn.attr('data-id', img.id);
+                            $item.attr('data-id', img.id);
+
+                            // ✅ Xóa preview local (blob) sau khi upload thành công
+                            $item.remove();
+                        }).catch(err => {
+                            console.error('❌ Lỗi upload ảnh local:', err);
+                        });
 
                         jobs.push(p);
                     }
                 });
             });
 
+            // Chờ tất cả upload hoàn tất
             await Promise.allSettled(jobs);
             console.log('✅ Hoàn thành upload ảnh + cập nhật bìa.');
+
+            // ✅ Sau khi upload xong, reload lại danh sách ảnh từ DB (tránh trùng)
+            await reloadApiImagesForAllRows(sanPhamId);
         }
 
 
@@ -2975,7 +3001,7 @@
                 formData.append("laAnhBia", false);
                 formData.append("thuTu", $container.find('.preview-item').length);
 
-                const uploadRes = await axios.post("/api/san-pham-mau-anh/upload", formData, {
+                const uploadRes = await axios.post("/api/upload/hinh-anh-san-pham", formData, {
                     headers: {"Content-Type": "multipart/form-data"}
                 });
 
@@ -3043,41 +3069,59 @@
         // 🟢 Reload ảnh từ API (nếu muốn hiển thị lại sau khi lưu)
         // ============================================================
         // ✅ Reload ảnh hiệu quả hơn (1 request duy nhất)
+        // =============================
+        // 🖼️ HÀM RELOAD ẢNH TỪ SERVER
+        // =============================
         async function reloadApiImagesForAllRows(sanPhamId) {
-            const res = await axios.get(`/api/san-pham-mau-anh/by-san-pham/${sanPhamId}`);
-            const allImgs = res.data || [];
+            try {
+                const res = await axios.get(`/api/hinh-anh-san-pham/by-san-pham`, { params: { sanPhamId } });
+                const allImgs = res.data || [];
 
-            $('#table-variants tr').each(function () {
-                const $row = $(this);
-                const $container = $row.find('.upload-container');
-                if (!$container.length) return;
+                $('#table-variants tr').each(function () {
+                    const $row = $(this);
+                    const $container = $row.find('.upload-container');
+                    if (!$container.length) return;
 
-                const mauSacId = Number($row.data('mau-id')) || null;
-                const list = allImgs.filter(img => img.mauSacId === mauSacId);
-                const $preview = $container.find('.preview-container');
-                $preview.empty();
+                    const mauSacId = Number($row.data('mau-id')) || null;
+                    const list = allImgs.filter(img => img.mauSacId === mauSacId);
+                    const $preview = $container.find('.preview-container');
 
-                if (!list.length) {
-                    $container.find('.upload-placeholder').show();
-                    return;
-                }
+                    // ✅ Xóa sạch ảnh cũ (bao gồm blob & trùng id)
+                    $preview.empty();
+                    $container.removeData('files');
 
-                $container.find('.upload-placeholder').hide();
-                list.forEach(img => {
-                    $preview.append(`
-                <div class="preview-item" draggable="true" data-thu-tu="${img.thuTu}">
-                    <img src="${img.duongDan}" alt="">
-                    <button type="button" class="btn-set-cover ${img.laAnhBia ? 'active' : ''}"
-                            data-id="${img.id}" title="${img.laAnhBia ? 'Ảnh chính' : 'Đặt làm ảnh chính'}">
-                        <i class="fas fa-star"></i>
-                    </button>
-                    <button type="button" class="btn-remove-image" data-id="${img.id}">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `);
+                    if (!list.length) {
+                        $container.find('.upload-placeholder').show();
+                        return;
+                    }
+
+                    $container.find('.upload-placeholder').hide();
+
+                    list.forEach(img => {
+                        // ❗ Loại bỏ trùng data-id nếu có
+                        $preview.find(`.preview-item[data-id="${img.id}"]`).remove();
+
+                        const isCover = img.laAnhBia ? 'active' : '';
+                        const title = img.laAnhBia ? 'Ảnh chính' : 'Đặt làm ảnh chính';
+
+                        const html = `
+                    <div class="preview-item" data-id="${img.id}" data-cover="${img.laAnhBia}">
+                        <img src="${img.duongDan}" alt="">
+                        <button type="button" class="btn-set-cover ${isCover}" data-id="${img.id}" title="${title}">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button type="button" class="btn-remove-image" data-id="${img.id}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>`;
+                        $preview.append(html);
+                    });
                 });
-            });
+
+                console.log(`🖼 Reload ảnh từ API thành công (SPID=${sanPhamId})`);
+            } catch (err) {
+                console.error('❌ Lỗi reload ảnh từ API:', err);
+            }
         }
 
 
@@ -3418,7 +3462,7 @@
                 await uploadAllImagesAfterSave(finalSanPhamId);
 
                 // 🟢 Hiển thị lại ảnh đã upload từ server
-                await reloadApiImagesForAllRows(finalSanPhamId);
+                // await reloadApiImagesForAllRows(finalSanPhamId);
 
                 toastSuccess('✅ Đã lưu sản phẩm và ảnh thành công!');
 

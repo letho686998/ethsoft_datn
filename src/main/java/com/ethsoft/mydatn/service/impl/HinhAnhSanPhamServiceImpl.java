@@ -67,6 +67,18 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
             list.add(e);
         }
 
+        // 🔹 Sau khi gom xong, đảm bảo mỗi màu chỉ có 1 ảnh bìa
+        Map<String, List<HinhAnhSanPhamEntity>> grouped = list.stream()
+                .collect(Collectors.groupingBy(e -> e.getSanPham().getId() + "-" +
+                        (e.getMauSac() != null ? e.getMauSac().getId() : "null")));
+
+        for (List<HinhAnhSanPhamEntity> group : grouped.values()) {
+            boolean hasCover = group.stream().anyMatch(HinhAnhSanPhamEntity::getLaAnhBia);
+            if (!hasCover && !group.isEmpty()) {
+                group.get(0).setLaAnhBia(true); // auto chọn cái đầu làm bìa nếu chưa có
+            }
+        }
+
         return repo.saveAll(list).stream().map(this::toDTO).collect(Collectors.toList());
     }
 
@@ -153,15 +165,18 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
         Long spId = target.getSanPham().getId();
         Long mauId = target.getMauSac() != null ? target.getMauSac().getId() : null;
 
-        // Bỏ ảnh bìa cũ cùng màu
-        repo.findBySanPham_IdAndMauSac_Id(spId, mauId)
-                .forEach(img -> {
-                    img.setLaAnhBia(img.getId().equals(id));
-                    repo.save(img);
-                });
+        // 🔸 Bỏ cờ bìa cũ cùng sản phẩm & màu
+        repo.unsetAllCovers(spId, mauId);
+
+        // 🔸 Gắn cờ bìa cho ảnh hiện tại
+        repo.setCover(id);
+
+        // 🔸 Cập nhật lại object trong bộ nhớ để trả đúng dữ liệu
+        target.setLaAnhBia(true);
 
         return toDTO(target);
     }
+
 
     //Nếu ảnh bị xóa là ảnh bìa, tự động chọn ảnh khác cùng màu để làm ảnh bìa mới.
     @Transactional
