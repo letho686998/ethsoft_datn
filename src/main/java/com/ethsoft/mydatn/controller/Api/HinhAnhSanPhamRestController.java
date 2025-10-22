@@ -43,9 +43,10 @@ public class HinhAnhSanPhamRestController {
         service.delete(id);
     }
 
-    @PutMapping("/set-cover/{id}")
+    @PutMapping("/{id}/cover")
     public HinhAnhSanPhamDTO setCover(@PathVariable Long id) {
         return service.setCover(id);
     }
+
 
 }

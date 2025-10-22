@@ -30,7 +30,8 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
 
         try {
-            Path dirPath = Paths.get(uploadRoot, sanPhamId.toString());
+            String rootDir = System.getProperty("user.dir") + "/uploads/sanpham";
+            Path dirPath = Paths.get(rootDir, sanPhamId.toString());
             Files.createDirectories(dirPath);
 
             String timestamp = LocalDateTime.now()
