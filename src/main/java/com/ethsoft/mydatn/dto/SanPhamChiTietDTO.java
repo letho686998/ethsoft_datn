@@ -18,8 +18,9 @@ public class SanPhamChiTietDTO {
     private Long mauSacId;
     private Long kichCoId;
     private Integer soLuongTon;
-    private BigDecimal giaNhap;
+//    private BigDecimal giaNhap;
     private BigDecimal giaBan;
+    private Integer gioiTinh;
     private Integer trangThai;
 
     // ✅ Bổ sung thêm các trường phục vụ hiển thị bảng 11 cột

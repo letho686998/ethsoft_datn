@@ -774,18 +774,19 @@
         /***************************************************
          * 📏 ĐỘ RỘNG CỘT (11 CỘT)
          ***************************************************/
+        /* 📏 ĐỘ RỘNG CỘT (11 CỘT - MỚI) */
         .table th:nth-child(1),
         .table td:nth-child(1) { width: 42px; }   /* Tick */
         .table th:nth-child(2),
         .table td:nth-child(2) { width: 50px; }   /* STT */
         .table th:nth-child(3),
-        .table td:nth-child(3) { width: 150px; }   /* Ảnh bìa */
+        .table td:nth-child(3) { width: 150px; }  /* Ảnh bìa */
         .table th:nth-child(4),
-        .table td:nth-child(4) { min-width: 180px; } /* Tên sản phẩm */
+        .table td:nth-child(4) { width: 120px; }  /* Mã SPCT */
         .table th:nth-child(5),
-        .table td:nth-child(5) { width: 90px; }   /* Số lượng */
+        .table td:nth-child(5) { min-width: 180px; } /* Tên sản phẩm */
         .table th:nth-child(6),
-        .table td:nth-child(6) { width: 110px; }  /* Giá nhập */
+        .table td:nth-child(6) { width: 90px; }   /* Số lượng */
         .table th:nth-child(7),
         .table td:nth-child(7) { width: 110px; }  /* Giá bán */
         .table th:nth-child(8),
@@ -793,7 +794,7 @@
         .table th:nth-child(9),
         .table td:nth-child(9) { width: 90px; }   /* Kích cỡ */
         .table th:nth-child(10),
-        .table td:nth-child(10) { width: 120px; }  /* Trạng thái */
+        .table td:nth-child(10) { width: 120px; } /* Trạng thái */
         .table th:nth-child(11),
         .table td:nth-child(11) { width: 100px; } /* Thao tác */
 
@@ -1100,7 +1101,7 @@
         .btn-success,
         .btn-warning,
         .btn-danger {
-            width: 36px;
+            width: 30px;
             height: 30px;
             display: inline-flex;
             align-items: center;
@@ -1147,6 +1148,28 @@
         .btn-danger i {
             font-size: 14px;
         }
+
+        /* 🎨 Nút "Sửa" — đồng bộ màu xanh hệ thống Aurora */
+        .btn-edit {
+            background-color: #007bff !important;
+            color: #fff !important;
+            border: none !important;
+            box-shadow: 0 1px 3px rgba(0, 123, 255, 0.3);
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Hiệu ứng hover mượt, sáng hơn nhẹ */
+        .btn-edit:hover {
+            filter: brightness(1.1);
+            transform: scale(1.05);
+        }
+
+        /* Khi click (active) — tối nhẹ để có phản hồi */
+        .btn-edit:active {
+            filter: brightness(0.9);
+            transform: scale(0.95);
+        }
+
 
         #upload-container.loading {
             opacity: 0.6;
@@ -1211,7 +1234,7 @@
 
         .table input.editable {
             background-color: #ffffff;
-            border-color: var(--bs-alert-border, #007bff);
+            border-color: var(--bs-showToast-border, #007bff);
             box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
         }
 
@@ -1314,10 +1337,11 @@
                             <th><input type="checkbox" id="selectAllSPCT"></th>
                             <th>STT</th>
                             <th>Ảnh bìa</th>
+                            <th>Giá nhập</th>
                             <th>Tên sản phẩm</th>
                             <th>Số lượng tồn</th>
-                            <th>Giá nhập</th>
-                            <th>Giá bán</th>
+<!--                            <th>Giá nhập</th>-->
+                            <th>Giá</th>
                             <th>Màu sắc</th>
                             <th>Kích cỡ</th>
                             <th>Trạng thái</th>
@@ -1447,7 +1471,6 @@
 
         <script>
             $(function () {
-
                 // 🧭 Đọc sanPhamId từ URL nếu có
                 function getSanPhamIdFromUrl() {
                     const params = new URLSearchParams(window.location.search);
@@ -1485,6 +1508,81 @@
                     IMG_SET_COVER: (spctId, imgId) =>
                         `/api/san-pham-chi-tiet/anh/set-cover?spctId=${spctId}&imageId=${imgId}`
                 };
+
+                // ===========================
+                // 🌈 Aurora Toast Notification
+                // ===========================
+                function showToast(message, type = 'success') {
+                    // Nếu container chưa có, tạo 1 cái
+                    let container = document.querySelector('.aurora-toast-container');
+                    if (!container) {
+                        container = document.createElement('div');
+                        container.className = 'aurora-toast-container';
+                        Object.assign(container.style, {
+                            position: 'fixed',
+                            top: '20px',
+                            right: '20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px',
+                            zIndex: 9999,
+                            pointerEvents: 'none' // không chặn click các phần tử khác
+                        });
+                        document.body.appendChild(container);
+                    }
+
+                    // Tạo phần tử toast
+                    const toast = document.createElement('div');
+                    toast.className = `aurora-toast ${type}`;
+                    toast.innerHTML = `
+        <div class="aurora-toast-content">
+            ${message}
+        </div>
+    `;
+
+                    // Style Aurora/iOS-like
+                    Object.assign(toast.style, {
+                        minWidth: '240px',
+                        padding: '10px 16px',
+                        borderRadius: '12px',
+                        color: '#fff',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        opacity: 0,
+                        transform: 'translateY(-10px)',
+                        transition: 'all 0.3s ease',
+                        pointerEvents: 'auto'
+                    });
+
+                    // Màu theo loại
+                    if (type === 'error') {
+                        toast.style.background = 'linear-gradient(135deg, #ff5f6d, #d43f8d)';
+                    } else if (type === 'warning') {
+                        toast.style.background = 'linear-gradient(135deg, #f7971e, #ffd200)';
+                        toast.style.color = '#333';
+                    } else {
+                        toast.style.background = 'linear-gradient(135deg, var(--aurora-primary, #00b4d8), #007bff)';
+                    }
+
+                    // Thêm vào container
+                    container.appendChild(toast);
+
+                    // Hiện lên
+                    requestAnimationFrame(() => {
+                        toast.style.opacity = 1;
+                        toast.style.transform = 'translateY(0)';
+                    });
+
+                    // Tự ẩn sau 3s
+                    setTimeout(() => {
+                        toast.style.opacity = 0;
+                        toast.style.transform = 'translateY(-10px)';
+                        setTimeout(() => toast.remove(), 400);
+                    }, 2000);
+                }
 
                 /* =====================================================
                 * 2️⃣ DOM & STATE (CHUẨN HÓA)
@@ -1718,6 +1816,7 @@
                     pageData.forEach((spct, idx) => {
                         const {
                             id,
+                            maSpct,
                             tenSanPham,
                             tenMau,
                             tenKichCo,
@@ -1736,6 +1835,7 @@
             <td><input type="checkbox" class="spct-checkbox" data-id="${id}"></td>
             <td>${start + idx + 1}</td>
             <td><img src="${anhBiaUrl || '/img/no-image.png'}"></td>
+            <td>${maSpct || '-'}</td> <!-- ✅ thêm mới -->
             <td class="truncate">${tenSanPham || '-'}</td>
             <td>
                 <input type="number"
@@ -1744,7 +1844,7 @@
                             value="${soLuongTon ?? 0}"
                             min="0" readonly />
             </td>
-            <td>${formatVnd(giaNhap)}</td>
+
             <td>
                 <input type="text"
            class="form-control form-control-sm input-giaban text-end"
@@ -1903,17 +2003,17 @@
                         });
                     });
                     if (reqs.length === 0) {
-                        alert('Vui lòng chọn ít nhất một sản phẩm để cập nhật!');
+                        showToast('Vui lòng chọn ít nhất một sản phẩm để cập nhật!');
                         return;
                     }
                     if (!confirm(`Xác nhận cập nhật ${reqs.length} sản phẩm chi tiết?`)) return;
                     try {
                         await axios.put('/api/san-pham-chi-tiet/bulk-update', reqs);
-                        alert('✅ Đã cập nhật thành công!');
+                        showToast('✅ Đã cập nhật thành công!');
                         loadSPCTData(PRODUCT_ID || null);
                     } catch (err) {
                         console.error(err);
-                        alert('❌ Lỗi khi cập nhật!');
+                        showToast('❌ Lỗi khi cập nhật!');
                     }
                 });
 
@@ -1998,28 +2098,38 @@
                     });
                 });
 
+
+
+
+
                 // 🔁 CHUYỂN ĐỔI TRẠNG THÁI SPCT
                 $(document).on('click', '.btn-toggle-status', async function () {
                     const id = $(this).data('id');
                     const currentStatus = Number($(this).data('status'));
                     const newStatus = currentStatus === 1 ? 0 : 1;
+
                     const confirmMsg = currentStatus === 1
                         ? '⚠️ Bạn có chắc muốn NGỪNG kinh doanh sản phẩm này không?'
                         : '✅ Bạn có muốn KINH DOANH LẠI sản phẩm này không?';
+
                     if (!confirm(confirmMsg)) return;
+
                     try {
-                        await axios.put('/api/san-pham-chi-tiet/bulk-update', [{
+                        const body = [{
                             id: id,
-                            trangThai: newStatus,
-                            ...buildAuditFields(false)
-                        }]);
-                        alert('✅ Cập nhật trạng thái thành công!');
+                            trangThai: newStatus
+                        }];
+
+                        await axios.put('/api/san-pham-chi-tiet/bulk-update', body);
+
+                        showToast('✅ Cập nhật trạng thái thành công!');
                         await loadSPCTData(PRODUCT_ID || null);
                     } catch (err) {
                         console.error('❌ Lỗi khi cập nhật trạng thái:', err);
-                        alert('❌ Không thể cập nhật trạng thái. Vui lòng thử lại!');
+                        showToast('❌ Không thể cập nhật trạng thái. Vui lòng thử lại!');
                     }
                 });
+
 
                 /* =====================================================
                 * 🚀 KHỞI TẠO TRANG (INIT)
@@ -2042,7 +2152,7 @@
                         console.log('✅ Trang Quản lý SPCT đã khởi tạo xong.');
                     } catch (err) {
                         console.error('❌ Lỗi khi khởi tạo trang:', err);
-                        alert('❌ Không thể tải dữ liệu khởi tạo. Vui lòng thử lại hoặc kiểm tra kết nối!');
+                        showToast('❌ Không thể tải dữ liệu khởi tạo. Vui lòng thử lại hoặc kiểm tra kết nối!');
                     }
                 }
 
@@ -2438,7 +2548,7 @@
                 //         const trangThai = $('#trangThaiInput').data('id') ?? 1;
                 //
                 //         if (!sanPhamId || !mauSacId || !kichCoId) {
-                //             alert('⚠️ Vui lòng chọn đầy đủ Sản phẩm, Màu sắc, Kích cỡ!');
+                //             showToast('⚠️ Vui lòng chọn đầy đủ Sản phẩm, Màu sắc, Kích cỡ!');
                 //             return;
                 //         }
                 //
@@ -2479,10 +2589,10 @@
                 //                     nguoiCapNhat: ADMIN_NAME,
                 //                     ngayCapNhat: nowIso()
                 //                 });
-                //                 alert(`✅ Đã cộng dồn số lượng tồn thành công!\nSố lượng mới: ${newQty}`);
+                //                 showToast(`✅ Đã cộng dồn số lượng tồn thành công!\nSố lượng mới: ${newQty}`);
                 //                 await loadSPCTFiltered();
                 //             } else {
-                //                 alert('⚠️ Sản phẩm chi tiết này đã tồn tại, dữ liệu được giữ nguyên!');
+                //                 showToast('⚠️ Sản phẩm chi tiết này đã tồn tại, dữ liệu được giữ nguyên!');
                 //             }
                 //             return;
                 //         }
@@ -2494,7 +2604,7 @@
                 //             await uploadImages(savedId);
                 //         }
                 //
-                //         alert('✅ Thêm sản phẩm chi tiết thành công!');
+                //         showToast('✅ Thêm sản phẩm chi tiết thành công!');
                 //         clearUploadState();
                 //         clearFormInputs();
                 //         fillCreatorUpdaterDefaults();
@@ -2502,7 +2612,7 @@
                 //
                 //     } catch (err) {
                 //         console.error('❌ Lỗi khi thêm SPCT:', err);
-                //         alert('❌ Không thể thêm sản phẩm chi tiết. Vui lòng kiểm tra lại dữ liệu!');
+                //         showToast('❌ Không thể thêm sản phẩm chi tiết. Vui lòng kiểm tra lại dữ liệu!');
                 //     }
                 // });
 
@@ -2511,7 +2621,7 @@
                 // 🟦 CẬP NHẬT SPCT
                 // $('#btn-update').on('click', async function () {
                 //     try {
-                //         if (!selectedId) return alert('⚠️ Hãy chọn một dòng để cập nhật!');
+                //         if (!selectedId) return showToast('⚠️ Hãy chọn một dòng để cập nhật!');
                 //
                 //         const dto = {
                 //             id: selectedId,
@@ -2528,12 +2638,12 @@
                 //         await axios.put(API.SPCT_UPDATE, dto);
                 //         await uploadImages(selectedId);
                 //
-                //         alert('✅ Cập nhật sản phẩm chi tiết thành công!');
+                //         showToast('✅ Cập nhật sản phẩm chi tiết thành công!');
                 //         await loadSPCTFiltered();
                 //
                 //     } catch (err) {
                 //         console.error('❌ Lỗi khi cập nhật SPCT:', err);
-                //         alert('❌ Cập nhật thất bại. Vui lòng thử lại!');
+                //         showToast('❌ Cập nhật thất bại. Vui lòng thử lại!');
                 //     }
                 // });
 
@@ -2635,7 +2745,7 @@
                 //
                 //     } catch (err) {
                 //         console.error('❌ Lỗi upload ảnh:', err);
-                //         alert('❌ Không thể tải ảnh lên máy chủ. Vui lòng thử lại!');
+                //         showToast('❌ Không thể tải ảnh lên máy chủ. Vui lòng thử lại!');
                 //     } finally {
                 //         $upload.removeClass('loading');
                 //     }
@@ -2716,7 +2826,7 @@
             //                         }
             //                     } catch (err) {
             //                         console.error('❌ Lỗi xóa ảnh:', err);
-            //                         alert('❌ Không thể xóa ảnh. Vui lòng thử lại!');
+            //                         showToast('❌ Không thể xóa ảnh. Vui lòng thử lại!');
             //                     }
             //                 });
             //
@@ -2729,7 +2839,7 @@
             //                         $box.addClass('cover');
             //                     } catch (err) {
             //                         console.error('❌ Lỗi đặt ảnh bìa:', err);
-            //                         alert('❌ Không thể đặt ảnh bìa. Vui lòng thử lại!');
+            //                         showToast('❌ Không thể đặt ảnh bìa. Vui lòng thử lại!');
             //                     }
             //                 });
             //
@@ -2742,7 +2852,7 @@
             //
             //         } catch (err) {
             //             console.error('❌ Lỗi load ảnh sản phẩm chi tiết:', err);
-            //             alert('❌ Không thể tải ảnh sản phẩm. Vui lòng kiểm tra kết nối hoặc thử lại sau!');
+            //             showToast('❌ Không thể tải ảnh sản phẩm. Vui lòng kiểm tra kết nối hoặc thử lại sau!');
             //         }
             //     }
 

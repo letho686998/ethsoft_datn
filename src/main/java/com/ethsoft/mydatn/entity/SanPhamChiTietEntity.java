@@ -40,8 +40,8 @@ public class SanPhamChiTietEntity extends BaseAuditable {
     @Column(name = "so_luong_ton")
     private Integer soLuongTon;
 
-    @Column(name = "gia_nhap", precision = 18, scale = 2)
-    private BigDecimal giaNhap;
+//    @Column(name = "gia_nhap", precision = 18, scale = 2)
+//    private BigDecimal giaNhap;
 
     @Column(name = "gia_ban", precision = 18, scale = 2)
     private BigDecimal giaBan;
@@ -49,4 +49,7 @@ public class SanPhamChiTietEntity extends BaseAuditable {
     // 1=Đang bán, 0=Ngừng
     @Column(name = "trang_thai")
     private Integer trangThai;
+
+    @Column(name = "gioi_tinh")
+    private Integer gioiTinh; // 0=Nam, 1=Nữ, 2=Unisex
 }

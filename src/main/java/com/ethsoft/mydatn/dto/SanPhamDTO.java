@@ -18,8 +18,12 @@ public class SanPhamDTO  {
     private Long deGiayId;
     private Integer gioiTinh;
 
+    private String nguoiTao;
+    private String nguoiCapNhat;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private LocalDateTime ngayTao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    private LocalDateTime ngayCapNhat;
 
     // Phục vụ danh sách
     private Integer tongSoLuong;

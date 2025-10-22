@@ -14,3 +14,4 @@ public class SanPhamCreateRequest {
     private Long deGiayId;
     private Integer gioiTinh;    // 0/1/2
 }
+

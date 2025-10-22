@@ -1,9 +1,13 @@
-// src/main/java/com/ethsoft/mydatn/dto/SanPhamUpdateRequest.java
 package com.ethsoft.mydatn.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SanPhamUpdateRequest {
     private String tenSanPham;
     private String moTa;

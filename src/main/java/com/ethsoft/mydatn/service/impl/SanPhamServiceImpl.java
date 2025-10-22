@@ -11,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SanPhamServiceImpl implements SanPhamService {
@@ -24,14 +26,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     private final DanhMucRepository danhMucRepository;
     private final ChatLieuRepository chatLieuRepository;
     private final DeGiayRepository deGiayRepository;
-
-//    private String genNextCode(String maxCode) {
-//        int next = 1;
-//        if (maxCode != null && maxCode.matches("SP\\d+")) {
-//            next = Integer.parseInt(maxCode.substring(2)) + 1;
-//        }
-//        return "SP" + new DecimalFormat("000000").format(next);
-//    }
+    private final SanPhamChiTietRepository sanPhamChiTietRepository;
 
     private SanPhamDTO toDTO(SanPhamEntity e) {
         if (e == null) return null;
@@ -42,11 +37,22 @@ public class SanPhamServiceImpl implements SanPhamService {
                 .moTa(e.getMoTa())
                 .trangThai(e.getTrangThai())
                 .gioiTinh(e.getGioiTinh())
+                .nguoiTao(e.getNguoiTao())
+                .nguoiCapNhat(e.getNguoiCapNhat())
                 .ngayTao(e.getNgayTao())
+                .ngayCapNhat(e.getNgayCapNhat())
                 .thuongHieuId(e.getThuongHieu() != null ? e.getThuongHieu().getId() : null)
                 .danhMucId(e.getDanhMuc() != null ? e.getDanhMuc().getId() : null)
                 .chatLieuId(e.getChatLieu() != null ? e.getChatLieu().getId() : null)
                 .deGiayId(e.getDeGiay() != null ? e.getDeGiay().getId() : null)
+                .tenThuongHieu(e.getThuongHieu() != null ? e.getThuongHieu().getTenThuongHieu() : null)
+                .tenDanhMuc(e.getDanhMuc() != null ? e.getDanhMuc().getTenDanhMuc() : null)
+                .tenChatLieu(e.getChatLieu() != null ? e.getChatLieu().getTenChatLieu() : null)
+                .tenDeGiay(e.getDeGiay() != null ? e.getDeGiay().getTenDeGiay() : null)
+                .tongSoLuong(
+                        e.getChiTietList() == null ? 0 :
+                                e.getChiTietList().stream().mapToInt(c -> c.getSoLuongTon() == null ? 0 : c.getSoLuongTon()).sum()
+                )
                 .build();
     }
 
@@ -78,7 +84,6 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public SanPhamDTO create(SanPhamCreateRequest req) {
         String max = sanPhamRepository.findMaxMaSanPham();
-//        String code = genNextCode(max);
         String code = CodeGenerator.nextSanPhamCode(max);
 
         SanPhamEntity e = SanPhamEntity.builder()
@@ -107,7 +112,6 @@ public class SanPhamServiceImpl implements SanPhamService {
         if (req.getMoTa() != null) e.setMoTa(req.getMoTa());
         if (req.getTrangThai() != null) e.setTrangThai(req.getTrangThai());
         if (req.getGioiTinh() != null) e.setGioiTinh(req.getGioiTinh());
-
         if (req.getThuongHieuId() != null) e.setThuongHieu(getThuongHieu(req.getThuongHieuId()));
         if (req.getDanhMucId() != null) e.setDanhMuc(getDanhMuc(req.getDanhMucId()));
         if (req.getChatLieuId() != null) e.setChatLieu(getChatLieu(req.getChatLieuId()));
@@ -116,55 +120,70 @@ public class SanPhamServiceImpl implements SanPhamService {
         return toDTO(e);
     }
 
+    @Transactional
+    public SanPhamDTO updateTrangThai(Long sanPhamId, int trangThaiMoi) {
+        SanPhamEntity sp = sanPhamRepository.findById(sanPhamId)
+                .orElseThrow(() -> new ApiException("Không tìm thấy sản phẩm ID=" + sanPhamId));
+
+        // Không cần làm gì nếu trạng thái không đổi
+        if (Objects.equals(sp.getTrangThai(), trangThaiMoi)) {
+            return toDTO(sp);
+        }
+
+        // Nếu đổi sang NGỪNG BÁN → Tất cả SPCT phải ngừng bán
+        if (trangThaiMoi == 0) {
+            List<SanPhamChiTietEntity> chiTietList = sanPhamChiTietRepository.findBySanPham_Id(sanPhamId);
+            chiTietList.forEach(ct -> ct.setTrangThai(0));
+            sanPhamChiTietRepository.saveAll(chiTietList);
+            log.info("→ Ngừng bán toàn bộ SPCT của sản phẩm {}", sanPhamId);
+        }
+
+        // Nếu đổi sang ĐANG BÁN → Toàn bộ SPCT sẽ mở bán
+        else if (trangThaiMoi == 1) {
+            List<SanPhamChiTietEntity> chiTietList = sanPhamChiTietRepository.findBySanPham_Id(sanPhamId);
+            chiTietList.forEach(ct -> ct.setTrangThai(1));
+            sanPhamChiTietRepository.saveAll(chiTietList);
+            log.info("→ Mở bán toàn bộ SPCT của sản phẩm {}", sanPhamId);
+        }
+
+        sp.setTrangThai(trangThaiMoi);
+        sanPhamRepository.save(sp);
+        return toDTO(sp);
+    }
+
+    /**
+     * ✅ Hàm tự động cập nhật trạng thái CHA theo trạng thái CON
+     * (Nếu tất cả con ngừng bán → cha ngừng bán,
+     *  nếu có ít nhất 1 con đang bán → cha đang bán)
+     */
+    @Transactional
+    public void capNhatTrangThaiChaTheoCon(Long sanPhamId) {
+        SanPhamEntity sp = sanPhamRepository.findById(sanPhamId)
+                .orElseThrow(() -> new ApiException("Không tìm thấy sản phẩm cha ID=" + sanPhamId));
+
+        long soConDangBan = sanPhamChiTietRepository.countBySanPham_IdAndTrangThai(sanPhamId, 1);
+        int newStatus = soConDangBan > 0 ? 1 : 0;
+
+        if (!Objects.equals(sp.getTrangThai(), newStatus)) {
+            sp.setTrangThai(newStatus);
+            sanPhamRepository.save(sp);
+            log.info("→ Đồng bộ trạng thái cha (ID={}) = {}", sanPhamId, newStatus);
+        }
+    }
+
     @Override
     public SanPhamDTO getById(Long id) {
-        SanPhamEntity e = sanPhamRepository.findById(id)
-                .orElseThrow(() -> new ApiException("Không tìm thấy sản phẩm: " + id));
-
-        SanPhamDTO dto = toDTO(e);
-
-        // 🔹 Bổ sung tên hiển thị (nếu có)
-        if (e.getThuongHieu() != null) {
-            dto.setTenThuongHieu(e.getThuongHieu().getTenThuongHieu());
-        }
-        if (e.getDanhMuc() != null) {
-            dto.setTenDanhMuc(e.getDanhMuc().getTenDanhMuc());
-        }
-        if (e.getChatLieu() != null) {
-            dto.setTenChatLieu(e.getChatLieu().getTenChatLieu());
-        }
-        if (e.getDeGiay() != null) {
-            dto.setTenDeGiay(e.getDeGiay().getTenDeGiay());
-        }
-
-        return dto;
+        return toDTO(sanPhamRepository.findById(id)
+                .orElseThrow(() -> new ApiException("Không tìm thấy sản phẩm: " + id)));
     }
 
     @Override
-    public List<SanPhamDTO> getAllForList() {
-        List<Object[]> rows = sanPhamRepository.findAllForList();
-
-        return rows.stream().map(r -> {
-            SanPhamDTO dto = new SanPhamDTO();
-            dto.setId(((Number) r[0]).longValue());
-            dto.setMaSanPham((String) r[1]);
-            dto.setTenSanPham((String) r[2]);
-            dto.setTrangThai((Integer) r[3]);
-
-            // 👇 Chuyển ngày đúng kiểu
-            dto.setNgayTao(
-                    r[4] instanceof java.time.LocalDateTime
-                            ? (java.time.LocalDateTime) r[4]
-                            : null
-            );
-
-            dto.setThuongHieuId(r[5] != null ? ((Number) r[5]).longValue() : null);
-            dto.setDanhMucId(r[6] != null ? ((Number) r[6]).longValue() : null);
-            dto.setTongSoLuong(r[7] != null ? ((Number) r[7]).intValue() : 0);
-            return dto;
-        }).collect(Collectors.toList());
+    public List<SanPhamDTO> getAll() {
+        return sanPhamRepository.findAll().stream()
+                .sorted((a,b) -> b.getId().compareTo(a.getId()))
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
-
-
 }
+
 

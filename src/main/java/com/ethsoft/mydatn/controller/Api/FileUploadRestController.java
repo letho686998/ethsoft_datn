@@ -1,32 +1,30 @@
 package com.ethsoft.mydatn.controller.Api;
 
-import com.ethsoft.mydatn.service.impl.FileStorageServiceImpl;
+import com.ethsoft.mydatn.dto.HinhAnhSanPhamDTO;
+import com.ethsoft.mydatn.service.FileStorageService;
+import com.ethsoft.mydatn.service.HinhAnhSanPhamService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/upload")
 @RequiredArgsConstructor
 public class FileUploadRestController {
 
-    private final FileStorageServiceImpl fileStorageService;
+    private final FileStorageService fileStorageService;
+    private final HinhAnhSanPhamService hinhAnhService;
 
-    /**
-     * Upload ảnh sản phẩm theo ID sản phẩm
-     * @param sanPhamId ID sản phẩm
-     * @param file file ảnh multipart
-     * @return JSON chứa đường dẫn public
-     */
-    @PostMapping("/sanpham/{sanPhamId}")
-    public ResponseEntity<?> uploadSanPhamImage(
-            @PathVariable Long sanPhamId,
-            @RequestParam("file") MultipartFile file) {
+    @PostMapping("/hinh-anh-san-pham")
+    public HinhAnhSanPhamDTO uploadImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("sanPhamId") Long sanPhamId,
+            @RequestParam(value = "mauSacId", required = false) Long mauSacId) {
 
+        // Lưu ảnh vật lý
         String url = fileStorageService.saveProductImage(sanPhamId, file);
-        return ResponseEntity.ok(Map.of("duongDan", url));
+
+        // Tạo bản ghi ảnh trong DB
+        return hinhAnhService.createOne(sanPhamId, mauSacId, file.getOriginalFilename(), url);
     }
 }
