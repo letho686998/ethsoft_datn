@@ -1,6 +1,8 @@
 package com.ethsoft.mydatn.service;
 
 import com.ethsoft.mydatn.dto.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface HinhAnhSanPhamService {
@@ -12,5 +14,7 @@ public interface HinhAnhSanPhamService {
     void delete(Long id); // ✅ Bổ sung logic khi xóa ảnh bìa
     List<HinhAnhSanPhamDTO> getBySanPham(Long sanPhamId);
     List<HinhAnhSanPhamDTO> getBySanPhamAndMau(Long sanPhamId, Long mauSacId);
+    List<HinhAnhSanPhamDTO> uploadImages(Long sanPhamId, Long mauSacId, List<MultipartFile> files, boolean laAnhBia);
+
 }
 

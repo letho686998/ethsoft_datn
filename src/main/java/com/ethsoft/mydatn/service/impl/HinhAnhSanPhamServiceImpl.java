@@ -4,10 +4,12 @@ import com.ethsoft.mydatn.dto.*;
 import com.ethsoft.mydatn.entity.*;
 import com.ethsoft.mydatn.exception.ApiException;
 import com.ethsoft.mydatn.repository.*;
+import com.ethsoft.mydatn.service.FileStorageService;
 import com.ethsoft.mydatn.service.HinhAnhSanPhamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,6 +21,7 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
     private final HinhAnhSanPhamRepository repo;
     private final SanPhamRepository sanPhamRepository;
     private final MauSacRepository mauSacRepository;
+    private final FileStorageService fileStorageService;
 
     private HinhAnhSanPhamDTO toDTO(HinhAnhSanPhamEntity e) {
         if (e == null) return null;
@@ -202,4 +205,45 @@ public class HinhAnhSanPhamServiceImpl implements HinhAnhSanPhamService {
         }
     }
 
+    @Transactional
+    @Override
+    public List<HinhAnhSanPhamDTO> uploadImages(Long sanPhamId, Long mauSacId, List<MultipartFile> files, boolean laAnhBia) {
+        if (files == null || files.isEmpty()) {
+            throw new ApiException("Không có file nào để upload!");
+        }
+
+        // ✅ Nếu có ảnh bìa mới được chọn → hạ ảnh bìa cũ
+        if (laAnhBia) {
+            repo.unsetAllCovers(sanPhamId, mauSacId);
+        }
+
+        SanPhamEntity sp = sanPhamRepository.findById(sanPhamId)
+                .orElseThrow(() -> new ApiException("Không tìm thấy sản phẩm ID=" + sanPhamId));
+
+        MauSacEntity mau = null;
+        if (mauSacId != null) {
+            mau = mauSacRepository.findById(mauSacId)
+                    .orElseThrow(() -> new ApiException("Không tìm thấy màu ID=" + mauSacId));
+        }
+
+        List<HinhAnhSanPhamEntity> savedList = new ArrayList<>();
+
+        for (int i = 0; i < files.size(); i++) {
+            MultipartFile file = files.get(i);
+            String duongDan = fileStorageService.saveProductImage(sanPhamId, file);
+
+            HinhAnhSanPhamEntity entity = HinhAnhSanPhamEntity.builder()
+                    .sanPham(sp)
+                    .mauSac(mau)
+                    .tenTapTin(file.getOriginalFilename())
+                    .duongDan(duongDan)
+                    .laAnhBia(laAnhBia && i == 0) // ✅ nếu chọn cover → ảnh đầu tiên là cover
+                    .trangThai(1)
+                    .build();
+
+            savedList.add(repo.save(entity));
+        }
+
+        return savedList.stream().map(this::toDTO).collect(Collectors.toList());
+    }
 }

@@ -2,8 +2,11 @@ package com.ethsoft.mydatn.controller.Api;
 
 import com.ethsoft.mydatn.dto.*;
 import com.ethsoft.mydatn.service.HinhAnhSanPhamService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -46,6 +49,18 @@ public class HinhAnhSanPhamRestController {
     @PutMapping("/{id}/cover")
     public HinhAnhSanPhamDTO setCover(@PathVariable Long id) {
         return service.setCover(id);
+    }
+
+    // ✅ Upload ảnh sản phẩm (có hỗ trợ chọn ảnh bìa)
+    @PostMapping("/upload")
+    @Transactional
+    public List<HinhAnhSanPhamDTO> uploadImages(
+            @RequestParam Long sanPhamId,
+            @RequestParam(required = false) Long mauSacId,
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam(required = false, defaultValue = "false") boolean laAnhBia
+    ) {
+        return service.uploadImages(sanPhamId, mauSacId, files, laAnhBia);
     }
 
 
