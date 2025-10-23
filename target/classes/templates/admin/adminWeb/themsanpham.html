@@ -482,21 +482,6 @@
             opacity: 1;
         }
 
-
-        /* Hiệu ứng fade popup */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-4px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-
         #mauSacPopup {
             top: calc(100% + 6px);
             /* cách input một đoạn nhỏ */
@@ -688,24 +673,28 @@
             background: #fafbfd;
             cursor: pointer;
             transition: all 0.25s ease;
-            width: 355px; /* ✅ vừa cho 4 ảnh */
-            height: 100px; /* ✅ cố định chiều cao */
+            width: 355px;
+            height: 100px;
             display: flex;
-            align-items: center; /* ✅ căn giữa theo chiều dọc */
-            justify-content: flex-start; /* ✅ ảnh canh trái trong khung */
-            overflow-x: auto; /* ✅ cuộn ngang khi nhiều ảnh */
-            overflow-y: hidden;
-            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: auto !important;   /* ✅ */
+            overflow-y: hidden !important;
+            flex-wrap: nowrap !important;  /* ✅ */
             gap: 10px;
-            margin: 0 auto; /* ✅ căn giữa khung trong cột */
+            margin: 0 auto;
             scroll-behavior: smooth;
             white-space: nowrap;
-            -webkit-overflow-scrolling: touch; /* iOS hỗ trợ trượt mượt */
+            -webkit-overflow-scrolling: touch;
         }
 
-        .upload-container:hover {
-            border-color: #007bff;
-            background: #f1f7ff;
+        .preview-item {
+            flex: 0 0 auto; /* ✅ bắt buộc */
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
         }
 
         .upload-container input[type="file"] {
@@ -768,42 +757,6 @@
             flex-shrink: 0;
             align-items: center; /* ✅ căn giữa ảnh trong khung */
             order: 1;
-        }
-
-        .preview-item {
-            flex: 0 0 auto;
-            width: 90px;
-            height: 90px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #ddd;
-            position: relative;
-        }
-
-        .preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        /* Nút xóa ảnh */
-        .btn-remove-image {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s ease;
         }
 
         .btn-remove-image:hover {
@@ -970,22 +923,6 @@
             animation: tickPop 0.25s ease;
         }
 
-        /* 🔹 Hiệu ứng bật tick giống dropdown */
-        @keyframes tickPop {
-            0% {
-                transform: scale(0.4);
-                opacity: 0.4;
-            }
-            60% {
-                transform: scale(1.25);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
         .is-invalid {
             border-color: #dc3545 !important;
             box-shadow: 0 0 0 0.1rem rgba(220, 53, 69, 0.25);
@@ -1052,58 +989,6 @@
             cursor: not-allowed;
         }
 
-        .preview-item {
-            position: relative;
-        }
-
-        .btn-set-cover {
-            position: absolute;
-            top: 5px;
-            right: 30px;
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .btn-set-cover.active {
-            background: gold;
-            color: white;
-        }
-
-        #tenSanPhamList {
-            position: absolute;
-            width: 100%;
-            top: 100%; /* nằm ngay dưới input */
-            left: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            z-index: 1000;
-            max-height: 250px;
-            overflow-y: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Dropdown danh sách sản phẩm */
-        #tenSanPhamList {
-            position: absolute;
-            width: 100%;
-            top: 100%; /* nằm ngay dưới input */
-            left: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.15s ease;
-        }
-
         /* Các item trong danh sách */
         #tenSanPhamList .dropdown-item {
             padding: 8px 12px;
@@ -1149,6 +1034,223 @@
 
         #table-variants tr.table-active {
             background-color: #eaf4ff;
+        }
+
+        /* Gợi ý style nhỏ cho UX (có thể bỏ nếu bạn đã có) */
+        #tenSanPhamList {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            max-height: 260px;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: opacity .12s ease, transform .12s ease;
+            transition: all 0.15s ease;
+        }
+
+        #tenSanPhamList .dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        #tenSanPhamList .dropdown-item:hover, #tenSanPhamList .dropdown-item.active {
+            background: #f3f4f6;
+        }
+
+        #tenSanPhamList .dropdown-empty {
+            padding: 10px 12px;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        #tenSanPhamList.loading {
+            background: linear-gradient(90deg, #fff, #f9fafb, #fff);
+            background-size: 200% 100%;
+            animation: shine 1s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: -200% 0;
+            }
+        }
+
+        #tenSanPhamList mark {
+            background: #fff1a6;
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        #quickAddModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #quickAddModal.show {
+            display: flex;
+            animation: fadeIn .15s ease;
+        }
+
+        #quickAddModal .modal-content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px 24px;
+            width: 420px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(0);
+            animation: slideUp .2s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        #table-variants tr.selected {
+            background-color: #eaf4ff;
+        }
+
+        #table-variants tr:hover {
+            background-color: #f9fafc;
+        }
+
+        /* ✅ Căn giữa input theo chiều dọc trong bảng */
+        /* ✅ Giữ toàn bộ ô bảng căn giữa */
+        .table td {
+            vertical-align: middle !important;
+        }
+
+        /* ✅ Căn input số lượng & giá giữa hàng, cùng chiều cao đẹp */
+        .table td .form-control.form-control-sm {
+            height: 34px; /* Cân với chiều cao dòng chữ */
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            line-height: 34px; /* Giúp chữ trong input căn giữa */
+            text-align: center; /* Căn giữa nội dung */
+            font-size: 14px; /* Giữ chữ vừa mắt, không bị lệch */
+            border-radius: 6px; /* Bo nhẹ cho đồng bộ style Aurora */
+        }
+
+        /* ✅ Giảm khoảng cách giữa các dòng */
+        .table tbody tr {
+            height: 40px;
+        }
+
+        /* ✅ Nếu dùng màu nền hover hoặc chọn */
+        .table tr.selected {
+            background: rgba(20, 245, 241, 0.1);
+        }
+
+        /* ✅ Cân chỉnh tổng thể table nhỏ gọn, không vênh */
+        .table th, .table td {
+            padding: 6px 8px !important;
+        }
+
+        /* 🌙 Khi dropdown bị khóa (sản phẩm có sẵn) */
+        .disabled-field {
+            background: rgba(240, 240, 240, 0.9) !important;
+            cursor: not-allowed !important;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        /* ========== ẢNH TRONG UPLOAD CONTAINER ========== */
+        /* Mỗi ô ảnh */
+        .preview-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+        }
+
+        /* ⭐ Nút đặt ảnh bìa */
+        .btn-set-cover {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 22px;
+            height: 22px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.85);
+            color: #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 2px rgba(0,0,0,0.15);
+        }
+
+        .btn-set-cover i {
+            font-size: 12px;
+        }
+
+        .btn-set-cover:hover {
+            color: #111;
+            background: #fff;
+        }
+
+        /* Khi là ảnh bìa */
+        .btn-set-cover.active {
+            background: #ffd700;
+            color: #fff;
+            box-shadow: 0 0 4px #ffcc00;
+        }
+
+        /* ❌ Nút xoá ảnh */
+        .btn-remove-image {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* Khi hover ảnh — thêm hiệu ứng nhấn nhẹ */
+        .preview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
     </style>
@@ -1436,156 +1538,7 @@
             const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
             document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
         });
-    </script>
 
-    <style>
-        /* Gợi ý style nhỏ cho UX (có thể bỏ nếu bạn đã có) */
-        #tenSanPhamList {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
-            max-height: 260px;
-            overflow: auto;
-            z-index: 1000;
-            transition: opacity .12s ease, transform .12s ease;
-        }
-
-        #tenSanPhamList .dropdown-item {
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        #tenSanPhamList .dropdown-item:hover, #tenSanPhamList .dropdown-item.active {
-            background: #f3f4f6;
-        }
-
-        #tenSanPhamList .dropdown-empty {
-            padding: 10px 12px;
-            color: #6b7280;
-            font-style: italic;
-        }
-
-        #tenSanPhamList.loading {
-            background: linear-gradient(90deg, #fff, #f9fafb, #fff);
-            background-size: 200% 100%;
-            animation: shine 1s linear infinite;
-        }
-
-        @keyframes shine {
-            to {
-                background-position: -200% 0;
-            }
-        }
-
-        #tenSanPhamList mark {
-            background: #fff1a6;
-            padding: 0 2px;
-            border-radius: 3px;
-        }
-
-        #quickAddModal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #quickAddModal.show {
-            display: flex;
-            animation: fadeIn .15s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        #quickAddModal .modal-content {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            padding: 20px 24px;
-            width: 420px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(0);
-            animation: slideUp .2s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        #table-variants tr.selected {
-            background-color: #eaf4ff;
-        }
-
-        #table-variants tr:hover {
-            background-color: #f9fafc;
-        }
-
-        /* ✅ Căn giữa input theo chiều dọc trong bảng */
-        /* ✅ Giữ toàn bộ ô bảng căn giữa */
-        .table td {
-            vertical-align: middle !important;
-        }
-
-        /* ✅ Căn input số lượng & giá giữa hàng, cùng chiều cao đẹp */
-        .table td .form-control.form-control-sm {
-            height: 34px; /* Cân với chiều cao dòng chữ */
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            line-height: 34px; /* Giúp chữ trong input căn giữa */
-            text-align: center; /* Căn giữa nội dung */
-            font-size: 14px; /* Giữ chữ vừa mắt, không bị lệch */
-            border-radius: 6px; /* Bo nhẹ cho đồng bộ style Aurora */
-        }
-
-        /* ✅ Giảm khoảng cách giữa các dòng */
-        .table tbody tr {
-            height: 40px;
-        }
-
-        /* ✅ Nếu dùng màu nền hover hoặc chọn */
-        .table tr.selected {
-            background: rgba(20, 245, 241, 0.1);
-        }
-
-        /* ✅ Cân chỉnh tổng thể table nhỏ gọn, không vênh */
-        .table th, .table td {
-            padding: 6px 8px !important;
-        }
-
-        /* 🌙 Khi dropdown bị khóa (sản phẩm có sẵn) */
-        .disabled-field {
-            background: rgba(240, 240, 240, 0.9) !important;
-            cursor: not-allowed !important;
-            user-select: none;
-            transition: all 0.2s ease;
-        }
-
-
-    </style>
-
-    <script>
         // ============================================================
         // 🟢 BIẾN TOÀN CỤC — DÙNG CHUNG CHO TOÀN BỘ TRANG
         // ============================================================
@@ -2626,30 +2579,6 @@
         //     // reset input để có thể chọn lại cùng file
         //     $(this).val('');
         // });
-        //
-        // // Xoá ảnh preview
-        // $(document).on('click', '.remove-img', function () {
-        //     $(this).closest('.preview-item').remove();
-        // });
-        //
-        // // ============================================================
-        // // ✅ CHỌN DÒNG (tick chọn / chọn tất cả)
-        // // ============================================================
-        // $(document).on('click', '.row-select', function () {
-        //     const $icon = $(this);
-        //     $icon.toggleClass('fa-square fa-check-square text-primary');
-        //     $icon.closest('tr').toggleClass('table-active');
-        // });
-        //
-        // $(document).on('click', '#selectAllSPCT', function () {
-        //     const checked = $(this).is(':checked');
-        //     $('.row-select').each(function () {
-        //         $(this)
-        //             .toggleClass('fa-square', !checked)
-        //             .toggleClass('fa-check-square text-primary', checked);
-        //         $(this).closest('tr').toggleClass('table-active', checked);
-        //     });
-        // });
 
         // ============================================================
         // 🟨 11️⃣ UPLOAD ẢNH & XEM TRƯỚC (CÓ NÉN + COVER + REORDER)
@@ -2876,7 +2805,7 @@
                     const idx = +($item.data('file-index'));
                     const file = filesArr[idx];
 
-                    // 🧩 Ảnh đã tồn tại trên server → chỉ cập nhật cover nếu cần
+                    // 🟦 1. Ảnh đã tồn tại trên server → chỉ cập nhật cover
                     if (serverId) {
                         if (isCover) {
                             const p = axios.put(`/api/hinh-anh-san-pham/${serverId}/cover`)
@@ -2887,26 +2816,37 @@
                         return;
                     }
 
-                    // 🧩 Ảnh local → upload mới
+                    // 🟩 2. Ảnh local → upload mới
                     if (file) {
                         const formData = new FormData();
                         formData.append('sanPhamId', sanPhamId);
                         formData.append('mauSacId', mauSacId);
-                        formData.append('file', file);
+                        formData.append('files', file); // ✅ đổi thành "files" để BE nhận đúng
                         formData.append('laAnhBia', isCover);
                         formData.append('thuTu', $item.data('thu-tu') || idx);
 
-                        const p = axios.post('/api/upload/hinh-anh-san-pham', formData, {
+                        const p = axios.post('/api/hinh-anh-san-pham/upload', formData, {
                             headers: { 'Content-Type': 'multipart/form-data' }
                         }).then(res => {
-                            const img = res.data;
+                            const imgs = res.data;
+                            const img = Array.isArray(imgs) && imgs.length > 0 ? imgs[0] : imgs;
+
                             console.log(`📤 Uploaded ${isCover ? '[⭐ bìa]' : ''}:`, img);
 
                             // ✅ Gắn ID server vào ảnh
                             btn.attr('data-id', img.id);
                             $item.attr('data-id', img.id);
 
-                            // ✅ Xóa preview local (blob) sau khi upload thành công
+                            // ✅ Nếu ảnh này là ảnh bìa, cập nhật giao diện
+                            if (img.laAnhBia) {
+                                const $upload = $item.closest('.upload-container');
+                                $upload.find('.preview-item').removeAttr('data-cover');
+                                $upload.find('.btn-set-cover').removeClass('active');
+                                $item.attr('data-cover', 'true');
+                                btn.addClass('active');
+                            }
+
+                            // ✅ Xóa preview local (blob) để tránh trùng
                             $item.remove();
                         }).catch(err => {
                             console.error('❌ Lỗi upload ảnh local:', err);
@@ -2917,13 +2857,16 @@
                 });
             });
 
-            // Chờ tất cả upload hoàn tất
+            // 🟨 3. Chờ tất cả upload / update cover xong
             await Promise.allSettled(jobs);
-            console.log('✅ Hoàn thành upload ảnh + cập nhật bìa.');
+            console.log('✅ Hoàn thành upload ảnh + cập nhật ảnh bìa.');
 
-            // ✅ Sau khi upload xong, reload lại danh sách ảnh từ DB (tránh trùng)
-            await reloadApiImagesForAllRows(sanPhamId);
+            // 🟧 4. Sau khi upload xong, reload lại ảnh từ DB
+            if (typeof reloadApiImagesForAllRows === 'function') {
+                await reloadApiImagesForAllRows(sanPhamId);
+            }
         }
+
 
 
         // ============================================================
