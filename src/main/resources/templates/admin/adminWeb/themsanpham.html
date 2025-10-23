@@ -1253,6 +1253,58 @@
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
+        #btn-save-product:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.2);
+        }
+
+        /* ====== BADGE TRẠNG THÁI SẢN PHẨM ====== */
+        .badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            line-height: 1.2;
+            vertical-align: middle;
+            transition: all 0.2s ease;
+        }
+
+        /* 🌿 Đang bán */
+        .bg-success-subtle {
+            background-color: rgba(25, 135, 84, 0.1);
+        }
+        .text-success {
+            color: #198754 !important;
+        }
+        .border-success {
+            border: 1px solid #198754 !important;
+        }
+
+        /* 🔴 Ngừng bán */
+        .bg-danger-subtle {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        .text-danger {
+            color: #dc3545 !important;
+        }
+        .border-danger {
+            border: 1px solid #dc3545 !important;
+        }
+
+        /* ⚙️ Hiệu ứng hover (tùy chọn) */
+        .badge:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .upload-container.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+
     </style>
 </head>
 
@@ -1538,6 +1590,103 @@
             const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
             document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // ✅ Reset checkbox và khóa nút khi load
+            $('.variant-checkbox').prop('checked', false);
+            $('#btn-save-product').prop('disabled', true);
+        });
+
+        // ===========================
+        // 🌈 Aurora Toast Notification
+        // ===========================
+        function showToast(message, type = 'success') {
+            // Nếu container chưa có, tạo 1 cái
+            let container = document.querySelector('.aurora-toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'aurora-toast-container';
+                Object.assign(container.style, {
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                    zIndex: 9999,
+                    pointerEvents: 'none' // không chặn click các phần tử khác
+                });
+                document.body.appendChild(container);
+            }
+
+            // Tạo phần tử toast
+            const toast = document.createElement('div');
+            toast.className = `aurora-toast ${type}`;
+            toast.innerHTML = `
+        <div class="aurora-toast-content">
+            ${message}
+        </div>
+    `;
+
+            // Style Aurora/iOS-like
+            Object.assign(toast.style, {
+                minWidth: '240px',
+                padding: '10px 16px',
+                borderRadius: '12px',
+                color: '#fff',
+                fontSize: '14px',
+                fontWeight: '500',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                opacity: 0,
+                transform: 'translateY(-10px)',
+                transition: 'all 0.3s ease',
+                pointerEvents: 'auto'
+            });
+
+            // Màu theo loại
+            if (type === 'error') {
+                toast.style.background = 'linear-gradient(135deg, #ff5f6d, #d43f8d)';
+            } else if (type === 'warning') {
+                toast.style.background = 'linear-gradient(135deg, #f7971e, #ffd200)';
+                toast.style.color = '#333';
+            } else {
+                toast.style.background = 'linear-gradient(135deg, var(--aurora-primary, #00b4d8), #007bff)';
+            }
+
+            // Thêm vào container
+            container.appendChild(toast);
+
+            // Hiện lên
+            requestAnimationFrame(() => {
+                toast.style.opacity = 1;
+                toast.style.transform = 'translateY(0)';
+            });
+
+            // Tự ẩn sau 2s
+            setTimeout(() => {
+                toast.style.opacity = 0;
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 2000);
+        }
+
+        //Hàm Render trạng thái
+        function renderTrangThai(status) {
+            return status == 1
+                ? '<span class="badge bg-success-subtle text-success border border-success">Đang bán</span>'
+                : '<span class="badge bg-danger-subtle text-danger border border-danger">Ngừng bán</span>';
+        }
+        // Helper khóa/mở theo “màu”
+        function toggleUploadContainerByMau(mauId, enable) {
+            const $c = $(`.upload-container[data-mau-id="${mauId}"]`);
+            $c.toggleClass('disabled', !enable);
+            $c.find('input[type="file"]').prop('disabled', !enable);
+            $c.find('.upload-placeholder').css('opacity', enable ? 1 : 0.4);
+        }
+
+
 
         // ============================================================
         // 🟢 BIẾN TOÀN CỤC — DÙNG CHUNG CHO TOÀN BỘ TRANG
@@ -1880,6 +2029,8 @@
                 .removeClass('disabled-field')
                 .css('opacity', 1)
                 .css('pointer-events', 'auto');
+            // 🆕 Thêm dòng này để reset popup trạng thái (nếu đang mở)
+            if (typeof resetQuickAddForm === 'function') resetQuickAddForm();
         }
 
         async function selectExistingProduct(id, name) {
@@ -1914,8 +2065,8 @@
                 .data('id', null)
                 .trigger?.('change');
 
-            $('#gioiTinhInput').val('').data('id', null);
-            $('#trangThaiInput').val(mapTrangThai(1)).data('id', 1);
+            $('#gioiTinhInput').val('').data('id', null).attr('placeholder', 'Chọn giới tính');
+            $('#trangThaiInput').val('').data('id', null).attr('placeholder', 'Chọn trạng thái');
 
             // ✅ Nếu đang tạo mới (SPCTX_STATE.mode === 'new') → mở mô tả để nhập
             const isNew = window.SPCTX_STATE?.mode === 'new';
@@ -2146,7 +2297,7 @@
             const kichCoIds = $('#kichCoInput').data('ids') || [];
 
             if (!tenSanPham || mauSacIds.length === 0 || kichCoIds.length === 0) {
-                alert('⚠️ Vui lòng nhập tên sản phẩm, chọn màu sắc và kích cỡ trước!');
+                showToast('⚠️ Vui lòng nhập tên sản phẩm, chọn màu sắc và kích cỡ trước!');
                 return;
             }
 
@@ -2309,7 +2460,10 @@
             // 🧹 Reset form khi đổi loại thuộc tính hoặc thêm tiếp
             function resetQuickAddForm() {
                 $('#attrColorNameInput').val('');
-                $('#attrStatusInput').val('').data('id', null);
+                $('#attrStatusInput').val('').data('id', null)
+                    .attr('placeholder', 'Chọn trạng thái'); // 🆕 làm rõ placeholder
+
+                // Reset icon trạng thái
                 $('#attrStatusList .dropdown-item').removeClass('selected')
                     .find('i').removeClass('fa-check-square text-primary').addClass('fa-square');
 
@@ -2317,6 +2471,7 @@
                     updateColorSelection('#000000');
                 }
             }
+
         });
 
         function updateVariantTable() {
@@ -2409,14 +2564,11 @@
            value="0đ"
            data-raw="0">
 </td>
-
-
-
-
                 <!-- Trạng thái -->
-                <td class="text-center align-middle" data-value="${trangThaiValue}">
-                    ${trangThaiLabel}
-                </td>
+<td class="text-center align-middle" data-value="${trangThaiValue}">
+    ${renderTrangThai(trangThaiValue)}
+</td>
+
 
                 <!-- Upload ảnh -->
                 ${j === 0 ? `
@@ -2436,6 +2588,20 @@
 
             $tbody.html(rowsHtml);
 
+            // ✅ Khởi tạo: bỏ tick hết, khóa nút lưu, bỏ tick 'chọn tất cả'
+            $tbody.find('.variant-checkbox').prop('checked', false);
+            $('#selectAllVariants').prop('checked', false);
+            $('#btn-save-product').prop('disabled', true);
+
+            // ✅ Khóa/mờ toàn bộ upload-container ngay khi render xong
+            $tbody.find('.upload-container').each(function () {
+                const $c = $(this);
+                $c.addClass('disabled');
+                $c.find('input[type="file"]').prop('disabled', true);
+                $c.find('.upload-placeholder').css('opacity', 0.4);
+            });
+
+
             // ✅ Restore dữ liệu cũ (gồm SLT, giá, trạng thái, giới tính)
             $tbody.find('tr').each(function () {
                 const key = `${$(this).data('mau-id')}-${$(this).data('size-id')}`;
@@ -2446,8 +2612,7 @@
                     const trangThai = cache[key].trangThai ?? trangThaiValue;
                     // const gioiTinh = cache[key].gioiTinh ?? gioiTinhValue;
 
-                    $(this).find('td[data-value]').attr('data-value', trangThai)
-                        .text(trangThai === 1 ? 'Đang bán' : 'Ngừng bán');
+                    $(this).find('td[data-value]').attr('data-value', trangThai).html(renderTrangThai(trangThai));
                     // $(this).find('td[data-gioi-tinh]').attr('data-gioi-tinh', gioiTinh)
                     //     .text(gioiTinh === 0 ? 'Nam' : gioiTinh === 1 ? 'Nữ' : 'Nam & Nữ');
                 }
@@ -2467,7 +2632,13 @@
         // 🔹 Hàm định dạng giá VND
         function formatVnd(val) {
             val = Number(val || 0);
-            return val.toLocaleString('vi-VN') + 'đ';
+            return val.toLocaleString('vi-VN') + " " + 'đ';
+        }
+
+        // 🔹 Cập nhật trạng thái nút lưu
+        function updateSaveButtonState() {
+            const anyChecked = $('.variant-checkbox:checked').length > 0;
+            $('#btn-save-product').prop('disabled', !anyChecked);
         }
 
         // 🔹 Khi tick từng dòng
@@ -2494,6 +2665,13 @@
 
             // Highlight dòng khi tick
             $row.toggleClass('selected', checked);
+
+            // ✅ THÊM PHẦN NÀY (CẬP NHẬT Ô TICK TẤT CẢ)
+            const total = $('.variant-checkbox').length;
+            const checkedCount = $('.variant-checkbox:checked').length;
+            $('#selectAllVariants').prop('checked', total > 0 && total === checkedCount);
+
+            updateSaveButtonState();
         });
 
         // 🔹 Tick chọn tất cả
@@ -2501,6 +2679,15 @@
             const isChecked = $(this).is(':checked');
             const $checkboxes = $('.variant-checkbox');
             $checkboxes.prop('checked', isChecked);
+
+            // ✅ Bật/tắt tất cả upload-container đồng loạt theo isChecked
+            $('.upload-container').each(function () {
+                toggleUploadContainerByMau($(this).data('mau-id'), isChecked);
+            });
+
+// ✅ Cập nhật nút Lưu
+            $('#btn-save-product').prop('disabled', !isChecked);
+
 
             $checkboxes.each(function () {
                 const id = $(this).data('id');
@@ -2521,6 +2708,8 @@
                 }
 
                 $row.toggleClass('selected', isChecked);
+
+                updateSaveButtonState();
             });
         });
 
@@ -2776,7 +2965,7 @@
                     console.log('⭐ Đã cập nhật ảnh bìa (server).');
                 } catch (err) {
                     console.error('❌ Lỗi cập nhật ảnh bìa:', err);
-                    alert('Không thể cập nhật ảnh bìa!');
+                    showToast('Không thể cập nhật ảnh bìa!');
                 }
             }
         });
@@ -2794,6 +2983,16 @@
             $('.upload-container').each(function () {
                 const $container = $(this);
                 const mauSacId = +($container.closest('tr').data('mau-id') || 0);
+
+                // 🔹 Kiểm tra xem biến thể (hàng) này có được tick không
+                const $row = $(`#table-variants tr.variant-row[data-mau-id="${mauSacId}"]`);
+                const isChecked = $row.find('.variant-checkbox').is(':checked');
+
+                if (!isChecked) {
+                    console.log(`⚪ Bỏ qua upload ảnh cho màu ${mauSacId} (chưa tick).`);
+                    return; // ❌ bỏ qua upload ảnh cho biến thể chưa chọn
+                }
+
                 const $items = $container.find('.preview-item');
                 const filesArr = $container.data('files') || [];
 
@@ -2866,6 +3065,24 @@
                 await reloadApiImagesForAllRows(sanPhamId);
             }
         }
+
+        $(document).on('change', '.variant-checkbox', function () {
+            const $row = $(this).closest('tr');
+            const mauId = $row.data('mau-id');
+
+            // 🔹 Nếu màu này vẫn còn ít nhất 1 dòng được tick thì container mở, ngược lại khóa
+            const anyCheckedForThisMau =
+                $(`tr.variant-row[data-mau-id="${mauId}"] .variant-checkbox:checked`).length > 0;
+            toggleUploadContainerByMau(mauId, anyCheckedForThisMau);
+
+            // 🔹 Cập nhật trạng thái tick tất cả + nút Lưu
+            const total = $('.variant-checkbox').length;
+            const checkedCount = $('.variant-checkbox:checked').length;
+            $('#selectAllVariants').prop('checked', total > 0 && total === checkedCount);
+            $('#btn-save-product').prop('disabled', checkedCount === 0);
+        });
+
+
 
 
 
@@ -2967,7 +3184,7 @@
 
                 console.log('✅ Đã tải và lưu ảnh URL vào SQL:', imgUrl);
             } catch (err) {
-                alert('❌ Không thể tải ảnh từ URL này!');
+                showToast('❌ Không thể tải ảnh từ URL này!');
                 console.error(err);
             } finally {
                 isPromptOpen = false; // 🔓 Luôn mở khóa lại sau khi hoàn tất
@@ -3303,25 +3520,21 @@
         // ============================================================
         // 🟢 NÚT LƯU SẢN PHẨM (TẠO MỚI HOẶC CẬP NHẬT + GỘP BIẾN THỂ)
         // ============================================================
-        // ============================================================
-        // 🟢 NÚT LƯU SẢN PHẨM (TẠO MỚI HOẶC CẬP NHẬT + AUDIT FIELD)
-        // ============================================================
-        // ============================================================
-        // 🟢 NÚT LƯU SẢN PHẨM (TẠO MỚI HOẶC CẬP NHẬT + AUDIT FIELD)
-        // ============================================================
+
         $('#btn-save-product').off('click').on('click', async function () {
             try {
                 const gioiTinhValue = $('#gioiTinhInput').data('id') ?? 2;
                 const tenSanPham = $('#tenSanPhamInput').val().trim();
 
                 if (!tenSanPham) {
-                    alert('⚠️ Vui lòng nhập tên sản phẩm!');
+                    showToast('⚠️ Vui lòng nhập tên sản phẩm!');
                     return;
                 }
 
-                const allRows = $('#table-variants tr.variant-row[data-mau-id]');
+                const allRows = $('#table-variants tr.variant-row[data-mau-id]')
+                    .has('.variant-checkbox:checked');
                 if (!allRows.length) {
-                    alert('⚠️ Chưa có biến thể nào để lưu!');
+                    showToast('⚠️ Chưa có biến thể nào để lưu!');
                     return;
                 }
 
@@ -3357,6 +3570,9 @@
 
                 allRows.each(function () {
                     const $r = $(this);
+                    const isChecked = $r.find('.variant-checkbox').is(':checked');
+                    if (!isChecked) return; // ❌ bỏ qua nếu chưa tick
+
                     const id = $r.data('id'); // có thể là 3-1 (tạm) hoặc số thật từ DB
                     const mauSacId = +$r.data('mau-id');
                     const kichCoId = +$r.data('size-id');
@@ -3398,7 +3614,7 @@
                         headers: {'X-Admin-Name': localStorage.getItem('adminName') || 'ADMIN'}
                     });
 
-                alert('✅ Đã lưu sản phẩm và biến thể thành công!');
+                showToast('✅ Đã lưu sản phẩm và biến thể thành công!');
                 console.log('✅ Lưu hoàn tất!');
                 // Nếu muốn: await reloadApiImagesForAllRows(finalSanPhamId);
                 // 🧩 Sau khi lưu SPCT thành công, tiến hành upload ảnh
@@ -3409,6 +3625,22 @@
 
                 toastSuccess('✅ Đã lưu sản phẩm và ảnh thành công!');
 
+                // ✅ Sau khi lưu thành công: reset trạng thái tick + khóa input và nút Lưu
+                $('.variant-checkbox').prop('checked', false);
+                $('#selectAllVariants').prop('checked', false);
+                $('#btn-save-product').prop('disabled', true);
+
+                // Khóa lại input số lượng & giá, format lại giá bán
+                $('.input-slt').prop('readonly', true).removeClass('editable');
+                $('.input-giaban').each(function () {
+                    const val = Number($(this).val().replace(/[^\d]/g, '') || 0);
+                    $(this).attr('data-raw', val).val(formatVnd(val)).prop('readonly', true).removeClass('editable');
+                });
+
+                // Xóa highlight chọn dòng
+                $('#table-variants tr.variant-row').removeClass('selected');
+
+
 
             } catch (error) {
                 console.error('❌ Lỗi khi lưu sản phẩm:', error);
@@ -3416,11 +3648,11 @@
                 if (error.response) {
                     console.error('🧩 Response data:', error.response.data);
                     console.error('🧩 Status:', error.response.status);
-                    alert(`❌ API lỗi: ${error.response.status} - ${error.response.data?.message || 'Xem console để biết thêm'}`);
+                    showToast(`❌ API lỗi: ${error.response.status} - ${error.response.data?.message || 'Xem console để biết thêm'}`);
                 } else if (error.request) {
-                    alert('⚠️ Server không phản hồi!');
+                    showToast('⚠️ Server không phản hồi!');
                 } else {
-                    alert(`⚠️ Lỗi không xác định: ${error.message}`);
+                    showToast(`⚠️ Lỗi không xác định: ${error.message}`);
                 }
             }
         });
